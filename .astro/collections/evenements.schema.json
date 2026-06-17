@@ -2,6 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
+    "pubDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Publication date"
+    },
     "title": {
       "type": "string",
       "description": "Title of the event"

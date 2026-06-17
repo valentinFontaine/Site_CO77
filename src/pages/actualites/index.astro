@@ -5,31 +5,11 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import SubNav from '../../components/SubNav.astro';
 
 const allPosts = await getCollection('actualites');
 const posts = allPosts.sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-
-const actualitesSubNav = [
-  { href: '/actualites/resultats-et-news/', label: 'Résultats et News' },
-  { href: '/actualites/photos/', label: 'Photos' },
-  { href: '/actualites/portraits/', label: 'Portraits des orienteurs' },
-];
-
-const categories = {
-	'resultats-et-news': 'Résultats et News',
-	'photos': 'Photos',
-	'portraits': 'Portraits'
-};
-
-function getCategoryFromPath(id) {
-	if (id.includes('/resultats-et-news/')) return 'resultats-et-news';
-	if (id.includes('/photos/')) return 'photos';
-	if (id.includes('/portraits/')) return 'portraits';
-	return 'resultats-et-news';
-}
 ---
 
 <!doctype html>
@@ -43,25 +23,19 @@ function getCategoryFromPath(id) {
 			<h1>Actualités</h1>
 			<p>Toutes les actualités du CO77</p>
 			
-			<SubNav items={actualitesSubNav} />
-			
 			<ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
 				{
-					posts.map((post) => {
-						const category = getCategoryFromPath(post.id);
-						return (
-							<li>
-								<a href={`/actualites/${post.id}/`} style="text-decoration: none; color: inherit; display: block;">
-									{post.data.heroImage && (
-										<Image width={400} height={250} src={post.data.heroImage} alt="" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;" />
-									)}
-									<h3>{post.data.title}</h3>
-									<p style="color: var(--gray); font-size: 0.875rem;"><FormattedDate date={post.data.pubDate} /></p>
-									<span style="display: inline-block; background: var(--accent); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-top: 0.5rem;">{categories[category] || category}</span>
-								</a>
-							</li>
-						);
-					})
+					posts.map((post) => (
+						<li>
+							<a href={`/actualites/${post.id}/`} style="text-decoration: none; color: inherit; display: block;">
+								{post.data.heroImage && (
+									<Image width={400} height={250} src={post.data.heroImage} alt="" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;" />
+								)}
+								<h3>{post.data.title}</h3>
+								<p style="color: var(--gray); font-size: 0.875rem;"><FormattedDate date={post.data.pubDate} /></p>
+							</a>
+						</li>
+					))
 				}
 			</ul>
 		</main>

@@ -3,6 +3,31 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+
+const allActualites = (await getCollection('actualites')).map(p => ({ ...p, collection: 'actualites' }));
+const allClubs = (await getCollection('clubs')).map(p => ({ ...p, collection: 'clubs' }));
+const allCartes = (await getCollection('cartes')).map(p => ({ ...p, collection: 'cartes' }));
+const allEntrainements = (await getCollection('entrainements')).map(p => ({ ...p, collection: 'entrainements' }));
+const allEvenements = (await getCollection('evenements')).map(p => ({ ...p, collection: 'evenements' }));
+
+const allContent = [...allActualites, ...allClubs, ...allCartes, ...allEntrainements, ...allEvenements];
+
+function getCollectionPath(collection) {
+  switch (collection) {
+    case 'actualites': return '/actualites';
+    case 'clubs': return '/la-co/les-clubs';
+    case 'cartes': return '/cartographie';
+    case 'entrainements': return '/missions-cd/entrainements';
+    case 'evenements': return '/evenements';
+    default: return '';
+  }
+}
+
+const recentContent = allContent
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <!doctype html>
@@ -45,6 +70,20 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 					<a href="/missions-cd/" style="color: var(--accent);">En savoir plus →</a>
 				</div>
 			</div>
+
+			<h2>Dernières publications</h2>
+			<ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+				{recentContent.map((post) => {
+					const collectionPath = getCollectionPath(post.collection);
+					return (
+						<li style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px;">
+							<h3 style="margin-top: 0;">{post.data.title || post.data.name}</h3>
+							<p style="color: var(--gray); font-size: 0.875rem; margin: 0.5rem 0;"><FormattedDate date={post.data.pubDate} /></p>
+							<a href={`${collectionPath}/${post.id}/`} style="display: inline-block; margin-top: 0.5rem; padding: 0.5rem 1rem; background: var(--accent); color: white; border-radius: 4px; text-decoration: none;">Lire la suite →</a>
+						</li>
+					);
+				})}
+			</ul>
 		</main>
 		<Footer />
 	</body>

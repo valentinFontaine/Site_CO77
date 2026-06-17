@@ -18,19 +18,9 @@ export async function getStaticPaths() {
 const post = Astro.props;
 const { Content } = await render(post);
 
-// Extract category from post ID
-function getCategory(id) {
-  if (id.includes('/resultats-et-news/')) return 'Résultats et News';
-  if (id.includes('/photos/')) return 'Photos';
-  if (id.includes('/portraits/')) return 'Portraits des orienteurs';
-  return 'Actualités';
-}
-
-const category = getCategory(post.id);
 const breadcrumbItems = [
   { href: '/', label: 'Accueil' },
   { href: '/actualites/', label: 'Actualités' },
-  { href: `/actualites/${post.id}/`, label: category },
 ];
 ---
 

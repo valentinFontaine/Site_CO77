@@ -26,8 +26,7 @@
     },
     "category": {
       "type": "string",
-      "enum": ["resultats-et-news", "photos", "portraits"],
-      "description": "Category of the actualite (for sub-collection organization)"
+      "description": "Category of the actualite"
     }
   },
   "required": ["title", "description", "pubDate"]

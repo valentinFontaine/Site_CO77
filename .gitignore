@@ -1,9 +1,9 @@
 # build output
 dist/
 # generated types
-.astro/*
-!.astro/collections/
-!.astro/collections/*.json
+#.astro/*
+#!.astro/collections/
+#!.astro/collections/*.json
 
 # dependencies
 node_modules/

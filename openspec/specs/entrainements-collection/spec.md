@@ -1,5 +1,8 @@
-## ADDED Requirements
+# entrainements-collection Specification
 
+## Purpose
+TBD - created by archiving change create-overall-structure. Update Purpose after archive.
+## Requirements
 ### Requirement: Training content type exists
 The site SHALL have an Entrainements (training) content type for weekly training sessions.
 
@@ -19,7 +22,7 @@ Each training session SHALL have the following required fields:
 - **WHEN** a training markdown file has title, date, rendezVous, parkingInfo, and itinerary
 - **THEN** the training entry is valid
 
-### Requirement: Training optional fields
+### Requirement: Training SHALL support optional fields
 Each training session MAY have the following optional fields:
 - description (string, additional details)
 - duration (string, estimated duration)
@@ -55,3 +58,4 @@ The training detail page SHALL display all fields for a training session.
 #### Scenario: Training detail shows complete information
 - **WHEN** a user visits `/entrainements/2026-06-17/`
 - **THEN** all training fields (title, date, rendez-vous, parking, itinerary, description) are displayed
+

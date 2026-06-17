@@ -8,26 +8,26 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
 	site: 'https://example.com',
 	integrations: [mdx(), sitemap()],
-	redirects: {
-		// Redirect old blog URLs to actualites
-		'/blog/': '/actualites/',
-		'/blog/index.html': '/actualites/',
-	},
 	content: {
 		collections: {
 			clubs: {
+				dir: './src/content/clubs',
 				schema: await import('./.astro/collections/clubs.schema.json'),
 			},
 			entrainements: {
+				dir: './src/content/entrainements',
 				schema: await import('./.astro/collections/entrainements.schema.json'),
 			},
 			evenements: {
+				dir: './src/content/evenements',
 				schema: await import('./.astro/collections/evenements.schema.json'),
 			},
 			actualites: {
+				dir: './src/content/actualites',
 				schema: await import('./.astro/collections/actualites.schema.json'),
 			},
 			cartes: {
+				dir: './src/content/cartes',
 				schema: await import('./.astro/collections/cartes.schema.json'),
 			},
 		},

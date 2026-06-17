@@ -17,7 +17,7 @@ Each map SHALL have the following required fields:
 - **WHEN** a map markdown file has title, imagePath, and description
 - **THEN** the map entry is valid
 
-### Requirement: Map optional fields
+### Requirement: Map SHALL support optional fields
 Each map MAY have the following optional fields:
 - coordinates (object with lat/long or array of coordinates)
 - difficultyLevel (string, e.g., "Facile", "Moyen", "Difficile", "Expert")
@@ -63,7 +63,7 @@ The map detail page SHALL display the full map image and all metadata.
 - **WHEN** a user visits `/cartographie/forest-sector/`
 - **THEN** the full map image (blurry), description, and all metadata (scale, difficulty, region, etc.) are displayed
 
-### Requirement: Map filtering
+### Requirement: Map SHALL support filtering
 Maps MAY be filterable by region, difficulty, or type.
 
 #### Scenario: Filter maps by difficulty

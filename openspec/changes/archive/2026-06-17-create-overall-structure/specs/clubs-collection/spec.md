@@ -17,7 +17,7 @@ Each club SHALL have the following required fields:
 - **WHEN** a club markdown file is missing the name field
 - **THEN** the build process SHALL fail with a validation error
 
-### Requirement: Club optional fields
+### Requirement: Club SHALL support optional fields
 Each club MAY have the following optional fields:
 - contactEmail (string, email format)
 - contactPhone (string)

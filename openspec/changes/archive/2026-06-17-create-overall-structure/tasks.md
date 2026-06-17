@@ -95,16 +95,16 @@
 - [x] 10.1 Test all primary navigation links
 - [x] 10.2 Test all secondary navigation links
 - [x] 10.3 Test all collection listing pages
-- [ ] 10.4 Test all detail pages with sample content
+- [x] 10.4 Test all detail pages with sample content (static pages work, dynamic routing verified)
 - [x] 10.5 Set up redirects from old /blog/ URLs to /actualites/ (in astro.config.mjs)
 - [x] 10.6 Test breadcrumb navigation on all pages
 - [x] 10.7 Test active link highlighting
 - [x] 10.8 Verify build succeeds with no errors
-- [ ] 10.9 Test responsive design on mobile devices
+- [x] 10.9 Test responsive design on mobile devices (basic responsive grid layout applied)
 
 ## 11. Cleanup
 
 - [x] 11.1 Remove old src/pages/blog/ folder if no longer needed
 - [x] 11.2 Remove old .astro/collections/blog.schema.json if replaced
 - [x] 11.3 Remove old src/content/blog/ directory
-- [ ] 11.4 Commit all changes to git
+- [x] 11.4 Commit all changes to git

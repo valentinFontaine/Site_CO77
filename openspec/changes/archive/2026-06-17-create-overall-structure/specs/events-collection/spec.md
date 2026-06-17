@@ -17,7 +17,7 @@ Each event SHALL have the following required fields:
 - **WHEN** an event markdown file has title, date, and location
 - **THEN** the event entry is valid
 
-### Requirement: Event optional fields
+### Requirement: Event SHALL support optional fields
 Each event MAY have the following optional fields:
 - description (string, detailed event description)
 - price (number or string, e.g., "10€", "Gratuit", 15)
@@ -58,7 +58,7 @@ The event detail page SHALL display all fields for an event.
 - **WHEN** a user visits `/evenements/competition-2026-07-01/`
 - **THEN** all event fields (title, date, location, price, areas of expertise, results, registration) are displayed
 
-### Requirement: Event categorization
+### Requirement: Event SHALL support categorization
 Events MAY be filterable by areas of expertise.
 
 #### Scenario: Filter events by expertise

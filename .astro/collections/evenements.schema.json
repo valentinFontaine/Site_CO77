@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the event"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the event (YYYY-MM-DD)"
+    },
+    "location": {
+      "type": "string",
+      "description": "Location/venue of the event"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the event"
+    },
+    "price": {
+      "type": ["string", "number"],
+      "description": "Price of the event (e.g., 10, '10€', 'Gratuit')"
+    },
+    "areasOfExpertise": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Areas of expertise for the event",
+      "examples": [["Course d'orientation", "Trail"]]
+    },
+    "results": {
+      "type": "string",
+      "description": "Results summary or link to results"
+    },
+    "organizer": {
+      "type": "string",
+      "description": "Organizing entity"
+    },
+    "registrationLink": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL for event registration"
+    },
+    "maxParticipants": {
+      "type": "number",
+      "description": "Maximum number of participants"
+    },
+    "startTime": {
+      "type": "string",
+      "description": "Start time of the event"
+    },
+    "endTime": {
+      "type": "string",
+      "description": "End time of the event"
+    }
+  },
+  "required": ["title", "date", "location"]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Name or title of the map"
+    },
+    "imagePath": {
+      "type": "string",
+      "description": "Path to the map image file"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the map area and features"
+    },
+    "coordinates": {
+      "type": ["object", "array"],
+      "description": "Geographical coordinates of the map area"
+    },
+    "difficultyLevel": {
+      "type": "string",
+      "enum": ["Facile", "Moyen", "Difficile", "Expert"],
+      "description": "Difficulty level of the map"
+    },
+    "scale": {
+      "type": "string",
+      "description": "Map scale (e.g., '1:10000')"
+    },
+    "mapType": {
+      "type": "string",
+      "enum": ["Forêt", "Urbain", "Sprint", "Mixed"],
+      "description": "Type of terrain/area"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "Last update date of the map"
+    },
+    "author": {
+      "type": "string",
+      "description": "Cartographer or map author"
+    },
+    "region": {
+      "type": "string",
+      "description": "Geographical region where the map is located"
+    }
+  },
+  "required": ["title", "imagePath", "description"]
+}

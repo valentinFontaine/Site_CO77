@@ -8,6 +8,11 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
 	site: 'https://example.com',
 	integrations: [mdx(), sitemap()],
+	redirects: {
+		// Redirect old blog URLs to actualites
+		'/blog/': '/actualites/',
+		'/blog/index.html': '/actualites/',
+	},
 	content: {
 		collections: {
 			clubs: {

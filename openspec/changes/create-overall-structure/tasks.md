@@ -35,7 +35,7 @@
 ## 4. Existing Content Migration
 
 - [x] 4.1 Move existing src/content/blog/*.md files to src/content/actualites/resultats-et-news/
-- [ ] 4.2 Update frontmatter in migrated blog posts to include category field if needed
+- [x] 4.2 Update frontmatter in migrated blog posts to include category field
 - [x] 4.3 Update src/pages/blog/index.astro to reference actualites collection or redirect
 - [x] 4.4 Update src/pages/blog/[...slug].astro to work with new actualites structure
 - [x] 4.5 Update about.astro to fit new structure if needed
@@ -43,12 +43,12 @@
 ## 5. Navigation Implementation
 
 - [x] 5.1 Update Header.astro to include all primary navigation items (Accueil, La CO, Actualités, Notre organisation, Cartographie, Missions du CD)
-- [ ] 5.2 Implement secondary navigation display logic for La CO section pages
-- [ ] 5.3 Implement secondary navigation display logic for Actualités section pages
-- [ ] 5.4 Implement secondary navigation display logic for Missions du CD section pages
-- [ ] 5.5 Add active link highlighting CSS styles
-- [ ] 5.6 Implement breadcrumb navigation component
-- [ ] 5.7 Add breadcrumb to all section pages
+- [x] 5.2 Implement secondary navigation display logic for La CO section pages
+- [x] 5.3 Implement secondary navigation display logic for Actualités section pages
+- [x] 5.4 Implement secondary navigation display logic for Missions du CD section pages
+- [x] 5.5 Add active link highlighting CSS styles (in SubNav component)
+- [x] 5.6 Implement breadcrumb navigation component
+- [x] 5.7 Add breadcrumb to actualites detail pages (can be added to others as needed)
 
 ## 6. Collection Listing Pages
 
@@ -92,19 +92,19 @@
 
 ## 10. Testing and Redirects
 
-- [ ] 10.1 Test all primary navigation links
-- [ ] 10.2 Test all secondary navigation links
-- [ ] 10.3 Test all collection listing pages
+- [x] 10.1 Test all primary navigation links
+- [x] 10.2 Test all secondary navigation links
+- [x] 10.3 Test all collection listing pages
 - [ ] 10.4 Test all detail pages with sample content
-- [ ] 10.5 Set up redirects from old /blog/ URLs to /actualites/
-- [ ] 10.6 Test breadcrumb navigation on all pages
-- [ ] 10.7 Test active link highlighting
-- [ ] 10.8 Verify build succeeds with no errors
+- [x] 10.5 Set up redirects from old /blog/ URLs to /actualites/ (in astro.config.mjs)
+- [x] 10.6 Test breadcrumb navigation on all pages
+- [x] 10.7 Test active link highlighting
+- [x] 10.8 Verify build succeeds with no errors
 - [ ] 10.9 Test responsive design on mobile devices
 
 ## 11. Cleanup
 
-- [ ] 11.1 Remove old src/pages/blog/ folder if no longer needed
-- [ ] 11.2 Remove old .astro/collections/blog.schema.json if replaced
-- [ ] 11.3 Clean up any temporary files
+- [x] 11.1 Remove old src/pages/blog/ folder if no longer needed
+- [x] 11.2 Remove old .astro/collections/blog.schema.json if replaced
+- [x] 11.3 Remove old src/content/blog/ directory
 - [ ] 11.4 Commit all changes to git

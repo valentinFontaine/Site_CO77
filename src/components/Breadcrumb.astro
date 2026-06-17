@@ -1,0 +1,27 @@
+---
+interface Props {
+  items: Array<{
+    href: string;
+    label: string;
+  }>;
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumb" style="margin-bottom: 2rem; font-size: 0.875rem;">
+  <ul style="list-style: none; padding: 0; margin: 0; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    {
+      items.map((item, index) => (
+        <li>
+          {index > 0 && <span style="color: var(--gray);">/</span>}
+          {index < items.length - 1 ? (
+            <a href={item.href} style="text-decoration: none; color: var(--accent);">{item.label}</a>
+          ) : (
+            <span style="color: var(--gray);">{item.label}</span>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</nav>

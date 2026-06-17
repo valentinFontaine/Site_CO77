@@ -2,11 +2,38 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-const title = 'CO77';
-const description = 'Comité Départemental';
+import SubNav from '../../components/SubNav.astro';
+
+const missionsSubNav = [
+  { href: '/missions-cd/entrainements/', label: 'Entraînements' },
+  { href: '/missions-cd/materiel/', label: 'Matériel' },
+];
 ---
+
 <!doctype html>
 <html lang="fr">
-<head><BaseHead title={title} description={description} /></head>
-<body><Header /><main><h1>{title}</h1></main><Footer /></body>
+	<head>
+		<BaseHead title="Missions du CD - CO77" description="Missions et organisation du Comité" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Missions du Comité Départemental</h1>
+			<p>Organisation et gestion des activités du CO77.</p>
+			
+			<SubNav items={missionsSubNav} />
+			
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+				<a href="/missions-cd/entrainements/" style="text-decoration: none; padding: 2rem; background: white; border: 1px solid #ddd; border-radius: 8px; text-align: center;">
+					<h3>Entraînements</h3>
+					<p>Calendrier et détails des entraînements</p>
+				</a>
+				<a href="/missions-cd/materiel/" style="text-decoration: none; padding: 2rem; background: white; border: 1px solid #ddd; border-radius: 8px; text-align: center;">
+					<h3>Matériel</h3>
+					<p>Gestion du matériel du comité</p>
+				</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
 </html>

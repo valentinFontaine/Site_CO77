@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the club"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the club"
+    },
+    "location": {
+      "type": "string",
+      "description": "Physical location of the club"
+    },
+    "contactEmail": {
+      "type": "string",
+      "format": "email",
+      "description": "Email contact for the club"
+    },
+    "contactPhone": {
+      "type": "string",
+      "description": "Phone contact for the club"
+    },
+    "website": {
+      "type": "string",
+      "format": "uri",
+      "description": "Club website URL"
+    },
+    "president": {
+      "type": "string",
+      "description": "Name of the club president"
+    },
+    "membersCount": {
+      "type": "number",
+      "description": "Number of members in the club"
+    },
+    "logoPath": {
+      "type": "string",
+      "description": "Path to the club logo image"
+    },
+    "foundingYear": {
+      "type": "number",
+      "description": "Year the club was founded"
+    }
+  },
+  "required": ["name", "description", "location"]
+}

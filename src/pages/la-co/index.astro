@@ -2,11 +2,48 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-const title = 'CO77';
-const description = 'Comité Départemental';
+import SubNav from '../../components/SubNav.astro';
+
+const laCoSubNav = [
+  { href: '/la-co/decouvrir/', label: 'Découvrir' },
+  { href: '/la-co/les-clubs/', label: 'Les Clubs' },
+  { href: '/la-co/le-haut-niveau/', label: 'Le Haut Niveau' },
+  { href: '/la-co/les-courses-dans-la-region/', label: 'Les Courses dans la Région' },
+];
 ---
+
 <!doctype html>
 <html lang="fr">
-<head><BaseHead title={title} description={description} /></head>
-<body><Header /><main><h1>{title}</h1></main><Footer /></body>
+	<head>
+		<BaseHead title="La CO - CO77" description="Découvrez la Course d'Orientation" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>La Course d'Orientation</h1>
+			<p>Bienvenue dans la section dédiée à la Course d'Orientation.</p>
+			
+			<SubNav items={laCoSubNav} />
+			
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+				<a href="/la-co/decouvrir/" style="text-decoration: none; padding: 2rem; background: white; border: 1px solid #ddd; border-radius: 8px; text-align: center;">
+					<h3>Découvrir</h3>
+					<p>Qu'est-ce que la course d'orientation ?</p>
+				</a>
+				<a href="/la-co/les-clubs/" style="text-decoration: none; padding: 2rem; background: white; border: 1px solid #ddd; border-radius: 8px; text-align: center;">
+					<h3>Les Clubs</h3>
+					<p>Les clubs membres du comité</p>
+				</a>
+				<a href="/la-co/le-haut-niveau/" style="text-decoration: none; padding: 2rem; background: white; border: 1px solid #ddd; border-radius: 8px; text-align: center;">
+					<h3>Le Haut Niveau</h3>
+					<p>La compétition au niveau national</p>
+				</a>
+				<a href="/la-co/les-courses-dans-la-region/" style="text-decoration: none; padding: 2rem; background: white; border: 1px solid #ddd; border-radius: 8px; text-align: center;">
+					<h3>Les Courses dans la Région</h3>
+					<p>Calendrier et informations</p>
+				</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
 </html>

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the training session"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the training session (YYYY-MM-DD)"
+    },
+    "rendezVous": {
+      "type": "string",
+      "description": "Meeting point location for the training"
+    },
+    "parkingInfo": {
+      "type": "string",
+      "description": "Information about parking availability and details"
+    },
+    "itinerary": {
+      "type": "string",
+      "description": "Description of the route from parking to rendez-vous point"
+    },
+    "description": {
+      "type": "string",
+      "description": "Additional details about the training session"
+    },
+    "duration": {
+      "type": "string",
+      "description": "Estimated duration of the training"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["Facile", "Moyen", "Difficile"],
+      "description": "Difficulty level of the training"
+    },
+    "organizer": {
+      "type": "string",
+      "description": "Person or entity organizing the training"
+    },
+    "maxParticipants": {
+      "type": "number",
+      "description": "Maximum number of participants"
+    }
+  },
+  "required": ["title", "date", "rendezVous", "parkingInfo", "itinerary"]
+}

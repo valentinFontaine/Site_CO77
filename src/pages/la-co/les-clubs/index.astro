@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+
+const clubs = await getCollection('clubs');
+---
+
+<!doctype html>
+<html lang="fr">
+<head><BaseHead title="Les Clubs" description="Liste des clubs du CO77" /></head>
+<body>
+<Header />
+<main>
+  <h1>Les Clubs</h1>
+  <p>Découvrez les clubs membres du Comité.</p>
+  <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+    {clubs.map((club) => (
+      <li style="border: 1px solid #ddd; padding: 1.5rem; border-radius: 8px;">
+        <h3>{club.data.name}</h3>
+        <p style="color: var(--gray);">{club.data.location}</p>
+        <p>{club.data.description}</p>
+        <a href={`/la-co/les-clubs/${club.id}/`} style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: var(--accent); color: white; border-radius: 4px; text-decoration: none;">En savoir plus</a>
+      </li>
+    ))}
+  </ul>
+</main>
+<Footer />
+</body>
+</html>

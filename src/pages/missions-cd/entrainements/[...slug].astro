@@ -1,0 +1,34 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+
+export async function getStaticPaths() {
+  const trainings = await getCollection('entrainements');
+  return trainings.map((training) => ({
+    params: { slug: training.id },
+    props: training,
+  }));
+}
+
+const training = Astro.props;
+const { Content } = await render(training);
+---
+
+<!doctype html>
+<html lang="fr">
+<head><BaseHead title={training.data.title} description={training.data.description} /></head>
+<body>
+<Header />
+<main>
+  <h1>{training.data.title}</h1>
+  <p><strong>Date:</strong> {training.data.date}</p>
+  <p><strong>Rendez-vous:</strong> {training.data.rendezVous}</p>
+  <p><strong>Parking:</strong> {training.data.parkingInfo}</p>
+  <p><strong>Itinéraire:</strong> {training.data.itinerary}</p>
+  <Content />
+</main>
+<Footer />
+</body>
+</html>

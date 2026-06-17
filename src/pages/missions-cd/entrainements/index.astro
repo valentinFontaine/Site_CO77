@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+
+const trainings = await getCollection('entrainements');
+---
+
+<!doctype html>
+<html lang="fr">
+<head><BaseHead title="Entraînement" description="Entraînements du CO77" /></head>
+<body>
+<Header />
+<main>
+  <h1>Entraînement</h1>
+  <p>Calendrier des entraînements.</p>
+  <ul style="list-style: none; padding: 0;">
+    {trainings.sort((a, b) => b.data.date.localeCompare(a.data.date)).map((training) => (
+      <li style="border: 1px solid #ddd; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
+        <h3>{training.data.title}</h3>
+        <p><strong>Date:</strong> {training.data.date}</p>
+        <p><strong>Rendez-vous:</strong> {training.data.rendezVous}</p>
+        <a href={`/missions-cd/entrainements/${training.id}/`} style="color: var(--accent);">Voir les détails</a>
+      </li>
+    ))}
+  </ul>
+</main>
+<Footer />
+</body>
+</html>

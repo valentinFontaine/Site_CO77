@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+
+export async function getStaticPaths() {
+  const clubs = await getCollection('clubs');
+  return clubs.map((club) => ({
+    params: { slug: club.id },
+    props: club,
+  }));
+}
+
+const club = Astro.props;
+const { Content } = await render(club);
+---
+
+<!doctype html>
+<html lang="fr">
+<head><BaseHead title={club.data.name} description={club.data.description} /></head>
+<body>
+<Header />
+<main>
+  <h1>{club.data.name}</h1>
+  <p><strong>Localisation:</strong> {club.data.location}</p>
+  {club.data.contactEmail && <p><strong>Email:</strong> {club.data.contactEmail}</p>}
+  {club.data.website && <p><strong>Site web:</strong> <a href={club.data.website}>{club.data.website}</a></p>}
+  <Content />
+</main>
+<Footer />
+</body>
+</html>

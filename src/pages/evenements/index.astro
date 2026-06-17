@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+
+const events = await getCollection('evenements');
+---
+
+<!doctype html>
+<html lang="fr">
+<head><BaseHead title="Événements" description="Calendrier des événements CO77" /></head>
+<body>
+<Header />
+<main>
+  <h1>Événements</h1>
+  <p>Prochains événements et compétitions.</p>
+  <ul style="list-style: none; padding: 0;">
+    {events.sort((a, b) => a.data.date.localeCompare(b.data.date)).map((event) => (
+      <li style="border: 1px solid #ddd; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
+        <h3>{event.data.title}</h3>
+        <p><strong>Date:</strong> {event.data.date}</p>
+        <p><strong>Lieu:</strong> {event.data.location}</p>
+        {event.data.price && <p><strong>Prix:</strong> {event.data.price}</p>}
+        <a href={`/evenements/${event.id}/`} style="color: var(--accent);">Voir les détails</a>
+      </li>
+    ))}
+  </ul>
+</main>
+<Footer />
+</body>
+</html>

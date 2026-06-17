@@ -8,6 +8,25 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
 	site: 'https://example.com',
 	integrations: [mdx(), sitemap()],
+	content: {
+		collections: {
+			clubs: {
+				schema: await import('./.astro/collections/clubs.schema.json'),
+			},
+			entrainements: {
+				schema: await import('./.astro/collections/entrainements.schema.json'),
+			},
+			evenements: {
+				schema: await import('./.astro/collections/evenements.schema.json'),
+			},
+			actualites: {
+				schema: await import('./.astro/collections/actualites.schema.json'),
+			},
+			cartes: {
+				schema: await import('./.astro/collections/cartes.schema.json'),
+			},
+		},
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),

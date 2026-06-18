@@ -19,28 +19,28 @@ The site SHALL have separate Astro content collections for each content type to 
 
 #### Scenario: No conflicting configuration files exist
 - **WHEN** the project is examined
-- **THEN** only `astro.config.mjs` contains content collection configuration
+- **THEN** only `src/content.config.ts` contains content collection configuration
 
 ### Requirement: Content collections are type-safe
-Content from each collection SHALL be type-safe and accessible via Astro's `getCollection()` and `getEntries()` functions. Collections SHALL be configured in `astro.config.mjs` to ensure proper TypeScript type generation.
+Content from each collection SHALL be type-safe and accessible via Astro's `getCollection()` and `getEntries()` functions. Collections SHALL be configured in `src/content.config.ts` to ensure proper TypeScript type generation.
 
-#### Scenario: Type-safe content access via astro.config.mjs
+#### Scenario: Type-safe content access via src/content.config.ts
 - **WHEN** a page imports and uses `getCollection('clubs')`
 - **THEN** TypeScript SHALL provide autocomplete for club properties
 
 #### Scenario: All collections accessible after removing old config
-- **WHEN** `src/content.config.ts` is removed
-- **THEN** all collections defined in `astro.config.mjs` remain accessible via `astro:content`
+- **WHEN** any old conflicting `src/content.config.ts` is removed
+- **THEN** all collections defined in the current `src/content.config.ts` remain accessible via `astro:content`
 
 ## ADDED Requirements
 
-### Requirement: Collections configured in astro.config.mjs
-All content collections SHALL be defined in `astro.config.mjs` with correct directory paths and schema references.
+### Requirement: Collections configured in src/content.config.ts
+All content collections SHALL be defined in `src/content.config.ts` with correct directory paths and schema references.
 
-#### Scenario: astro.config.mjs contains all collection definitions
-- **WHEN** `astro.config.mjs` is examined
+#### Scenario: src/content.config.ts contains all collection definitions
+- **WHEN** `src/content.config.ts` is examined
 - **THEN** it contains collection definitions for: clubs, entrainements, actualites, evenements, cartes
 
 #### Scenario: Collection schemas are properly referenced
-- **WHEN** `astro.config.mjs` is examined
-- **THEN** each collection references its corresponding schema file from `.astro/collections/`
+- **WHEN** `src/content.config.ts` is examined
+- **THEN** each collection references its corresponding schema definitions using `defineCollection` and `z.object`

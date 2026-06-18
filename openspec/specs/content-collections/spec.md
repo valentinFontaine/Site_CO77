@@ -1,10 +1,10 @@
 # content-collections Specification
 
 ## Purpose
-TBD - created by archiving change create-overall-structure. Update Purpose after archive.
+Establish separate content collections for each content type with a unified configuration to enable type-specific schemas and querying, eliminating configuration conflicts.
 ## Requirements
 ### Requirement: Separate content collections for each type
-The site SHALL have separate Astro content collections for each content type to enable type-specific schemas and querying.
+The site SHALL have separate Astro content collections for each content type to enable type-specific schemas and querying. All collections SHALL be configured in a single, unified configuration file (`src/content.config.ts`) to avoid conflicts.
 
 #### Scenario: All content collections are registered
 - **WHEN** Astro builds the site
@@ -14,6 +14,13 @@ The site SHALL have separate Astro content collections for each content type to 
   - actualites (with sub-collections)
   - evenements
   - cartes
+
+### Requirement: Collections configured in src/content.config.ts
+All content collections SHALL be defined in `src/content.config.ts` with correct directory paths and schema references.
+
+#### Scenario: src/content.config.ts contains all collection definitions
+- **WHEN** `src/content.config.ts` is examined
+- **THEN** it contains collection definitions for: clubs, entrainements, actualites, evenements, cartes
 
 ### Requirement: Collection schemas exist
 Each content collection SHALL have a corresponding JSON schema file in `.astro/collections/`.
@@ -28,11 +35,15 @@ Each content collection SHALL have a corresponding JSON schema file in `.astro/c
   - `.astro/collections/cartes.schema.json`
 
 ### Requirement: Content collections are type-safe
-Content from each collection SHALL be type-safe and accessible via Astro's `getCollection()` and `getEntries()` functions.
+Content from each collection SHALL be type-safe and accessible via Astro's `getCollection()` and `getEntries()` functions. Collections SHALL be configured in `src/content.config.ts` to ensure proper TypeScript type generation.
 
 #### Scenario: Type-safe content access
 - **WHEN** a page imports and uses `getCollection('clubs')`
 - **THEN** TypeScript SHALL provide autocomplete for club properties
+
+#### Scenario: All collections accessible after removing old config
+- **WHEN** any old conflicting configuration files are removed
+- **THEN** all collections defined in `src/content.config.ts` remain accessible via `astro:content`
 
 ### Requirement: Actualites sub-collections
 The actualites collection SHALL support sub-categories for different content types.

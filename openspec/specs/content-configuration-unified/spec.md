@@ -1,20 +1,20 @@
 # content-configuration-unified Specification
 
 ## Purpose
-Establish a single, unified configuration for content collections in Astro v4+ using `astro.config.mjs` as the source of truth, eliminating configuration conflicts and build errors.
+Establish a single, unified configuration for content collections in Astro v4+ using `src/content.config.ts` as the source of truth, eliminating configuration conflicts and build errors.
 
 ## ADDED Requirements
 
 ### Requirement: Single source of truth for content collections
-The site SHALL use `astro.config.mjs` as the single configuration file for all content collections.
+The site SHALL use `src/content.config.ts` as the single configuration file for all content collections.
 
-#### Scenario: Only astro.config.mjs defines collections
+#### Scenario: Only src/content.config.ts defines collections
 - **WHEN** the Astro site is built
-- **THEN** all content collections are defined exclusively in `astro.config.mjs`
+- **THEN** all content collections are defined exclusively in `src/content.config.ts`
 
 #### Scenario: No conflicting configuration files exist
 - **WHEN** the project is examined
-- **THEN** no `src/content.config.ts` file exists in the project
+- **THEN** no duplicate or conflicting `src/content.config.ts` files exist in the project
 
 ### Requirement: All collections are accessible via Astro v4+ API
 All content collections SHALL be accessible through Astro's `getCollection()` and `getEntries()` functions from the `astro:content` module.

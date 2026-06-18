@@ -4,51 +4,48 @@
   "properties": {
     "pubDate": {
       "type": "string",
-      "format": "date-time",
-      "description": "Publication date"
+      "format": "date-time"
     },
     "name": {
-      "type": "string",
-      "description": "Name of the club"
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Brief description of the club"
+      "type": "string"
     },
     "location": {
-      "type": "string",
-      "description": "Physical location of the club"
+      "type": "string"
     },
     "contactEmail": {
       "type": "string",
       "format": "email",
-      "description": "Email contact for the club"
+      "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
     },
     "contactPhone": {
-      "type": "string",
-      "description": "Phone contact for the club"
+      "type": "string"
     },
     "website": {
       "type": "string",
-      "format": "uri",
-      "description": "Club website URL"
+      "format": "uri"
     },
     "president": {
-      "type": "string",
-      "description": "Name of the club president"
+      "type": "string"
     },
     "membersCount": {
-      "type": "number",
-      "description": "Number of members in the club"
+      "type": "number"
     },
     "logoPath": {
-      "type": "string",
-      "description": "Path to the club logo image"
+      "type": "string"
     },
     "foundingYear": {
-      "type": "number",
-      "description": "Year the club was founded"
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "required": ["name", "description", "location"]
+  "required": [
+    "name",
+    "description",
+    "location"
+  ]
 }

@@ -4,63 +4,62 @@
   "properties": {
     "pubDate": {
       "type": "string",
-      "format": "date-time",
-      "description": "Publication date"
+      "format": "date-time"
     },
     "title": {
-      "type": "string",
-      "description": "Title of the event"
+      "type": "string"
     },
     "date": {
       "type": "string",
-      "format": "date",
-      "description": "Date of the event (YYYY-MM-DD)"
+      "format": "date-time"
     },
     "location": {
-      "type": "string",
-      "description": "Location/venue of the event"
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Detailed description of the event"
+      "type": "string"
     },
     "price": {
-      "type": ["string", "number"],
-      "description": "Price of the event (e.g., 10, '10€', 'Gratuit')"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ]
     },
     "areasOfExpertise": {
       "type": "array",
       "items": {
         "type": "string"
-      },
-      "description": "Areas of expertise for the event",
-      "examples": [["Course d'orientation", "Trail"]]
+      }
     },
     "results": {
-      "type": "string",
-      "description": "Results summary or link to results"
+      "type": "string"
     },
     "organizer": {
-      "type": "string",
-      "description": "Organizing entity"
+      "type": "string"
     },
     "registrationLink": {
       "type": "string",
-      "format": "uri",
-      "description": "URL for event registration"
+      "format": "uri"
     },
     "maxParticipants": {
-      "type": "number",
-      "description": "Maximum number of participants"
+      "type": "number"
     },
     "startTime": {
-      "type": "string",
-      "description": "Start time of the event"
+      "type": "string"
     },
     "endTime": {
-      "type": "string",
-      "description": "End time of the event"
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "required": ["title", "date", "location"]
+  "required": [
+    "title",
+    "location"
+  ]
 }

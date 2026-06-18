@@ -4,52 +4,62 @@
   "properties": {
     "pubDate": {
       "type": "string",
-      "format": "date-time",
-      "description": "Publication date"
+      "format": "date-time"
     },
     "title": {
-      "type": "string",
-      "description": "Name or title of the map"
+      "type": "string"
     },
     "imagePath": {
-      "type": "string",
-      "description": "Path to the map image file"
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Description of the map area and features"
+      "type": "string"
     },
     "coordinates": {
-      "type": ["object", "array"],
-      "description": "Geographical coordinates of the map area"
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
     },
     "difficultyLevel": {
       "type": "string",
-      "enum": ["Facile", "Moyen", "Difficile", "Expert"],
-      "description": "Difficulty level of the map"
+      "enum": [
+        "Facile",
+        "Moyen",
+        "Difficile",
+        "Expert"
+      ]
     },
     "scale": {
-      "type": "string",
-      "description": "Map scale (e.g., '1:10000')"
+      "type": "string"
     },
     "mapType": {
       "type": "string",
-      "enum": ["Forêt", "Urbain", "Sprint", "Mixed"],
-      "description": "Type of terrain/area"
+      "enum": [
+        "Forêt",
+        "Urbain",
+        "Sprint",
+        "Mixed"
+      ]
     },
     "lastUpdated": {
       "type": "string",
-      "format": "date",
-      "description": "Last update date of the map"
+      "format": "date-time"
     },
     "author": {
-      "type": "string",
-      "description": "Cartographer or map author"
+      "type": "string"
     },
     "region": {
-      "type": "string",
-      "description": "Geographical region where the map is located"
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "required": ["title", "imagePath", "description"]
+  "required": [
+    "title",
+    "imagePath",
+    "description"
+  ]
 }

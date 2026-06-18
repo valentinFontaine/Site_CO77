@@ -3,31 +3,32 @@
   "type": "object",
   "properties": {
     "title": {
-      "type": "string",
-      "description": "Title of the article/post"
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Brief description or excerpt"
+      "type": "string"
     },
     "pubDate": {
       "type": "string",
-      "format": "date-time",
-      "description": "Publication date"
+      "format": "date-time"
     },
     "updatedDate": {
       "type": "string",
-      "format": "date-time",
-      "description": "Last updated date"
+      "format": "date-time"
     },
     "heroImage": {
-      "type": "string",
-      "description": "Path to hero image"
+      "type": "string"
     },
     "category": {
-      "type": "string",
-      "description": "Category of the actualite"
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "required": ["title", "description", "pubDate"]
+  "required": [
+    "title",
+    "description",
+    "pubDate"
+  ]
 }

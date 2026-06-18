@@ -1,1 +1,8 @@
-export default new Map();
+
+import __ASTRO_IMAGE_IMPORT_gwBPb from "../../assets/blog-placeholder-1.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fmarkdown-style-guide.md";
+import __ASTRO_IMAGE_IMPORT_Z1PgF6n from "../../assets/blog-placeholder-2.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fthird-post.md";
+import __ASTRO_IMAGE_IMPORT_Zgrfrx from "../../assets/blog-placeholder-3.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Ffirst-post.md";
+import __ASTRO_IMAGE_IMPORT_1CvqJO from "../../assets/blog-placeholder-4.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fsecond-post.md";
+import __ASTRO_IMAGE_IMPORT_125Tws from "../../assets/blog-placeholder-about.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fmarkdown-style-guide.md";
+export default new Map([["../../assets/blog-placeholder-1.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fmarkdown-style-guide.md", __ASTRO_IMAGE_IMPORT_gwBPb], ["../../assets/blog-placeholder-2.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fthird-post.md", __ASTRO_IMAGE_IMPORT_Z1PgF6n], ["../../assets/blog-placeholder-3.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Ffirst-post.md", __ASTRO_IMAGE_IMPORT_Zgrfrx], ["../../assets/blog-placeholder-4.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fsecond-post.md", __ASTRO_IMAGE_IMPORT_1CvqJO], ["../../assets/blog-placeholder-about.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Factualites%2Fmarkdown-style-guide.md", __ASTRO_IMAGE_IMPORT_125Tws]]);
+		

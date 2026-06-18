@@ -4,51 +4,52 @@
   "properties": {
     "pubDate": {
       "type": "string",
-      "format": "date-time",
-      "description": "Publication date"
+      "format": "date-time"
     },
     "title": {
-      "type": "string",
-      "description": "Title of the training session"
+      "type": "string"
     },
     "date": {
       "type": "string",
-      "format": "date",
-      "description": "Date of the training session (YYYY-MM-DD)"
+      "format": "date-time"
     },
     "rendezVous": {
-      "type": "string",
-      "description": "Meeting point location for the training"
+      "type": "string"
     },
     "parkingInfo": {
-      "type": "string",
-      "description": "Information about parking availability and details"
+      "type": "string"
     },
     "itinerary": {
-      "type": "string",
-      "description": "Description of the route from parking to rendez-vous point"
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Additional details about the training session"
+      "type": "string"
     },
     "duration": {
-      "type": "string",
-      "description": "Estimated duration of the training"
+      "type": "string"
     },
     "difficulty": {
       "type": "string",
-      "enum": ["Facile", "Moyen", "Difficile"],
-      "description": "Difficulty level of the training"
+      "enum": [
+        "Facile",
+        "Moyen",
+        "Difficile"
+      ]
     },
     "organizer": {
-      "type": "string",
-      "description": "Person or entity organizing the training"
+      "type": "string"
     },
     "maxParticipants": {
-      "type": "number",
-      "description": "Maximum number of participants"
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "required": ["title", "date", "rendezVous", "parkingInfo", "itinerary"]
+  "required": [
+    "title",
+    "rendezVous",
+    "parkingInfo",
+    "itinerary"
+  ]
 }

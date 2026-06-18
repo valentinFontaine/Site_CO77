@@ -3,6 +3,14 @@
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
+import { z } from 'astro/zod';
+
+// Import schema files synchronously
+import clubsSchema from './.astro/collections/clubs.schema.json' assert { type: 'json' };
+import entrainementsSchema from './.astro/collections/entrainements.schema.json' assert { type: 'json' };
+import evenementsSchema from './.astro/collections/evenements.schema.json' assert { type: 'json' };
+import actualitesSchema from './.astro/collections/actualites.schema.json' assert { type: 'json' };
+import cartesSchema from './.astro/collections/cartes.schema.json' assert { type: 'json' };
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,23 +20,23 @@ export default defineConfig({
 		collections: {
 			clubs: {
 				dir: './src/content/clubs',
-				schema: await import('./.astro/collections/clubs.schema.json'),
+				schema: clubsSchema,
 			},
 			entrainements: {
 				dir: './src/content/entrainements',
-				schema: await import('./.astro/collections/entrainements.schema.json'),
+				schema: entrainementsSchema,
 			},
 			evenements: {
 				dir: './src/content/evenements',
-				schema: await import('./.astro/collections/evenements.schema.json'),
+				schema: evenementsSchema,
 			},
 			actualites: {
 				dir: './src/content/actualites',
-				schema: await import('./.astro/collections/actualites.schema.json'),
+				schema: actualitesSchema,
 			},
 			cartes: {
 				dir: './src/content/cartes',
-				schema: await import('./.astro/collections/cartes.schema.json'),
+				schema: cartesSchema,
 			},
 		},
 	},

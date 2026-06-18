@@ -79,7 +79,7 @@ const cartes = defineCollection({
 		z.object({
 			pubDate: z.coerce.date().optional(),
 			title: z.string(),
-			imagePath: z.string(),
+			imagePath: z.optional(image()),
 			description: z.string(),
 			coordinates: z.record(z.string(), z.any()).optional(),
 			difficultyLevel: z.enum(['Facile', 'Moyen', 'Difficile', 'Expert']).optional(),

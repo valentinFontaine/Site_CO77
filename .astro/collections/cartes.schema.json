@@ -59,7 +59,6 @@
   },
   "required": [
     "title",
-    "imagePath",
     "description"
   ]
 }

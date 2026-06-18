@@ -33,7 +33,7 @@ const breadcrumbItems = [
 			<Breadcrumb items={breadcrumbItems} />
 			<h1>{post.data.title}</h1>
 			<p style="color: var(--gray);"><FormattedDate date={post.data.pubDate} /></p>
-			{post.data.heroImage && <Image src={post.data.heroImage} alt={post.data.title} style="max-width: 100%; margin: 1rem 0; border-radius: 8px;" />}
+			{post.data.heroImage && <Image src={post.data.heroImage} alt={post.data.title} inferSize={true} style="max-width: 100%; margin: 1rem 0; border-radius: 8px;" />}
 			<Content />
 		</main>
 		<Footer />

@@ -1,6 +1,6 @@
 ---
 title: "Forêt de Fontainebleau - Secteur Nord"
-imagePath: "/images/maps/foret-nord.jpg"
+imagePath: "../../assets/blog-placeholder-1.jpg"
 description: "Carte détaillée du secteur nord de la forêt de Fontainebleau"
 difficultyLevel: "Moyen"
 mapType: "Forêt"

@@ -24,7 +24,7 @@ const { Content } = await render(map);
 <Header />
 <main>
   <h1>{map.data.title}</h1>
-  {map.data.imagePath && <Image src={map.data.imagePath} alt={map.data.title} style="filter: blur(8px); max-width: 100%;" />}
+  {map.data.imagePath && <Image src={map.data.imagePath} alt={map.data.title} inferSize={true} style="filter: blur(8px); max-width: 100%;" />}
   <p>{map.data.description}</p>
   {map.data.difficultyLevel && <p><strong>Niveau:</strong> {map.data.difficultyLevel}</p>}
   <Content />

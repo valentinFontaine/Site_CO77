@@ -72,7 +72,7 @@
 
 ## 7. Cleanup
 
-- [ ] 7.1 Remove temporary files from to_convert/ if no longer needed
+- [x] 7.1 Remove temporary files from to_convert/ if no longer needed
 - [ ] 7.2 Verify build completes without errors
 - [ ] 7.3 Verify all links work correctly
 - [ ] 7.4 Final review of all changes

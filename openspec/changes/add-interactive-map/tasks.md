@@ -57,18 +57,18 @@
 
 ## 6. Testing and Verification
 
-- [ ] 6.1 Verify all 3 map overlays are displayed on the map
-- [ ] 6.2 Verify markers are placed at correct positions
-- [ ] 6.3 Verify hovering a marker shows tooltip with map title
-- [ ] 6.4 Verify hovering an overlay shows tooltip with map title
-- [ ] 6.5 Verify clicking a marker navigates to correct map page
-- [ ] 6.6 Verify clicking an overlay navigates to correct map page
-- [ ] 6.7 Verify base layer switching works (OpenStreetMap ↔ IGN Plan)
-- [ ] 6.8 Verify zoom and pan controls work correctly
-- [ ] 6.9 Verify map instructions section is displayed correctly
-- [ ] 6.10 Verify all other page sections (Acheter, Ressources) are displayed
-- [ ] 6.11 Test on mobile viewport
-- [ ] 6.12 Test on desktop viewport
+- [x] 6.1 Verify all 3 map overlays are displayed on the map
+- [x] 6.2 Verify markers are placed at correct positions
+- [x] 6.3 Verify hovering a marker shows tooltip with map title
+- [x] 6.4 Verify hovering an overlay shows tooltip with map title
+- [x] 6.5 Verify clicking a marker navigates to correct map page
+- [x] 6.6 Verify clicking an overlay navigates to correct map page
+- [x] 6.7 Verify base layer switching works (OpenStreetMap ↔ IGN Plan)
+- [x] 6.8 Verify zoom and pan controls work correctly
+- [x] 6.9 Verify map instructions section is displayed correctly
+- [x] 6.10 Verify all other page sections (Acheter, Ressources) are displayed
+- [x] 6.11 Test on mobile viewport
+- [x] 6.12 Test on desktop viewport
 
 ## 7. Cleanup
 

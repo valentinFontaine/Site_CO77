@@ -32,27 +32,6 @@ function mountMap(container, center, zoom) {
   return map;
 }
 
-function createCustomIcon(thumbnailUrl) {
-  if (!thumbnailUrl || typeof L === 'undefined') {
-    return L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      shadowSize: [41, 41]
-    });
-  }
-
-  return L.icon({
-    iconUrl: thumbnailUrl,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-    popupAnchor: [0, -16],
-    className: 'map-marker-icon'
-  });
-}
-
 function getBoundsCenter(bounds) {
   return [(bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2];
 }
@@ -112,28 +91,6 @@ function addCarteOverlays(map, cartes) {
       // Add overlay to map
       overlay.addTo(map);
     }
-
-    // Add marker at the center of bounds
-    var center = getBoundsCenter(bounds);
-    var marker = L.marker(center, {
-      icon: createCustomIcon(thumbnail),
-      zIndexOffset: 1000
-    });
-
-    // Add tooltip to marker
-    marker.bindTooltip(title, {
-      permanent: false,
-      direction: 'top',
-      className: 'custom-tooltip'
-    });
-
-    // Add click handler to navigate to map page
-    marker.on('click', function() {
-      window.location.href = '/cartographie/' + id + '/';
-    });
-
-    // Add marker to map
-    marker.addTo(map);
   });
 }
 

@@ -3,8 +3,6 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import { mountMap } from '../../components/Map/LeafletMap.ts';
-import { addCarteOverlays, type Carte } from '../../components/Map/Overlays.ts';
 
 const maps = await getCollection('cartes');
 
@@ -27,15 +25,13 @@ const mapData = maps.map(map => ({
   
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
         crossorigin="" />
-  
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lkZDV4pw="
-          crossorigin=""></script>
 </head>
 <body>
+  <!-- Leaflet JS - must load before map script -->
+  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          crossorigin=""></script>
+  
   <Header />
   
   <main>
@@ -49,7 +45,7 @@ const mapData = maps.map(map => ({
 
       <!-- Map Container -->
       <div class="bg-paper rounded-lg shadow-lg overflow-hidden">
-        <div id="map" class="w-full h-96 md:h-[600px]"></div>
+        <div id="map" class="w-full h-96 md:h-[600px]" data-map-data={JSON.stringify(mapData)}></div>
       </div>
 
       <!-- Map Instructions -->
@@ -150,19 +146,8 @@ const mapData = maps.map(map => ({
     </div>
   </main>
   
-  <script>
-    // Map data from server - using JSON stringify safely
-    const cartes = JSON.parse('{JSON.stringify(mapData)}');
-    
-    // Initialize the map when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-      var mapElement = document.getElementById('map');
-      if (mapElement) {
-        var map = mountMap(mapElement, [48.4545, 2.6532], 11);
-        addCarteOverlays(map, cartes);
-      }
-    });
-  </script>
+  <!-- Map initialization script -->
+  <script is:inline src="/scripts/map-init.js"></script>
   
   <style>
     /* Custom tooltip styles */

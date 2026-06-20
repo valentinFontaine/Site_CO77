@@ -2,7 +2,32 @@ import { defineCollection, defineConfig } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// Clubs Collection
+// ============================================================================
+// SCHÉMAS DE BASE
+// ============================================================================
+
+// Schéma commun à tous les types de contenu
+const baseSchema = {
+	// Champs obligatoires
+	title: z.string().min(5).max(120).describe('Titre du contenu (5-120 caractères)'),
+	pubDate: z.coerce.date().describe('Date de publication au format ISO 8601'),
+	
+	// Champs optionnels communs
+	description: z.string().max(300).describe('Description courte pour les aperçus').optional(),
+	author: z.string().default('CO77').describe('Auteur du contenu'),
+	tags: z.array(z.string().max(30)).describe('Mots-clés pour le filtrage et la recherche').optional(),
+	draft: z.boolean().default(false).describe('Brouillon (ne sera pas publié)'),
+	featured: z.boolean().default(false).describe('Mettre en avant sur la page d\'accueil'),
+	
+	// Référence à l'ancien site (pour traçabilité)
+	legacyFile: z.string().describe('Nom du fichier original sur l\'ancien site').optional(),
+	legacyUrl: z.string().url().describe('URL originale sur l\'ancien site').optional(),
+};
+
+// ============================================================================
+// COLLECTION : CLUBS (inchangée)
+// ============================================================================
+
 const clubs = defineCollection({
 	loader: glob({ base: './src/content/clubs', pattern: '**/*.{md,mdx}' }),
 	schema: z.object({
@@ -20,59 +45,10 @@ const clubs = defineCollection({
 	}),
 });
 
-// Entrainements Collection
-const entrainements = defineCollection({
-	loader: glob({ base: './src/content/entrainements', pattern: '**/*.{md,mdx}' }),
-	schema: z.object({
-		pubDate: z.coerce.date().optional(),
-		title: z.string(),
-		date: z.coerce.date().optional(),
-		rendezVous: z.string(),
-		parkingInfo: z.string(),
-		itinerary: z.string(),
-		description: z.string().optional(),
-		duration: z.string().optional(),
-		difficulty: z.enum(['Facile', 'Moyen', 'Difficile']).optional(),
-		organizer: z.string().optional(),
-		maxParticipants: z.number().optional(),
-	}),
-});
+// ============================================================================
+// COLLECTION : CARTE (inchangée)
+// ============================================================================
 
-// Evenements Collection
-const evenements = defineCollection({
-	loader: glob({ base: './src/content/evenements', pattern: '**/*.{md,mdx}' }),
-	schema: z.object({
-		pubDate: z.coerce.date().optional(),
-		title: z.string(),
-		date: z.coerce.date().optional(),
-		location: z.string(),
-		description: z.string().optional(),
-		price: z.union([z.string(), z.number()]).optional(),
-		areasOfExpertise: z.array(z.string()).optional(),
-		results: z.string().optional(),
-		organizer: z.string().optional(),
-		registrationLink: z.string().url().optional(),
-		maxParticipants: z.number().optional(),
-		startTime: z.string().optional(),
-		endTime: z.string().optional(),
-	}),
-});
-
-// Actualites Collection
-const actualites = defineCollection({
-	loader: glob({ base: './src/content/actualites', pattern: '**/*.{md,mdx}' }),
-	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			description: z.string(),
-			pubDate: z.coerce.date(),
-			updatedDate: z.coerce.date().optional(),
-			heroImage: z.optional(image()),
-			category: z.string().optional(),
-		}),
-});
-
-// Cartes Collection
 const cartes = defineCollection({
 	loader: glob({ base: './src/content/cartes', pattern: '**/*.{md,mdx}' }),
 	schema: ({ image }) =>
@@ -81,7 +57,6 @@ const cartes = defineCollection({
 			title: z.string(),
 			imagePath: z.optional(image()),
 			description: z.string(),
-			// Map-specific fields for interactive map
 			bounds: z.array(z.number()).length(4).describe('Map bounds as [swLat, swLng, neLat, neLng]'),
 			thumbnail: z.string().optional().describe('Path to thumbnail image (PNG format)'),
 			coordinates: z.record(z.string(), z.any()).optional(),
@@ -92,6 +67,96 @@ const cartes = defineCollection({
 			author: z.string().optional(),
 			region: z.string().optional(),
 		}),
+});
+
+// ============================================================================
+// COLLECTION : ACTUALITÉS (mis à jour)
+// ============================================================================
+
+const actualites = defineCollection({
+	loader: glob({ base: './src/content/actualites', pattern: '**/*.{md,mdx}' }),
+	schema: ({ image }) =>
+		z.object({
+			...baseSchema,
+			category: z.enum([
+				'annonces',
+				'resultats', 
+				'conseils',
+				'vie-du-comite',
+				'photos',
+				'divers'
+			]).describe('Catégorie de l\'actualité'),
+			heroImage: z.optional(image()).describe('Image principale pour l\'aperçu'),
+			seoTitle: z.string().max(60).describe('Titre optimisé pour le SEO').optional(),
+			seoDescription: z.string().max(160).describe('Description optimisée pour le SEO').optional(),
+			updatedDate: z.coerce.date().describe('Date de dernière mise à jour').optional(),
+		}),
+});
+
+// ============================================================================
+// COLLECTION : ÉVÉNEMENTS (NOUVEAU - simplifié)
+// ============================================================================
+
+const evenements = defineCollection({
+	loader: glob({ base: './src/content/evenements', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		...baseSchema,
+		eventDate: z.coerce.date().describe('Date principale de l\'événement (YYYY-MM-DD)'),
+		location: z.string().describe('Lieu de l\'événement').optional(),
+		gpsCoordinates: z.string()
+			.regex(/^-?\d+\.\d+,-?\d+\.\d+$/)
+			.describe('Coordonnées GPS au format "lat,lng"').optional(),
+		mapsLink: z.string().url().describe('Lien vers Google Maps').optional(),
+		eventType: z.enum(['competition', 'entrainement', 'reunion', 'stage', 'autre'])
+			.default('competition')
+			.describe('Type d\'événement'),
+		discipline: z.enum(['CO', 'Sprint', 'MD', 'LD', 'Trail-O', 'Relais', 'Mixte'])
+			.default('CO')
+			.describe('Discipline'),
+		organizer: z.string().default('CO77').describe('Organisateur'),
+		price: z.string().max(100).describe('Tarif').optional(),
+		registrationLink: z.string().url().describe('URL du formulaire').optional(),
+		registrationDeadline: z.coerce.date().describe('Date limite').optional(),
+		inscriptionsOpen: z.boolean().default(false).describe('Inscriptions ouvertes ?'),
+		maxParticipants: z.number().describe('Nombre max de participants').optional(),
+		eventCompleted: z.boolean().default(false).describe('Événement terminé ?'),
+		eventCancelled: z.boolean().default(false).describe('Événement annulé ?'),
+		startTime: z.string().regex(/^\d{2}:\d{2}$/).describe('Heure de début').optional(),
+		endTime: z.string().regex(/^\d{2}:\d{2}$/).describe('Heure de fin').optional(),
+		announcementPdf: z.string().describe('Chemin vers annonce PDF').optional(),
+		announcementHtml: z.string().describe('Chemin vers annonce HTML').optional(),
+		resultsHtml: z.array(z.string()).describe('Liste des résultats HTML').optional(),
+		inscriptionsHtml: z.string().describe('Chemin vers inscrits HTML').optional(),
+		inscriptionsPdf: z.string().describe('Chemin vers inscrits PDF').optional(),
+		hasResults: z.boolean().default(false).describe('Résultats disponibles ?'),
+		hasLiveResults: z.boolean().default(false).describe('Résultats en direct ?'),
+		resultsLink: z.string().url().describe('Lien externe résultats').optional(),
+	}),
+});
+
+// ============================================================================
+// COLLECTION : ENTRAÎNEMENTS (mis à jour)
+// ============================================================================
+
+const entrainements = defineCollection({
+	loader: glob({ base: './src/content/entrainements', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		...baseSchema,
+		date: z.coerce.date().describe('Date de l\'entraînement'),
+		rendezVous: z.string().describe('Point de rendez-vous'),
+		location: z.string().describe('Lieu détaillé').optional(),
+		parkingInfo: z.string().describe('Informations parking').optional(),
+		itinerary: z.string().describe('Itinéraire').optional(),
+		duration: z.string().describe('Durée').optional(),
+		difficulty: z.enum(['Facile', 'Moyen', 'Difficile']).default('Moyen').describe('Difficulté'),
+		organizer: z.string().default('CO77').describe('Organisateur'),
+		maxParticipants: z.number().describe('Nombre max de participants').optional(),
+		startTime: z.string().regex(/^\d{2}:\d{2}$/).describe('Heure de début').optional(),
+		endTime: z.string().regex(/^\d{2}:\d{2}$/).describe('Heure de fin').optional(),
+		price: z.string().describe('Tarif').optional(),
+		equipment: z.array(z.string()).describe('Matériel à prévoir').optional(),
+		prerequisites: z.string().describe('Prérequis').optional(),
+	}),
 });
 
 export const collections = {

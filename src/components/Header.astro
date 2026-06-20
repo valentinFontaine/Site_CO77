@@ -5,7 +5,9 @@ import HeaderLink from './HeaderLink.astro';
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<a href="/" class="logo-link">
+			<img src="/logo-co77-header.jpg" alt="{SITE_TITLE}" class="logo" />
+		</a>
 		<div class="internal-links">
 			<HeaderLink href="/">Accueil</HeaderLink>
 			<HeaderLink href="/la-co/">La CO</HeaderLink>
@@ -52,15 +54,6 @@ import HeaderLink from './HeaderLink.astro';
 		background: white;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
 	nav {
 		display: flex;
 		align-items: center;
@@ -79,6 +72,19 @@ import HeaderLink from './HeaderLink.astro';
 	.social-links,
 	.social-links a {
 		display: flex;
+	}
+	.logo {
+		height: 40px;
+		width: auto;
+	}
+	.logo-link {
+		padding: 1em 0.5em;
+		color: var(--black);
+		border-bottom: 4px solid transparent;
+		text-decoration: none;
+	}
+	.logo-link:hover {
+		border-bottom-color: var(--accent);
 	}
 	@media (max-width: 720px) {
 		.social-links {

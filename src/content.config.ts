@@ -81,6 +81,9 @@ const cartes = defineCollection({
 			title: z.string(),
 			imagePath: z.optional(image()),
 			description: z.string(),
+			// Map-specific fields for interactive map
+			bounds: z.array(z.number()).length(4).describe('Map bounds as [swLat, swLng, neLat, neLng]'),
+			thumbnail: z.string().optional().describe('Path to thumbnail image (PNG format)'),
 			coordinates: z.record(z.string(), z.any()).optional(),
 			difficultyLevel: z.enum(['Facile', 'Moyen', 'Difficile', 'Expert']).optional(),
 			scale: z.string().optional(),

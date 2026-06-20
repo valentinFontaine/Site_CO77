@@ -15,6 +15,19 @@
     "description": {
       "type": "string"
     },
+    "bounds": {
+      "minItems": 4,
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Map bounds as [swLat, swLng, neLat, neLng]"
+    },
+    "thumbnail": {
+      "description": "Path to thumbnail image (PNG format)",
+      "type": "string"
+    },
     "coordinates": {
       "type": "object",
       "propertyNames": {
@@ -59,6 +72,7 @@
   },
   "required": [
     "title",
-    "description"
+    "description",
+    "bounds"
   ]
 }

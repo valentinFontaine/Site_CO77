@@ -1,13 +1,17 @@
 ---
-title: "Championnat Régional 2026"
-date: "2026-07-15"
-location: "Forêt de Fontainebleau"
-description: "Championnat régional de course d'orientation"
-price: "15€"
-areasOfExpertise: ["Course d'orientation", "Trail-O"]
-organizer: "CO77"
-registrationLink: "https://example.com/register"
-pubDate: "2026-07-15T00:00:00.000Z"
+heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
+title: Championnat Régional 2026
+description: Championnat régional de course d'orientation
+pubDate: 2026-07-15
+author: CO77
+location: Forêt de Fontainebleau
+price: 15€
+eventDate: 2026-07-15
+organizer: CO77
+registrationLink: https://example.com/register
+eventType: competition
+discipline: CO
+draft: false
 ---
 
 Compétition ouverte à tous les licenciés FFCO.

@@ -1,23 +1,23 @@
 ---
-title: Nouvelle page 1
-description: ''
-pubDate: '2023-06-03'
-updatedDate: '2023-06-03'
+heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
+title: Championnat Départemental de Seine et Marne 2023
+description: Championnat départemental en forêt de Fontainebleau
 author: CO77
 tags:
 - foret
-- competition
 - fontainebleau
-- championnats d�partementaux de seine et marne 2023 en for�t de fontainebleau cdco77
+- competition
 - championnat
-category: annonces
+- cdco77
+pubDate: 2023-06-03
 draft: true
 featured: false
 legacyFile: Championnats departementaux.htm
 legacyPath: attachements/2023/Championnats departementaux.htm
-eventDate: '2023-06-03'
+eventDate: 2023-06-03
 eventType: competition
+location: Forêt de Fontainebleau
+organizer: CO77
+discipline: CO
 needsManualReview: true
 ---
-
-![../temp/2023/flyerChtdepartementaux800.jpg](../temp/2023/flyerChtdepartementaux800.jpg)

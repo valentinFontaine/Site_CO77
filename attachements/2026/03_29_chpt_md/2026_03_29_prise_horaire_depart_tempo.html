@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ouverture prochaine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Championnat Départemental de Seine-et-Marne - Moyenne Distance</h1>
+        <p>Dimanche 29 mars 2026 en forêt de Fontainebleau</p>
+    </header>
+
+
+    <main>
+        <section>
+            <h2>Prise d'horaire de départ</h2>
+            <p>Un peu de patience, la prise d'horaire de départ ouvrira bientôt <\p>
+            <p>Le formulaire sera accessible le <strong>17 mars 2026 à 00h00</strong>.</p>
+        </section>
+    </main>
+    <script>
+        // → Définis ici la date d'ouverture
+        const ouverture = new Date("2026-03-17T00:00:00+01:00");
+
+        const maintenant = new Date();
+        if (maintenant >= ouverture) {
+            window.location.href = "#";
+        }
+    </script>
+</body>
+</html>

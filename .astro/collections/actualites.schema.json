@@ -3,24 +3,83 @@
   "type": "object",
   "properties": {
     "title": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 120,
+      "description": "Titre du contenu (5-120 caractères)"
     },
     "pubDate": {
+      "description": "Date de publication au format ISO 8601",
       "type": "string",
       "format": "date-time"
     },
-    "updatedDate": {
+    "description": {
       "type": "string",
-      "format": "date-time"
+      "maxLength": 300,
+      "description": "Description courte pour les aperçus"
     },
-    "heroImage": {
+    "author": {
+      "default": "CO77",
+      "description": "Auteur du contenu",
       "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 30
+      },
+      "description": "Mots-clés pour le filtrage et la recherche"
+    },
+    "draft": {
+      "default": false,
+      "description": "Brouillon (ne sera pas publié)",
+      "type": "boolean"
+    },
+    "featured": {
+      "default": false,
+      "description": "Mettre en avant sur la page d'accueil",
+      "type": "boolean"
+    },
+    "legacyFile": {
+      "type": "string",
+      "description": "Nom du fichier original sur l'ancien site"
+    },
+    "legacyUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL originale sur l'ancien site"
     },
     "category": {
+      "type": "string",
+      "enum": [
+        "annonces",
+        "resultats",
+        "conseils",
+        "vie-du-comite",
+        "photos",
+        "divers"
+      ],
+      "description": "Catégorie de l'actualité"
+    },
+    "heroImage": {
+      "description": "Image principale pour l'aperçu",
       "type": "string"
+    },
+    "seoTitle": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Titre optimisé pour le SEO"
+    },
+    "seoDescription": {
+      "type": "string",
+      "maxLength": 160,
+      "description": "Description optimisée pour le SEO"
+    },
+    "updatedDate": {
+      "description": "Date de dernière mise à jour",
+      "type": "string",
+      "format": "date-time"
     },
     "$schema": {
       "type": "string"
@@ -28,7 +87,7 @@
   },
   "required": [
     "title",
-    "description",
-    "pubDate"
+    "pubDate",
+    "category"
   ]
 }

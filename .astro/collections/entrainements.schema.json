@@ -2,33 +2,82 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 120,
+      "description": "Titre du contenu (5-120 caractères)"
+    },
     "pubDate": {
+      "description": "Date de publication au format ISO 8601",
       "type": "string",
       "format": "date-time"
     },
-    "title": {
+    "description": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Description courte pour les aperçus"
+    },
+    "author": {
+      "default": "CO77",
+      "description": "Auteur du contenu",
       "type": "string"
     },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 30
+      },
+      "description": "Mots-clés pour le filtrage et la recherche"
+    },
+    "draft": {
+      "default": false,
+      "description": "Brouillon (ne sera pas publié)",
+      "type": "boolean"
+    },
+    "featured": {
+      "default": false,
+      "description": "Mettre en avant sur la page d'accueil",
+      "type": "boolean"
+    },
+    "legacyFile": {
+      "type": "string",
+      "description": "Nom du fichier original sur l'ancien site"
+    },
+    "legacyUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL originale sur l'ancien site"
+    },
     "date": {
+      "description": "Date de l'entraînement",
       "type": "string",
       "format": "date-time"
     },
     "rendezVous": {
-      "type": "string"
+      "type": "string",
+      "description": "Point de rendez-vous"
+    },
+    "location": {
+      "type": "string",
+      "description": "Lieu détaillé"
     },
     "parkingInfo": {
-      "type": "string"
+      "type": "string",
+      "description": "Informations parking"
     },
     "itinerary": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
+      "type": "string",
+      "description": "Itinéraire"
     },
     "duration": {
-      "type": "string"
+      "type": "string",
+      "description": "Durée"
     },
     "difficulty": {
+      "default": "Moyen",
+      "description": "Difficulté",
       "type": "string",
       "enum": [
         "Facile",
@@ -37,10 +86,38 @@
       ]
     },
     "organizer": {
+      "default": "CO77",
+      "description": "Organisateur",
       "type": "string"
     },
     "maxParticipants": {
-      "type": "number"
+      "type": "number",
+      "description": "Nombre max de participants"
+    },
+    "startTime": {
+      "type": "string",
+      "pattern": "^\\d{2}:\\d{2}$",
+      "description": "Heure de début"
+    },
+    "endTime": {
+      "type": "string",
+      "pattern": "^\\d{2}:\\d{2}$",
+      "description": "Heure de fin"
+    },
+    "price": {
+      "type": "string",
+      "description": "Tarif"
+    },
+    "equipment": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Matériel à prévoir"
+    },
+    "prerequisites": {
+      "type": "string",
+      "description": "Prérequis"
     },
     "$schema": {
       "type": "string"
@@ -48,8 +125,8 @@
   },
   "required": [
     "title",
-    "rendezVous",
-    "parkingInfo",
-    "itinerary"
+    "pubDate",
+    "date",
+    "rendezVous"
   ]
 }

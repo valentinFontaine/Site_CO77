@@ -1,0 +1,155 @@
+/* Réinitialisation des styles par défaut */
+body, h1, h2, p, ul, li, header, main, footer {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Style général du corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+}
+
+/* Style du header */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #4CAF50;
+}
+
+/* Style des sections */
+section {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
+}
+
+/* Style des liens */
+a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-size: 1.5em; /* Taille du texte des liens */
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Style des listes */
+ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+/* Style du footer */
+footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+footer a {
+    color: blue;
+    text-decoration: underline;
+}
+
+/* Style général du tableau */
+table {
+    width: 100%; /* Le tableau prend toute la largeur disponible */
+    border-collapse: collapse; /* Fusionne les bordures des cellules */
+    margin-bottom: 20px; /* Espacement en dessous du tableau */
+}
+
+/* Style des en-têtes du tableau */
+th {
+    background-color: #4CAF50; /* Couleur vert clair pour les en-têtes */
+    color: white; /* Texte blanc pour un bon contraste */
+    padding: 10px; /* Espacement à l'intérieur des cellules */
+    text-align: left; /* Alignement du texte à gauche */
+    font-weight: bold; /* Texte en gras */
+}
+
+/* Style des cellules du tableau */
+td {
+    border: 1px solid #ddd; /* Bordures fines pour les cellules */
+    padding: 10px; /* Espacement à l'intérieur des cellules */
+    text-align: left; /* Alignement du texte à gauche */
+}
+
+/* Style des lignes paires (zébrure) */
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Couleur de fond légère pour les lignes paires */
+}
+
+/* Style des lignes impaires */
+tr:nth-child(odd) {
+    background-color: #ffffff; /* Couleur de fond blanche pour les lignes impaires */
+}
+
+/* Style pour les cellules fusionnées (rowspan) */
+td[rowspan] {
+    background-color: #e0e0e0; /* Couleur de fond grise pour les cellules fusionnées */
+    font-weight: bold; /* Texte en gras */
+}
+
+/* Style pour la section parente */
+.flex-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux conteneurs de passer à la ligne si nécessaire */
+    justify-content: center; /* Centre les conteneurs horizontalement */
+    gap: 20px; /* Espacement entre les conteneurs */
+}
+
+/* Style pour les conteneurs centrés */
+.centered-container {
+    display: flex;
+    flex-direction: column; /* Les éléments sont empilés verticalement */
+    align-items: center; /* Centre les éléments horizontalement */
+    text-align: center; /* Centre le texte à l'intérieur des liens */
+    max-width: 420px; /* Limite la largeur maximale des conteneurs */
+    margin: 10px; /* Espacement autour des conteneurs */
+}
+
+/* Style pour les liens */
+.centered-container a {
+    margin-bottom: 10px; /* Espacement entre le lien et l'image */
+    font-size: 1.8em; /* Taille du texte des liens */
+    color: #4CAF50; /* Couleur vert clair pour les liens */
+    text-decoration: none; /* Supprime le soulignement par défaut */
+}
+.centered-container a:hover {
+    text-decoration: underline;
+}
+
+/* Style pour les images */
+.centered-container img {
+    max-width: 100%; /* Limite la largeur de l'image à 100% de son conteneur */
+    height: auto; /* Conserve les proportions de l'image */
+    border: 2px solid #ddd; /* Ajoute une bordure fine autour de l'image */
+    border-radius: 8px; /* Coins arrondis pour l'image */
+}

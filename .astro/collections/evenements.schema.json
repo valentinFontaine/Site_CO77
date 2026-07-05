@@ -2,57 +2,185 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 120,
+      "description": "Titre du contenu (5-120 caractères)"
+    },
     "pubDate": {
+      "description": "Date de publication au format ISO 8601",
       "type": "string",
       "format": "date-time"
     },
-    "title": {
+    "description": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "Description courte pour les aperçus"
+    },
+    "author": {
+      "default": "CO77",
+      "description": "Auteur du contenu",
       "type": "string"
     },
-    "date": {
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 30
+      },
+      "description": "Mots-clés pour le filtrage et la recherche"
+    },
+    "draft": {
+      "default": false,
+      "description": "Brouillon (ne sera pas publié)",
+      "type": "boolean"
+    },
+    "featured": {
+      "default": false,
+      "description": "Mettre en avant sur la page d'accueil",
+      "type": "boolean"
+    },
+    "legacyFile": {
+      "type": "string",
+      "description": "Nom du fichier original sur l'ancien site"
+    },
+    "legacyUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL originale sur l'ancien site"
+    },
+    "eventDate": {
+      "description": "Date principale de l'événement (YYYY-MM-DD)",
       "type": "string",
       "format": "date-time"
     },
     "location": {
-      "type": "string"
+      "type": "string",
+      "description": "Lieu de l'événement"
     },
-    "description": {
+    "gpsCoordinates": {
+      "type": "string",
+      "pattern": "^-?\\d+\\.\\d+,-?\\d+\\.\\d+$",
+      "description": "Coordonnées GPS au format \"lat,lng\""
+    },
+    "mapsLink": {
+      "type": "string",
+      "format": "uri",
+      "description": "Lien vers Google Maps"
+    },
+    "eventType": {
+      "default": "competition",
+      "description": "Type d'événement",
+      "type": "string",
+      "enum": [
+        "competition",
+        "entrainement",
+        "reunion",
+        "stage",
+        "autre"
+      ]
+    },
+    "discipline": {
+      "default": "CO",
+      "description": "Discipline",
+      "type": "string",
+      "enum": [
+        "CO",
+        "Sprint",
+        "MD",
+        "LD",
+        "Trail-O",
+        "Relais",
+        "Mixte"
+      ]
+    },
+    "organizer": {
+      "default": "CO77",
+      "description": "Organisateur",
       "type": "string"
     },
     "price": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "number"
-        }
-      ]
-    },
-    "areasOfExpertise": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "results": {
-      "type": "string"
-    },
-    "organizer": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 100,
+      "description": "Tarif"
     },
     "registrationLink": {
       "type": "string",
-      "format": "uri"
+      "format": "uri",
+      "description": "URL du formulaire"
+    },
+    "registrationDeadline": {
+      "description": "Date limite",
+      "type": "string",
+      "format": "date-time"
+    },
+    "inscriptionsOpen": {
+      "default": false,
+      "description": "Inscriptions ouvertes ?",
+      "type": "boolean"
     },
     "maxParticipants": {
-      "type": "number"
+      "type": "number",
+      "description": "Nombre max de participants"
+    },
+    "eventCompleted": {
+      "default": false,
+      "description": "Événement terminé ?",
+      "type": "boolean"
+    },
+    "eventCancelled": {
+      "default": false,
+      "description": "Événement annulé ?",
+      "type": "boolean"
     },
     "startTime": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^\\d{2}:\\d{2}$",
+      "description": "Heure de début"
     },
     "endTime": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^\\d{2}:\\d{2}$",
+      "description": "Heure de fin"
+    },
+    "announcementPdf": {
+      "type": "string",
+      "description": "Chemin vers annonce PDF"
+    },
+    "announcementHtml": {
+      "type": "string",
+      "description": "Chemin vers annonce HTML"
+    },
+    "resultsHtml": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Liste des résultats HTML"
+    },
+    "inscriptionsHtml": {
+      "type": "string",
+      "description": "Chemin vers inscrits HTML"
+    },
+    "inscriptionsPdf": {
+      "type": "string",
+      "description": "Chemin vers inscrits PDF"
+    },
+    "hasResults": {
+      "default": false,
+      "description": "Résultats disponibles ?",
+      "type": "boolean"
+    },
+    "hasLiveResults": {
+      "default": false,
+      "description": "Résultats en direct ?",
+      "type": "boolean"
+    },
+    "resultsLink": {
+      "type": "string",
+      "format": "uri",
+      "description": "Lien externe résultats"
     },
     "$schema": {
       "type": "string"
@@ -60,6 +188,7 @@
   },
   "required": [
     "title",
-    "location"
+    "pubDate",
+    "eventDate"
   ]
 }

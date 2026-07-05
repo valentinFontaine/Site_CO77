@@ -1,4 +1,5 @@
 ---
+heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 name: "Club d'Orientation Melun"
 description: "Club d'orientation basé à Melun"
 location: "Melun, Seine-et-Marne"

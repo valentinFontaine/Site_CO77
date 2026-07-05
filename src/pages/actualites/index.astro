@@ -29,8 +29,12 @@ const posts = allPosts.sort(
 						<li>
 							<a href={`/actualites/${post.id}/`} style="text-decoration: none; color: inherit; display: block;">
 								{post.data.heroImage && (
+								typeof post.data.heroImage === "string" && (post.data.heroImage.startsWith("/images/") || post.data.heroImage.startsWith("http")) ? (
+									<img src={post.data.heroImage} alt="" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;" />
+								) : (
 									<Image width={400} height={250} src={post.data.heroImage} alt="" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;" />
-								)}
+								)
+							)}
 								<h3>{post.data.title}</h3>
 								<p style="color: var(--gray); font-size: 0.875rem;"><FormattedDate date={post.data.pubDate} /></p>
 							</a>

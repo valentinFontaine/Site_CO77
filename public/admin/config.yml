@@ -47,9 +47,14 @@ public_folder: /images/uploads
 
 locale: fr
 
-# Chaque contribution passe par un circuit brouillon -> en relecture -> publié.
-# Supprimer cette ligne pour que tout soit publié immédiatement.
-publish_mode: editorial_workflow
+# Publication directe sur la branche main.
+#
+# Le circuit de relecture de Decap CMS (publish_mode: editorial_workflow) est
+# volontairement désactivé : il fonctionne en ouvrant une pull request par
+# contribution, ce qui exige d'élargir les droits du jeton GitHub et ajoute une
+# étape que les bénévoles n'ont pas à comprendre. La case « Brouillon » présente
+# dans chaque formulaire remplit déjà le besoin : un contenu coché brouillon est
+# enregistré mais n'apparaît pas sur le site.
 
 collections:
   # --------------------------------------------------------------------------

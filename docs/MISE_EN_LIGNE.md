@@ -68,7 +68,7 @@ Leur transmettre [le guide du contributeur](GUIDE_CONTRIBUTEUR.md).
 ### Vérifier que tout fonctionne
 
 1. Se connecter sur https://co77.netlify.app/admin/
-2. Créer une actualité de test, la faire passer en **Ready** puis **Publish**.
+2. Créer une actualité de test et la publier.
 3. Vérifier dans l'historique GitHub que le commit porte bien le nom de la
    personne qui a publié.
 4. Attendre une à deux minutes : l'actualité doit apparaître sur le site.

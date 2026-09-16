@@ -20,9 +20,8 @@ Aucune compétence technique n'est nécessaire. Tout se fait depuis une page web
    - **Contenu** — le texte de l'article
 4. Facultatif mais recommandé : le **Résumé** (affiché dans la liste des
    actualités) et une **Image principale**.
-5. Cliquer sur **Save**. L'article part alors en relecture.
-6. Quand il est prêt, faire passer son statut de **Draft** à **Ready** puis
-   **Publish**.
+5. Cliquer sur **Publish** pour mettre l'article en ligne. Pour le garder de
+   côté sans le publier, cocher **Brouillon** avant d'enregistrer.
 
 Comptez **une à deux minutes** entre la publication et l'apparition sur le site :
 le site se reconstruit automatiquement.

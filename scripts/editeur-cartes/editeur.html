@@ -60,6 +60,12 @@
 		width: 14px; height: 14px; background: #2337ff; border: 2px solid #fff;
 		box-shadow: 0 0 2px rgba(0,0,0,0.6); cursor: nwse-resize;
 	}
+	/* Vert, pour ne se confondre ni avec le bleu du redimensionnement ni avec
+	   l'orange des sommets du contour. */
+	.poignee-deplacement {
+		width: 16px; height: 16px; background: #0a8f3c; border: 2px solid #fff;
+		box-shadow: 0 0 2px rgba(0,0,0,0.6); cursor: move;
+	}
 </style>
 </head>
 <body>
@@ -73,7 +79,7 @@
 		<p class="aide" id="infoSource"></p>
 
 		<h2>2. Position et taille</h2>
-		<p class="aide">Glisser l'image pour la déplacer. Glisser le carré bleu (coin sud-est) pour la redimensionner — les proportions restent verrouillées.</p>
+		<p class="aide">Glisser le carré <strong style="color:#0a8f3c">vert</strong> (coin nord-ouest) pour déplacer l'image, le carré <strong style="color:#2337ff">bleu</strong> (coin sud-est) pour la redimensionner — les proportions restent verrouillées. Glisser ailleurs déplace le fond de carte.</p>
 		<label for="opacite">Opacité de l'image (<span id="valeurOpacite">70</span> %)</label>
 		<input type="range" id="opacite" min="0" max="100" value="70" />
 

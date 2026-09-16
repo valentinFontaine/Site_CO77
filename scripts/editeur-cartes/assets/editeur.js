@@ -49,6 +49,7 @@ let rotation = 0;
 let feuille = null; // { sud, ouest, nord, est }
 let overlay = null;
 let poigneeRedim = null;
+let poigneeDeplacement = null;
 let contour = []; // [ [lat, lng], ... ]
 let marqueursContour = [];
 let polygoneContour = null;
@@ -172,7 +173,11 @@ async function chargerImageSource() {
 		// Première pose : un rectangle raisonnable centré sur la vue actuelle.
 		const vue = carte.getBounds();
 		const centre = carte.getCenter();
-		const largeurDeg = (vue.getEast() - vue.getWest()) * 0.5;
+		// Repli à environ 4 km si la vue n'a pas encore de dimensions exploitables
+		// (fenêtre pas encore dessinée, onglet en arrière-plan). Sans ce garde-fou,
+		// l'emprise est nulle et l'image se pose en 0 × 0 : invisible, sans erreur.
+		const largeurVue = vue.getEast() - vue.getWest();
+		const largeurDeg = largeurVue > 1e-6 ? largeurVue * 0.5 : 0.05;
 		const ouest = centre.lng - largeurDeg / 2;
 		const est = centre.lng + largeurDeg / 2;
 
@@ -194,7 +199,7 @@ async function chargerImageSource() {
 		opacity: Number(elOpacite.value) / 100,
 	}).addTo(carte);
 
-	installerDeplacement();
+	installerPoigneeDeplacement();
 	installerPoigneeRedim();
 	elInfoSource.textContent = `${largeur}×${hauteur} px affichés (source ${sourceActuelle.largeurOriginale}×${sourceActuelle.hauteurOriginale}).`;
 	majEtatBoutonEnregistrer();
@@ -205,41 +210,55 @@ function empriseDepuisFeuille(f) {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Déplacer l'image (glisser l'ensemble)
+// 2. Déplacer l'image (poignée nord-ouest)
 // ---------------------------------------------------------------------------
 
-function installerDeplacement() {
-	const image = overlay.getElement();
-	if (!image) return;
-	image.style.cursor = 'move';
+/**
+ * Le déplacement passe par une poignée, et non par un glisser sur l'image.
+ *
+ * Un `L.imageOverlay` ne capte pas les événements de souris : le `mousedown`
+ * atterrissait sur le fond de carte, qui se déplaçait avec l'image posée dessus
+ * — mouvement apparent nul. Un marqueur Leaflet, lui, intercepte le glisser
+ * avant la carte, sans conflit possible.
+ */
+function installerPoigneeDeplacement() {
+	if (poigneeDeplacement) carte.removeLayer(poigneeDeplacement);
 
-	image.addEventListener('mousedown', (evenement) => {
-		if (modeTrace) return; // en mode tracé, un clic sur l'image ajoute un sommet
-		evenement.preventDefault();
-		const depart = carte.mouseEventToLatLng(evenement);
-		const feuilleDepart = { ...feuille };
+	poigneeDeplacement = L.marker([feuille.nord, feuille.ouest], {
+		draggable: true,
+		icon: L.divIcon({ className: 'poignee-deplacement', iconSize: [16, 16] }),
+		zIndexOffset: 500, // au-dessus des sommets du contour, pour rester attrapable
+	}).addTo(carte);
 
-		function surDeplacement(e) {
-			const point = carte.mouseEventToLatLng(e);
-			const deltaLat = point.lat - depart.lat;
-			const deltaLng = point.lng - depart.lng;
-			feuille = {
-				sud: feuilleDepart.sud + deltaLat,
-				nord: feuilleDepart.nord + deltaLat,
-				ouest: feuilleDepart.ouest + deltaLng,
-				est: feuilleDepart.est + deltaLng,
-			};
-			overlay.setBounds(empriseDepuisFeuille(feuille));
-			if (poigneeRedim) poigneeRedim.setLatLng([feuille.sud, feuille.est]);
-		}
+	let depart = null;
+	poigneeDeplacement.on('dragstart', () => {
+		depart = { ...feuille };
+	});
 
-		function surRelachement() {
-			document.removeEventListener('mousemove', surDeplacement);
-			document.removeEventListener('mouseup', surRelachement);
-		}
+	poigneeDeplacement.on('drag', (evenement) => {
+		const point = evenement.target.getLatLng();
 
-		document.addEventListener('mousemove', surDeplacement);
-		document.addEventListener('mouseup', surRelachement);
+		// La hauteur est conservée dans le plan de Mercator, pas en degrés : une
+		// translation en degrés étirerait l'image à mesure qu'elle s'éloigne de
+		// l'équateur, et le rapport verrouillé au redimensionnement serait perdu.
+		const hauteurMercator = mercatorY(depart.nord) - mercatorY(depart.sud);
+		const nord = point.lat;
+		const sud = latitudeDepuisMercator(mercatorY(nord) - hauteurMercator);
+		const deltaLng = point.lng - depart.ouest;
+
+		feuille = {
+			nord,
+			sud,
+			ouest: depart.ouest + deltaLng,
+			est: depart.est + deltaLng,
+		};
+
+		overlay.setBounds(empriseDepuisFeuille(feuille));
+		if (poigneeRedim) poigneeRedim.setLatLng([feuille.sud, feuille.est]);
+	});
+
+	poigneeDeplacement.on('dragend', () => {
+		poigneeDeplacement.setLatLng([feuille.nord, feuille.ouest]);
 	});
 }
 

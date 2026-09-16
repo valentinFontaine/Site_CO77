@@ -75,10 +75,13 @@ async function main() {
 			.toFile(apercu);
 		console.log(`${apercu}  (source ${width}×${height})`);
 
-		// La vignette de la carte interactive est souvent fabriquée à la main, avec
-		// un fond transparent épousant les limites de la carte. On ne l'écrase pas.
+		// La vignette de la carte interactive est produite par l'éditeur de calage
+		// (`npm run carto`), qui la détoure selon le contour tracé, ou fabriquée à
+		// la main. Dans les deux cas on ne l'écrase pas. Les deux extensions sont
+		// testées : le WebP est le format actuel, le PNG celui des vignettes
+		// historiques.
 		const vignette = `${nom}-thumb.png`;
-		if (dejaPresents.has(vignette)) {
+		if (dejaPresents.has(vignette) || dejaPresents.has(`${nom}-thumb.webp`)) {
 			console.log(`${path.join(DOSSIER_PUBLIC, vignette)}  (conservée, faite à la main)`);
 			continue;
 		}

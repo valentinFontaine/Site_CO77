@@ -5,6 +5,11 @@
   command = "npm run build"
   publish = "dist"
 
+  # Chaque build consomme des minutes du forfait. Ce script annule ceux dont le
+  # commit ne touche pas au site publié — documentation, outils locaux, notes
+  # internes. Voir scripts/netlify-ignore.sh pour la liste des chemins surveillés.
+  ignore = "bash scripts/netlify-ignore.sh"
+
 [build.environment]
   # Astro 6 exige Node >= 22.12 (voir "engines" dans package.json)
   NODE_VERSION = "22.12.0"

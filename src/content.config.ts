@@ -182,10 +182,64 @@ const entrainements = defineCollection({
 	}),
 });
 
+// ============================================================================
+// GÉORÉFÉRENCEMENT DES CARTES
+// ============================================================================
+
+/**
+ * Calage géographique des cartes, écrit par l'éditeur (`npm run carto`) et par
+ * lui seul.
+ *
+ * Ces données vivent dans `src/data/cartes-geo/` et **non dans le frontmatter**
+ * des fichiers de `src/content/cartes/`, pour une raison précise : Decap CMS
+ * réécrit intégralement le fichier qu'il enregistre et supprime les champs qu'il
+ * ne connaît pas. Un bénévole corrigeant une faute de frappe dans la description
+ * effacerait donc le calage. En le tenant à l'écart, chaque fichier a un seul
+ * auteur possible : le CMS pour le texte, l'éditeur pour la géométrie.
+ *
+ * Le rapprochement entre les deux se fait par l'identifiant, c'est-à-dire le nom
+ * du fichier : `src/content/cartes/Sablons.md` ↔ `src/data/cartes-geo/Sablons.json`.
+ */
+const cartesGeo = defineCollection({
+	loader: glob({ base: './src/data/cartes-geo', pattern: '**/*.json' }),
+	schema: z.object({
+		/**
+		 * Emprise de la feuille imprimée, bords compris. Les cartes étant toujours
+		 * exportées nord en haut, la feuille est un rectangle en latitude/longitude
+		 * et se pose sans déformation avec un `L.imageOverlay` ordinaire.
+		 */
+		feuille: z.object({
+			sud: z.number().min(-90).max(90),
+			ouest: z.number().min(-180).max(180),
+			nord: z.number().min(-90).max(90),
+			est: z.number().min(-180).max(180),
+		}).refine((f) => f.nord > f.sud && f.est > f.ouest, {
+			message: 'Emprise incohérente : le nord doit être au-dessus du sud, et l\'est à droite de l\'ouest',
+		}),
+
+		/**
+		 * Contour de la zone réellement cartographiée, en [latitude, longitude].
+		 * C'est lui qui est affiché par défaut ; la feuille entière n'apparaît qu'au
+		 * survol. Trois sommets au minimum pour former une surface.
+		 */
+		contour: z.array(z.tuple([z.number(), z.number()])).min(3),
+
+		/** Quart de tour appliqué à l'image source, si elle a été fournie de travers. */
+		rotation: z.union([z.literal(0), z.literal(90), z.literal(180), z.literal(270)]).default(0),
+
+		/** Nom du fichier d'origine dans `cartes-sources/`, pour pouvoir régénérer. */
+		source: z.string().optional(),
+
+		/** Date du calage, utile pour savoir quelle carte a été refaite et quand. */
+		caleLe: z.coerce.date().optional(),
+	}),
+});
+
 export const collections = {
 	clubs,
 	entrainements,
 	evenements,
 	actualites,
 	cartes,
+	cartesGeo,
 };

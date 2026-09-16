@@ -147,6 +147,14 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
+"cartesGeo": Record<string, {
+  id: string;
+  body?: string;
+  collection: "cartesGeo";
+  data: InferEntrySchema<"cartesGeo">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
 "clubs": Record<string, {
   id: string;
   body?: string;

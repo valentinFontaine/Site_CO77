@@ -41,46 +41,43 @@ est lue depuis la variable d'environnement `URL` fournie par Netlify
 
 ---
 
-## Étape 2 — Activer l'interface d'administration (~10 minutes)
+## Étape 2 — Activer l'interface d'administration ✅ configurée
 
-L'interface d'administration utilise **Decap CMS** pour l'édition et
-**DecapBridge** pour l'authentification par e-mail.
+L'interface utilise **Decap CMS** pour l'édition et **DecapBridge** pour
+l'authentification.
 
 Pourquoi DecapBridge : c'est ce qui permet aux bénévoles de se connecter avec
-leur adresse e-mail **sans avoir de compte GitHub**, tout en signant chaque
-modification à leur nom. L'ancienne solution (Netlify Identity + Git Gateway)
-est officiellement dépréciée par Netlify et n'est plus recommandée pour un
-nouveau site.
+leur adresse e-mail — ou leur compte Google ou Microsoft — **sans compte
+GitHub**, tout en signant chaque modification à leur nom. L'ancienne solution
+(Netlify Identity + Git Gateway) est dépréciée par Netlify et déconseillée pour
+un nouveau site.
 
-1. Créer un compte sur https://decapbridge.com
-2. **Create site**, en renseignant :
-   - fournisseur Git : **GitHub**
-   - dépôt : `valentinFontaine/Site_CO77`
-   - branche : `main`
-   - URL de connexion au CMS : `https://<nom-du-site>.netlify.app/admin/`
-   - un jeton d'accès GitHub, généré depuis
-     https://github.com/settings/tokens avec le droit `repo` **sur ce seul dépôt**
-3. DecapBridge affiche alors un **identifiant de site**. Le recopier dans
-   [`public/admin/config.yml`](../public/admin/config.yml), à la place de
-   `IDENTIFIANT_DECAPBRIDGE` :
+Le site DecapBridge est créé et [`public/admin/config.yml`](../public/admin/config.yml)
+est renseigné : mode d'authentification **PKCE**, dépôt et branche corrects.
+Rien à modifier.
 
-   ```yaml
-   identity_url: https://auth.decapbridge.com/sites/VOTRE_IDENTIFIANT_ICI
-   ```
+### Inviter les bénévoles
 
-4. Commiter et pousser cette modification. Netlify redéploie tout seul.
-5. Depuis le tableau de bord DecapBridge, **inviter les bénévoles par e-mail**.
-   Chacun reçoit un lien, choisit son mot de passe, et accède ensuite au CMS
-   sur `https://<nom-du-site>.netlify.app/admin/`.
+Depuis le tableau de bord DecapBridge, onglet des utilisateurs, inviter chaque
+personne par son adresse e-mail. Elle reçoit un lien, choisit son mot de passe
+(ou se connecte avec Google ou Microsoft), puis accède au CMS sur
+https://co77.netlify.app/admin/
+
+Leur transmettre [le guide du contributeur](GUIDE_CONTRIBUTEUR.md).
 
 ### Vérifier que tout fonctionne
 
-1. Se connecter sur `/admin/` avec un compte invité.
-2. Créer une actualité de test, la publier.
-3. Vérifier dans l'historique GitHub que le commit porte bien le nom et
-   l'adresse e-mail de la personne.
+1. Se connecter sur https://co77.netlify.app/admin/
+2. Créer une actualité de test, la faire passer en **Ready** puis **Publish**.
+3. Vérifier dans l'historique GitHub que le commit porte bien le nom de la
+   personne qui a publié.
 4. Attendre une à deux minutes : l'actualité doit apparaître sur le site.
 5. Supprimer l'actualité de test depuis le CMS.
+
+Si une publication échoue, la cause la plus probable est un contenu qui ne
+respecte pas les schémas de [`src/content.config.ts`](../src/content.config.ts) :
+le build Netlify échoue alors et le site reste sur sa version précédente. Le
+journal de build sur Netlify indique le fichier et le champ en cause.
 
 ---
 

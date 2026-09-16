@@ -1,26 +1,45 @@
 # ============================================================================
 # Configuration du CMS (Decap CMS) — site du CDCO77
 # ============================================================================
-# Interface accessible sur https://<adresse-du-site>/admin/
+# Interface accessible sur https://co77.netlify.app/admin/
 # Chaque modification faite ici devient un commit Git : on sait toujours qui a
 # modifié quoi, et on peut revenir en arrière.
 #
-# /!\ AVANT LA PREMIERE UTILISATION : remplacer IDENTIFIANT_DECAPBRIDGE
-#     ci-dessous par l'identifiant fourni par le tableau de bord DecapBridge.
+# L'authentification passe par DecapBridge, qui permet aux bénévoles de se
+# connecter par e-mail (ou via Google / Microsoft) sans compte GitHub.
 # ============================================================================
 
 backend:
   name: git-gateway
   repo: valentinFontaine/Site_CO77
   branch: main
-  identity_url: https://auth.decapbridge.com/sites/IDENTIFIANT_DECAPBRIDGE
+  auth_type: pkce
+  base_url: https://auth.decapbridge.com
+  auth_endpoint: /sites/5f945517-ab3c-4331-8d63-05dc5472e234/pkce
+  auth_token_endpoint: /sites/5f945517-ab3c-4331-8d63-05dc5472e234/token
   gateway_url: https://gateway.decapbridge.com
+
+  # Chaque commit porte le nom et l'identifiant de son auteur.
   commit_messages:
-    create: "Ajout {{collection}} « {{slug}} » — {{author-name}} <{{author-email}}>"
-    update: "Modification {{collection}} « {{slug}} » — {{author-name}} <{{author-email}}>"
-    delete: "Suppression {{collection}} « {{slug}} » — {{author-name}} <{{author-email}}>"
-    uploadMedia: "Ajout du fichier {{path}} — {{author-name}} <{{author-email}}>"
-    deleteMedia: "Suppression du fichier {{path}} — {{author-name}} <{{author-email}}>"
+    create: Ajout {{collection}} "{{slug}}" - {{author-name}} <{{author-login}}>
+    update: Modification {{collection}} "{{slug}}" - {{author-name}} <{{author-login}}>
+    delete: Suppression {{collection}} "{{slug}}" - {{author-name}} <{{author-login}}>
+    uploadMedia: Ajout du fichier "{{path}}" - {{author-name}} <{{author-login}}>
+    deleteMedia: Suppression du fichier "{{path}}" - {{author-name}} <{{author-login}}>
+    openAuthoring: "{{message}} - {{author-name}} <{{author-login}}>"
+
+# Informations transmises par DecapBridge sur la personne connectée
+auth:
+  email_claim: email
+  first_name_claim: first_name
+  last_name_claim: last_name
+  avatar_url_claim: avatar_url
+
+# Logo affiché sur l'écran de connexion et dans l'interface
+logo_url: /logo-co77-header.jpg
+
+# Permet de revenir au site depuis le CMS
+site_url: https://co77.netlify.app
 
 # Images et documents téléversés depuis le CMS
 media_folder: public/images/uploads

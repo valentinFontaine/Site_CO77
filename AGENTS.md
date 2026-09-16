@@ -80,6 +80,16 @@ Collections : `actualites`, `evenements`, `entrainements`, `clubs`, `cartes`.
 
 ## Pièges connus
 
+**La carte interactive de `/cartographie/`** est pilotée par
+[`public/scripts/map-init.js`](public/scripts/map-init.js), du JavaScript simple
+chargé avec Leaflet depuis un CDN. Chaque carte est dessinée comme un rectangle
+à partir de son champ `bounds` ; la vignette n'est qu'un décor superposé. Une
+carte reste donc visible même sans vignette. Ne pas réintroduire de
+dépendance à `thumbnail` pour l'affichage.
+
+**Les fonds de plan IGN passent par `data.geopf.fr`.** L'ancien service
+`wxs.ign.fr` a été fermé en 2024 et son domaine ne résout plus.
+
 **`npm run build` échoue avec « astro non reconnu » ou un module introuvable** —
 installation npm corrompue sous Windows (bug npm sur les dépendances natives de
 rollup). Supprimer `node_modules` et relancer `npm install`.
@@ -97,6 +107,7 @@ validation : elles tracent ce qui reste à reprendre depuis `attachements/`.
 - Finaliser la migration des contenus marqués `needsManualReview`
 - Brancher le domaine `co77.fr`
 - Réduire le poids des images héritées (certaines dépassent 2 Mo en 6000 px)
+- Produire les vignettes des cartes (`thumbnail`) : aucune n'existe aujourd'hui
 - Concevoir l'inscription aux courses et la vente de cartes — non commencé
 
 ## Documentation

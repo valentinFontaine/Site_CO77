@@ -6,196 +6,204 @@ import Header from '../../components/Header.astro';
 
 const maps = await getPublished('cartes');
 
-// Prepare map data for the client-side script
-const mapData = maps.map(map => ({
-  id: map.id,
-  data: {
-    title: map.data.title,
-    description: map.data.description,
-    bounds: map.data.bounds,
-    thumbnail: map.data.thumbnail
-  }
+// Trier par secteur puis par nom, pour une liste stable et lisible.
+const cartes = maps.sort((a, b) =>
+	`${a.data.region ?? ''} ${a.data.title}`.localeCompare(`${b.data.region ?? ''} ${b.data.title}`, 'fr'),
+);
+
+// Données transmises telles quelles au script Leaflet. L'adresse de la fiche est
+// calculée ici plutôt que reconstruite en JavaScript, pour rester cohérente avec
+// les pages réellement générées par [...slug].astro.
+const mapData = cartes.map((carte) => ({
+	title: carte.data.title,
+	bounds: carte.data.bounds,
+	thumbnail: carte.data.thumbnail,
+	mapType: carte.data.mapType,
+	scale: carte.data.scale,
+	difficultyLevel: carte.data.difficultyLevel,
+	url: `/cartographie/${carte.id}/`,
 }));
 ---
 
 <!doctype html>
 <html lang="fr">
-<head>
-  <BaseHead title="Cartographie" description="Explorez nos cartes de course d'orientation en Seine-et-Marne. Survolez les vignettes pour en savoir plus et cliquez pour ouvrir la fiche détaillée." />
-  
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-        crossorigin="" />
-</head>
-<body>
-  <!-- Leaflet JS - must load before map script -->
-  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          crossorigin=""></script>
-  
-  <Header />
-  
-  <main>
-    <div class="container mx-auto px-4 py-8">
-      <div class="mb-8">
-        <h1 class="text-4xl font-display font-bold text-ink mb-4">Cartographie En Seine et Marne</h1>
-        <p class="text-lg text-gray-600 max-w-3xl">
-          Explorez nos cartes de course d'orientation disponibles : survolez les vignettes pour en savoir plus et cliquez pour ouvrir la fiche détaillée.
-        </p>
-      </div>
+	<head>
+		<BaseHead
+			title="Cartographie"
+			description="Les cartes de course d'orientation de Seine-et-Marne : emprises, échelles et secteurs, sur une carte interactive."
+		/>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+	</head>
+	<body>
+		<script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
-      <!-- Map Container -->
-      <div class="bg-paper rounded-lg shadow-lg overflow-hidden">
-        <div id="map" class="w-full h-96 md:h-[600px]" data-map-data={JSON.stringify(mapData)}></div>
-      </div>
+		<Header />
 
-      <!-- Map Instructions -->
-      <div class="mt-6 bg-surface rounded-lg p-6">
-        <h2 class="text-xl font-display font-semibold mb-3">Comment utiliser la carte</h2>
-        <ul class="space-y-2 text-gray-700">
-          <li class="flex items-start">
-            <span class="text-brand mr-2">•</span>
-            <span>Utilisez les contrôles en haut à droite pour changer de fond de carte (IGN Plan ou OpenStreetMap)</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-brand mr-2">•</span>
-            <span>Survolez les vignettes de cartes pour voir les détails</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-brand mr-2">•</span>
-            <span>Cliquez sur une vignette pour accéder à la fiche complète de la carte</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-brand mr-2">•</span>
-            <span>Zoomez et déplacez-vous pour explorer toute la Seine-et-Marne</span>
-          </li>
-        </ul>
-      </div>
+		<main>
+			<h1>Cartographie en Seine-et-Marne</h1>
+			<p class="intro">
+				Chaque rectangle représente l'emprise d'une carte. Survolez-le pour voir ses caractéristiques,
+				cliquez pour ouvrir sa fiche.
+			</p>
 
-      <!-- Acheter des cartes -->
-      <section class="mt-8">
-        <div class="bg-paper rounded-lg shadow-md p-6">
-          <h2 class="text-2xl font-display font-semibold mb-4">Acheter des cartes de course d'orientation</h2>
-          <p class="text-gray-700 mb-4">
-            Les cartes disponibles à l'achat sont représentées sur la carte interactive ci-dessus. 
-            Après avoir consulté l'inventaire des cartes du CDCO77, veuillez vous adresser directement au propriétaire de la carte.
-          </p>
-          <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
-            <h3 class="font-semibold text-blue-800 mb-2">Pour les cartes appartenant au CDCO77</h3>
-            <p class="text-blue-700 text-sm mb-2">Prendre contact auprès du responsable cartographique :</p>
-            <div class="text-blue-800">
-              <p class="font-semibold">Etienne MOREY</p>
-              <p>📞 06.07.43.21.97</p>
-              <p>📧 <a href="mailto:etienne.morey@neuf.fr" class="hover:underline">etienne.morey@neuf.fr</a></p>
-            </div>
-          </div>
-          <div class="text-sm text-gray-600">
-            <p>
-              Consultez également la page d'inventaire des cartes du CDCO77 sur le site FFCO : 
-              <a href="https://www.ffcorientation.fr/licencie/cartographie/cartotheque/liste/?cd=77" 
-                 class="text-brand hover:underline" target="_blank" rel="noopener noreferrer">
-                Cartothèque FFCO - Département 77
-              </a>
-            </p>
-          </div>
-        </div>
-      </section>
+			<div id="map" data-map-data={JSON.stringify(mapData)}></div>
 
-      <!-- Ressources pour les clubs CDCO77 -->
-      <section class="mt-8">
-        <div class="bg-paper rounded-lg shadow-md p-6">
-          <h2 class="text-2xl font-display font-semibold mb-4">Ressources pour les clubs du CDCO77</h2>
-          <p class="text-gray-700 mb-6">
-            Outils et ressources à destination des clubs affiliés au CDCO77 pour la création et le partage de cartes.
-          </p>
-          
-          <div class="grid md:grid-cols-2 gap-6">
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold text-brand">Partage des cartes</h3>
-              <div class="space-y-3">
-                <a href="https://drive.google.com/drive/folders/1cnnNO6GYUxPZ3dVjsCl1UCVYkunPvPmG?usp=sharing" 
-                   class="flex items-center text-brand hover:underline" target="_blank" rel="noopener noreferrer">
-                  📁 Dossier de partage des cartes
-                </a>
-                <a href="#" class="flex items-center text-brand hover:underline">
-                  📄 Convention partage et suivi des cartes du 77
-                </a>
-              </div>
-            </div>
-            
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold text-brand">Création de cartes</h3>
-              <div class="space-y-3">
-                <a href="#" class="flex items-center text-brand hover:underline">
-                  📚 Tutoriel CARTO CDCO77 2021
-                </a>
-                <a href="#" class="flex items-center text-brand hover:underline">
-                  🎨 Valise de logos 2022
-                </a>
-              </div>
-            </div>
-          </div>
-          
-          <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400">
-            <h4 class="font-semibold text-yellow-800 mb-2">Déclaration de création de cartes</h4>
-            <p class="text-yellow-700 text-sm">
-              Pensez à déclarer vos nouvelles cartes auprès de la FFCO et de la LIFCO selon la procédure en vigueur.
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
-  
-  <!-- Map initialization script -->
-  <script is:inline src="/scripts/map-init.js"></script>
-  
-  <style>
-    /* Custom tooltip styles */
-    :global(.custom-tooltip) {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      font-family: 'Source Sans 3', sans-serif;
-    }
-    
-    :global(.custom-tooltip .leaflet-tooltip-content) {
-      margin: 0;
-      padding: 0;
-    }
-    
-    /* Map container styles */
-    #map {
-      min-height: 400px;
-      border-radius: 12px;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Map marker icon styles */
-    :global(.map-marker-icon) {
-      border: 2px solid #ffffff;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Map image overlay styles */
-    :global(.map-image-overlay) {
-      opacity: 0.7;
-    }
-    
-    :global(.map-image-overlay:hover) {
-      cursor: pointer;
-      opacity: 1.0;
-    }
-    
-    /* Responsive design */
-    @media (max-width: 768px) {
-      #map {
-        height: 300px;
-      }
-    }
-  </style>
-  
-  <Footer />
-</body>
+			<p class="legende">
+				<span class="puce" style="--couleur: #1b7f3b"></span> Forêt
+				<span class="puce" style="--couleur: #b3541e"></span> Urbain
+				<span class="puce" style="--couleur: #7b2ff7"></span> Sprint
+				<span class="puce" style="--couleur: #0f6d8f"></span> Mixte
+			</p>
+
+			<h2>Les cartes disponibles</h2>
+			{
+				cartes.length === 0 ? (
+					<p>Aucune carte n'est publiée pour le moment.</p>
+				) : (
+					<ul class="liste-cartes">
+						{cartes.map((carte) => (
+							<li>
+								<a href={`/cartographie/${carte.id}/`}>{carte.data.title}</a>
+								<span class="meta">
+									{[carte.data.region, carte.data.mapType, carte.data.scale, carte.data.difficultyLevel]
+										.filter(Boolean)
+										.join(' · ')}
+								</span>
+							</li>
+						))}
+					</ul>
+				)
+			}
+
+			<h2>Acheter des cartes</h2>
+			<p>
+				Après avoir consulté l'inventaire des cartes du CDCO77, adressez-vous directement au
+				propriétaire de la carte.
+			</p>
+			<div class="encadre">
+				<h3>Cartes appartenant au CDCO77</h3>
+				<p>Prendre contact auprès du responsable cartographique :</p>
+				<p>
+					<strong>Etienne Morey</strong><br />
+					06 07 43 21 97<br />
+					<a href="mailto:etienne.morey@neuf.fr">etienne.morey@neuf.fr</a>
+				</p>
+			</div>
+			<p>
+				L'inventaire complet est également consultable sur le site de la fédération :
+				<a
+					href="https://www.ffcorientation.fr/licencie/cartographie/cartotheque/liste/?cd=77"
+					target="_blank"
+					rel="noopener noreferrer">cartothèque FFCO — département 77</a
+				>.
+			</p>
+
+			<h2>Ressources pour les clubs</h2>
+			<p>Outils à destination des clubs affiliés au CDCO77 pour créer et partager des cartes.</p>
+			<ul>
+				<li>
+					<a
+						href="https://drive.google.com/drive/folders/1cnnNO6GYUxPZ3dVjsCl1UCVYkunPvPmG?usp=sharing"
+						target="_blank"
+						rel="noopener noreferrer">Dossier de partage des cartes</a
+					>
+				</li>
+			</ul>
+			<div class="encadre">
+				<h3>Déclaration des nouvelles cartes</h3>
+				<p>
+					Pensez à déclarer vos nouvelles cartes auprès de la FFCO et de la LIFCO selon la procédure
+					en vigueur.
+				</p>
+			</div>
+		</main>
+
+		<Footer />
+
+		<script is:inline src="/scripts/map-init.js"></script>
+
+		<style>
+			/* Cette page a besoin de plus de largeur que le reste du site pour la carte. */
+			main {
+				width: 1100px;
+			}
+			.intro {
+				color: rgb(var(--gray));
+			}
+			#map {
+				height: 600px;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+				z-index: 0;
+			}
+			@media (max-width: 720px) {
+				#map {
+					height: 380px;
+				}
+			}
+			.legende {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.4em 1.2em;
+				margin-top: 1em;
+				font-size: 0.85em;
+				color: rgb(var(--gray));
+			}
+			.puce {
+				display: inline-block;
+				width: 0.9em;
+				height: 0.9em;
+				margin-right: 0.2em;
+				border: 2px solid var(--couleur);
+				border-radius: 3px;
+				background: color-mix(in srgb, var(--couleur) 25%, transparent);
+				vertical-align: -0.1em;
+			}
+			.liste-cartes {
+				list-style: none;
+				padding: 0;
+			}
+			.liste-cartes li {
+				padding: 0.6em 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+			.liste-cartes .meta {
+				display: block;
+				font-size: 0.8em;
+				color: rgb(var(--gray));
+			}
+			.encadre {
+				margin: 1.5em 0;
+				padding: 1em 1.5em;
+				border-left: 4px solid var(--accent);
+				background: rgba(var(--gray-light), 40%);
+				border-radius: 0 8px 8px 0;
+			}
+			.encadre h3 {
+				font-size: 1.2em;
+			}
+			.encadre p:last-child {
+				margin-bottom: 0;
+			}
+		</style>
+
+		<style is:global>
+			.custom-tooltip {
+				font-family: var(--font-atkinson);
+				font-size: 14px;
+				line-height: 1.4;
+			}
+			.custom-tooltip .infobulle-details {
+				color: #4b5563;
+			}
+			.carte-emprise {
+				cursor: pointer;
+				transition: fill-opacity 0.15s ease;
+			}
+			.map-image-overlay {
+				pointer-events: none;
+			}
+		</style>
+	</body>
 </html>

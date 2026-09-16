@@ -4,31 +4,154 @@ import { getPublished } from '../../lib/collections';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
 
 export async function getStaticPaths() {
-  const maps = await getPublished('cartes');
-  return maps.map((map) => ({
-    params: { slug: map.id },
-    props: map,
-  }));
+	const maps = await getPublished('cartes');
+	return maps.map((map) => ({
+		params: { slug: map.id },
+		props: map,
+	}));
 }
 
-const map = Astro.props;
-const { Content } = await render(map);
+const carte = Astro.props;
+const { Content } = await render(carte);
+
+// Caractéristiques affichées en tableau : on n'affiche que celles qui sont renseignées.
+const caracteristiques = [
+	['Secteur', carte.data.region],
+	['Type de terrain', carte.data.mapType],
+	['Échelle', carte.data.scale],
+	['Niveau', carte.data.difficultyLevel],
+	['Cartographe', carte.data.author],
+].filter(([, valeur]) => Boolean(valeur)) as [string, string][];
+
+// La fiche affiche la même carte interactive que l'index, cadrée sur cette seule emprise.
+const mapData = [
+	{
+		title: carte.data.title,
+		bounds: carte.data.bounds,
+		thumbnail: carte.data.thumbnail,
+		mapType: carte.data.mapType,
+		scale: carte.data.scale,
+		difficultyLevel: carte.data.difficultyLevel,
+	},
+];
 ---
 
 <!doctype html>
 <html lang="fr">
-<head><BaseHead title={map.data.title} description={map.data.description} /></head>
-<body>
-<Header />
-<main>
-  <h1>{map.data.title}</h1>
-  {map.data.imagePath && <img src={map.data.imagePath} alt={map.data.title} style="filter: blur(8px); max-width: 100%;" />}
-  <p>{map.data.description}</p>
-  {map.data.difficultyLevel && <p><strong>Niveau:</strong> {map.data.difficultyLevel}</p>}
-  <Content />
-</main>
-<Footer />
-</body>
+	<head>
+		<BaseHead title={carte.data.title} description={carte.data.description} />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+	</head>
+	<body>
+		<script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+		<Header />
+
+		<main>
+			<p class="fil-ariane"><a href="/cartographie/">&larr; Toutes les cartes</a></p>
+
+			<h1>{carte.data.title}</h1>
+			<p class="description">{carte.data.description}</p>
+
+			{
+				caracteristiques.length > 0 && (
+					<dl class="caracteristiques">
+						{caracteristiques.map(([libelle, valeur]) => (
+							<div>
+								<dt>{libelle}</dt>
+								<dd>{valeur}</dd>
+							</div>
+						))}
+					</dl>
+				)
+			}
+
+			<div id="map" data-map-data={JSON.stringify(mapData)}></div>
+			<p class="note">Emprise de la carte. Changez de fond de plan avec les contrôles en haut à droite.</p>
+
+			{
+				carte.data.imagePath && (
+					<figure>
+						<img src={carte.data.imagePath} alt={`Aperçu de la carte ${carte.data.title}`} />
+						<figcaption>Aperçu — la carte complète est disponible auprès de son propriétaire.</figcaption>
+					</figure>
+				)
+			}
+
+			<div class="prose">
+				<Content />
+			</div>
+
+			{
+				carte.data.lastUpdated && (
+					<p class="note">Carte mise à jour le <FormattedDate date={carte.data.lastUpdated} />.</p>
+				)
+			}
+		</main>
+
+		<Footer />
+
+		<script is:inline src="/scripts/map-init.js"></script>
+
+		<style>
+			.fil-ariane {
+				font-size: 0.85em;
+				margin-bottom: 1em;
+			}
+			.description {
+				font-size: 1.15em;
+				color: rgb(var(--gray));
+			}
+			.caracteristiques {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+				gap: 1em;
+				margin: 2em 0;
+				padding: 1.2em;
+				background: rgba(var(--gray-light), 40%);
+				border-radius: 8px;
+			}
+			.caracteristiques dt {
+				font-size: 0.75em;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: rgb(var(--gray));
+			}
+			.caracteristiques dd {
+				margin: 0.2em 0 0 0;
+				font-weight: 700;
+			}
+			#map {
+				height: 420px;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+				z-index: 0;
+			}
+			figure {
+				margin: 2em 0;
+			}
+			figcaption,
+			.note {
+				font-size: 0.8em;
+				color: rgb(var(--gray));
+			}
+		</style>
+
+		<style is:global>
+			.custom-tooltip {
+				font-family: var(--font-atkinson);
+				font-size: 14px;
+				line-height: 1.4;
+			}
+			.custom-tooltip .infobulle-details {
+				color: #4b5563;
+			}
+			.map-image-overlay {
+				pointer-events: none;
+			}
+		</style>
+	</body>
 </html>

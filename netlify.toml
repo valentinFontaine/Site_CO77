@@ -1,0 +1,30 @@
+# Configuration de déploiement Netlify — site du CDCO77
+# Doc : https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Astro 6 exige Node >= 22.12 (voir "engines" dans package.json)
+  NODE_VERSION = "22.12.0"
+
+# Astro génère des pages statiques : on renvoie une vraie 404 plutôt qu'une redirection.
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# En-têtes de sécurité de base
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Les fichiers versionnés par Astro (hash dans le nom) peuvent être mis en cache indéfiniment.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

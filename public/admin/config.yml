@@ -1,0 +1,474 @@
+# ============================================================================
+# Configuration du CMS (Decap CMS) — site du CDCO77
+# ============================================================================
+# Interface accessible sur https://<adresse-du-site>/admin/
+# Chaque modification faite ici devient un commit Git : on sait toujours qui a
+# modifié quoi, et on peut revenir en arrière.
+#
+# /!\ AVANT LA PREMIERE UTILISATION : remplacer IDENTIFIANT_DECAPBRIDGE
+#     ci-dessous par l'identifiant fourni par le tableau de bord DecapBridge.
+# ============================================================================
+
+backend:
+  name: git-gateway
+  repo: valentinFontaine/Site_CO77
+  branch: main
+  identity_url: https://auth.decapbridge.com/sites/IDENTIFIANT_DECAPBRIDGE
+  gateway_url: https://gateway.decapbridge.com
+  commit_messages:
+    create: "Ajout {{collection}} « {{slug}} » — {{author-name}} <{{author-email}}>"
+    update: "Modification {{collection}} « {{slug}} » — {{author-name}} <{{author-email}}>"
+    delete: "Suppression {{collection}} « {{slug}} » — {{author-name}} <{{author-email}}>"
+    uploadMedia: "Ajout du fichier {{path}} — {{author-name}} <{{author-email}}>"
+    deleteMedia: "Suppression du fichier {{path}} — {{author-name}} <{{author-email}}>"
+
+# Images et documents téléversés depuis le CMS
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+locale: fr
+
+# Chaque contribution passe par un circuit brouillon -> en relecture -> publié.
+# Supprimer cette ligne pour que tout soit publié immédiatement.
+publish_mode: editorial_workflow
+
+collections:
+  # --------------------------------------------------------------------------
+  - name: actualites
+    label: Actualités
+    label_singular: une actualité
+    folder: src/content/actualites
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [pubDate, title]
+    fields:
+      - name: title
+        label: Titre
+        widget: string
+        hint: Entre 5 et 120 caractères
+        pattern: ["^.{5,120}$", "Le titre doit faire entre 5 et 120 caractères"]
+      - name: pubDate
+        label: Date de publication
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - name: category
+        label: Catégorie
+        widget: select
+        options:
+          - { label: Annonces, value: annonces }
+          - { label: Résultats, value: resultats }
+          - { label: Conseils, value: conseils }
+          - { label: Vie du comité, value: vie-du-comite }
+          - { label: Photos, value: photos }
+          - { label: Divers, value: divers }
+      - name: description
+        label: Résumé
+        widget: text
+        required: false
+        hint: Court texte affiché dans les listes (300 caractères maximum)
+        pattern: ["^[\\s\\S]{0,300}$", "300 caractères maximum"]
+      - name: heroImage
+        label: Image principale
+        widget: image
+        required: false
+        allow_multiple: false
+      - name: author
+        label: Auteur
+        widget: string
+        default: CO77
+        required: false
+      - name: tags
+        label: Mots-clés
+        widget: list
+        required: false
+      - name: draft
+        label: Brouillon (non publié sur le site)
+        widget: boolean
+        default: false
+        required: false
+      - name: featured
+        label: Mettre en avant sur la page d'accueil
+        widget: boolean
+        default: false
+        required: false
+      - name: updatedDate
+        label: Date de mise à jour
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        required: false
+      - name: body
+        label: Contenu
+        widget: markdown
+
+  # --------------------------------------------------------------------------
+  - name: evenements
+    label: Événements
+    label_singular: un événement
+    folder: src/content/evenements
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [eventDate, title]
+    fields:
+      - name: title
+        label: Titre
+        widget: string
+        hint: Entre 5 et 120 caractères
+        pattern: ["^.{5,120}$", "Le titre doit faire entre 5 et 120 caractères"]
+      - name: eventDate
+        label: Date de l'événement
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - name: pubDate
+        label: Date de publication de l'annonce
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - name: location
+        label: Lieu
+        widget: string
+        required: false
+      - name: eventType
+        label: Type d'événement
+        widget: select
+        default: competition
+        options:
+          - { label: Compétition, value: competition }
+          - { label: Entraînement, value: entrainement }
+          - { label: Réunion, value: reunion }
+          - { label: Stage, value: stage }
+          - { label: Autre, value: autre }
+      - name: discipline
+        label: Discipline
+        widget: select
+        default: CO
+        options: [CO, Sprint, MD, LD, Trail-O, Relais, Mixte]
+      - name: description
+        label: Résumé
+        widget: text
+        required: false
+        pattern: ["^[\\s\\S]{0,300}$", "300 caractères maximum"]
+      - name: startTime
+        label: Heure de début
+        widget: string
+        required: false
+        hint: Format 24h, par exemple 09:30
+        pattern: ["^$|^\\d{2}:\\d{2}$", "Format attendu : HH:MM (ex. 09:30)"]
+      - name: endTime
+        label: Heure de fin
+        widget: string
+        required: false
+        pattern: ["^$|^\\d{2}:\\d{2}$", "Format attendu : HH:MM (ex. 17:00)"]
+      - name: organizer
+        label: Organisateur
+        widget: string
+        default: CO77
+        required: false
+      - name: price
+        label: Tarif
+        widget: string
+        required: false
+        hint: Texte libre, par exemple "8 € adultes / 4 € jeunes"
+      - name: mapsLink
+        label: Lien Google Maps
+        widget: string
+        required: false
+        pattern: ["^$|^https?://.+", "Doit commencer par http:// ou https://"]
+      - name: gpsCoordinates
+        label: Coordonnées GPS
+        widget: string
+        required: false
+        hint: Format "latitude,longitude", par exemple 48.5421,2.6561
+        pattern: ["^$|^-?\\d+\\.\\d+,-?\\d+\\.\\d+$", "Format attendu : 48.5421,2.6561"]
+      - name: inscriptionsOpen
+        label: Inscriptions ouvertes
+        widget: boolean
+        default: false
+        required: false
+      - name: registrationLink
+        label: Lien du formulaire d'inscription
+        widget: string
+        required: false
+        pattern: ["^$|^https?://.+", "Doit commencer par http:// ou https://"]
+      - name: registrationDeadline
+        label: Date limite d'inscription
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        required: false
+      - name: maxParticipants
+        label: Nombre maximum de participants
+        widget: number
+        value_type: int
+        required: false
+      - name: eventCompleted
+        label: Événement terminé
+        widget: boolean
+        default: false
+        required: false
+      - name: eventCancelled
+        label: Événement annulé
+        widget: boolean
+        default: false
+        required: false
+      - name: hasResults
+        label: Résultats disponibles
+        widget: boolean
+        default: false
+        required: false
+      - name: resultsLink
+        label: Lien vers les résultats
+        widget: string
+        required: false
+        pattern: ["^$|^https?://.+", "Doit commencer par http:// ou https://"]
+      - name: draft
+        label: Brouillon (non publié sur le site)
+        widget: boolean
+        default: false
+        required: false
+      - name: featured
+        label: Mettre en avant sur la page d'accueil
+        widget: boolean
+        default: false
+        required: false
+      - name: body
+        label: Description complète
+        widget: markdown
+
+  # --------------------------------------------------------------------------
+  - name: entrainements
+    label: Entraînements
+    label_singular: un entraînement
+    folder: src/content/entrainements
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - name: title
+        label: Titre
+        widget: string
+        pattern: ["^.{5,120}$", "Le titre doit faire entre 5 et 120 caractères"]
+      - name: date
+        label: Date de l'entraînement
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - name: pubDate
+        label: Date de publication
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - name: rendezVous
+        label: Point de rendez-vous
+        widget: string
+      - name: location
+        label: Lieu détaillé
+        widget: string
+        required: false
+      - name: startTime
+        label: Heure de début
+        widget: string
+        required: false
+        pattern: ["^$|^\\d{2}:\\d{2}$", "Format attendu : HH:MM"]
+      - name: endTime
+        label: Heure de fin
+        widget: string
+        required: false
+        pattern: ["^$|^\\d{2}:\\d{2}$", "Format attendu : HH:MM"]
+      - name: difficulty
+        label: Difficulté
+        widget: select
+        default: Moyen
+        options: [Facile, Moyen, Difficile]
+      - name: duration
+        label: Durée
+        widget: string
+        required: false
+      - name: parkingInfo
+        label: Informations parking
+        widget: text
+        required: false
+      - name: itinerary
+        label: Itinéraire
+        widget: text
+        required: false
+      - name: equipment
+        label: Matériel à prévoir
+        widget: list
+        required: false
+      - name: prerequisites
+        label: Prérequis
+        widget: text
+        required: false
+      - name: price
+        label: Tarif
+        widget: string
+        required: false
+      - name: maxParticipants
+        label: Nombre maximum de participants
+        widget: number
+        value_type: int
+        required: false
+      - name: organizer
+        label: Organisateur
+        widget: string
+        default: CO77
+        required: false
+      - name: description
+        label: Résumé
+        widget: text
+        required: false
+      - name: draft
+        label: Brouillon (non publié sur le site)
+        widget: boolean
+        default: false
+        required: false
+      - name: body
+        label: Contenu
+        widget: markdown
+
+  # --------------------------------------------------------------------------
+  - name: clubs
+    label: Clubs
+    label_singular: un club
+    folder: src/content/clubs
+    create: true
+    slug: "{{slug}}"
+    summary: "{{name}}"
+    sortable_fields: [name, location]
+    fields:
+      - name: name
+        label: Nom du club
+        widget: string
+      - name: location
+        label: Ville ou secteur
+        widget: string
+      - name: description
+        label: Présentation
+        widget: text
+      - name: president
+        label: Président ou présidente
+        widget: string
+        required: false
+      - name: contactEmail
+        label: Adresse e-mail de contact
+        widget: string
+        required: false
+        pattern: ["^$|^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "Adresse e-mail invalide"]
+      - name: contactPhone
+        label: Téléphone
+        widget: string
+        required: false
+      - name: website
+        label: Site internet
+        widget: string
+        required: false
+        pattern: ["^$|^https?://.+", "Doit commencer par http:// ou https://"]
+      - name: logoPath
+        label: Logo
+        widget: image
+        required: false
+      - name: foundingYear
+        label: Année de création
+        widget: number
+        value_type: int
+        required: false
+      - name: membersCount
+        label: Nombre de licenciés
+        widget: number
+        value_type: int
+        required: false
+      - name: pubDate
+        label: Date de publication
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        required: false
+      - name: body
+        label: Contenu de la page
+        widget: markdown
+        required: false
+
+  # --------------------------------------------------------------------------
+  - name: cartes
+    label: Cartes
+    label_singular: une carte
+    folder: src/content/cartes
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [title]
+    fields:
+      - name: title
+        label: Nom de la carte
+        widget: string
+      - name: description
+        label: Description
+        widget: text
+      - name: bounds
+        label: Emprise géographique
+        widget: list
+        hint: "Exactement 4 nombres dans cet ordre : latitude sud, longitude ouest, latitude nord, longitude est"
+        field: { name: valeur, label: Valeur, widget: number, value_type: float }
+      - name: imagePath
+        label: Image de la carte
+        widget: image
+        required: false
+      - name: thumbnail
+        label: Vignette
+        widget: image
+        required: false
+      - name: mapType
+        label: Type de terrain
+        widget: select
+        required: false
+        options: [Forêt, Urbain, Sprint, Mixed]
+      - name: difficultyLevel
+        label: Niveau de difficulté
+        widget: select
+        required: false
+        options: [Facile, Moyen, Difficile, Expert]
+      - name: scale
+        label: Échelle
+        widget: string
+        required: false
+        hint: "par exemple 1:10000"
+      - name: region
+        label: Région ou secteur
+        widget: string
+        required: false
+      - name: author
+        label: Traceur ou cartographe
+        widget: string
+        required: false
+      - name: lastUpdated
+        label: Dernière mise à jour de la carte
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        required: false
+      - name: pubDate
+        label: Date de publication
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        required: false
+      - name: body
+        label: Contenu de la page
+        widget: markdown
+        required: false

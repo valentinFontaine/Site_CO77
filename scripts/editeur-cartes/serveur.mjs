@@ -42,6 +42,14 @@ const QUALITE_JPEG = 72;
 const LARGEUR_VIGNETTE = 600;
 const FLOU_VIGNETTE = 2;
 
+// La vignette est servie en WebP, et non en PNG. Une carte d'orientation est une
+// image riche en détails : en PNG 24 bits elle pèse un demi-méga-octet, pour un
+// visuel identique à 27 Ko en WebP — vingt fois moins. C'est la seule image que
+// le visiteur télécharge systématiquement en arrivant sur la cartographie, et le
+// public de ce site la consulte souvent en forêt, sur un réseau médiocre.
+// Le WebP gère la transparence, indispensable au détourage.
+const QUALITE_WEBP = 80;
+
 // Largeur servie au navigateur pendant le calage : la pleine résolution (jusqu'à
 // plusieurs milliers de pixels) ralentirait le chargement pour rien, l'oeil ne
 // distinguant pas la différence à l'échelle de la carte affichée.
@@ -280,7 +288,7 @@ async function enregistrerCalage(reponse, requete) {
 	}
 
 	// 2. Vignette : la zone technique détourée, fond transparent.
-	const cheminVignette = path.join(DOSSIER_PUBLIC_CARTES, `${id}-thumb.png`);
+	const cheminVignette = path.join(DOSSIER_PUBLIC_CARTES, `${id}-thumb.webp`);
 	try {
 		const contourPx = contourEnPixels(contour, feuille, largeurImage, hauteurImage);
 		const boite = boiteEnglobantePixels(contourPx, largeurImage, hauteurImage);
@@ -307,7 +315,7 @@ async function enregistrerCalage(reponse, requete) {
 		await sharp(decoupeMasquee)
 			.resize({ width: LARGEUR_VIGNETTE, withoutEnlargement: true })
 			.blur(FLOU_VIGNETTE)
-			.png()
+			.webp({ quality: QUALITE_WEBP, alphaQuality: 100 })
 			.toFile(cheminVignette);
 		fichiersEcrits.push(path.relative(RACINE, cheminVignette));
 	} catch (erreur) {
@@ -339,7 +347,7 @@ async function enregistrerCalage(reponse, requete) {
 			'---',
 			`title: "${(titre || id).replace(/"/g, '\\"')}"`,
 			`description: "${(description || '').replace(/"/g, '\\"')}"`,
-			`thumbnail: "/images/cartes/${id}-thumb.png"`,
+			`thumbnail: "/images/cartes/${id}-thumb.webp"`,
 			`imagePath: "/images/cartes/${id}-apercu.jpg"`,
 			`bounds: [${latSud}, ${lngOuest}, ${latNord}, ${lngEst}]`,
 			`pubDate: "${aujourdhui}"`,

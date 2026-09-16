@@ -32,3 +32,10 @@ pnpm-debug.log*
 *.swp
 *.swo
 *~
+
+# Cartes haute résolution — NE JAMAIS COMMITER.
+# Le dépôt est public : tout fichier commité devient téléchargeable par tous et
+# reste dans l'historique Git même après suppression. Les originaux restent donc
+# ici, sur le poste, et seuls les aperçus dégradés générés par
+# scripts/generer-apercus.mjs sont publiés dans public/images/cartes/.
+cartes-sources/

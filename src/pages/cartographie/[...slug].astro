@@ -75,8 +75,17 @@ const mapData = [
 			{
 				carte.data.imagePath && (
 					<figure>
-						<img src={carte.data.imagePath} alt={`Aperçu de la carte ${carte.data.title}`} />
-						<figcaption>Aperçu — la carte complète est disponible auprès de son propriétaire.</figcaption>
+						{/*
+						  L'image servie est déjà réduite et floutée dans ses pixels, générée par
+						  scripts/generer-apercus.mjs. Ne pas remplacer ce procédé par un flou CSS :
+						  le navigateur téléchargerait alors la carte nette avant de la masquer,
+						  et un simple « enregistrer l'image » suffirait à la récupérer.
+						*/}
+						<img src={carte.data.imagePath} alt={`Aperçu flouté de la carte ${carte.data.title}`} />
+						<figcaption>
+							Aperçu volontairement flouté. La carte complète est disponible auprès de son
+							propriétaire.
+						</figcaption>
 					</figure>
 				)
 			}

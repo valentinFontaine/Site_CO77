@@ -1,6 +1,7 @@
 ---
 title: "Melun Beffroi Montaigu"
 description: "Carte urbaine du centre-ville de Melun, du Beffroi au quartier Montaigu. Idéale pour le sprint et les entraînements en semaine."
+thumbnail: "/images/cartes/Melun_Beffroi_Montaigu-thumb.png"
 bounds: [48.5435051382942, 2.64731505199855, 48.5542986265117, 2.66862604327737]
 difficultyLevel: "Facile"
 scale: "1:7500"

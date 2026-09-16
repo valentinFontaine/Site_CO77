@@ -1,6 +1,8 @@
 ---
 title: "Rocher des Demoiselles"
 description: "Secteur technique de la forêt de Fontainebleau, entre rochers et sentiers, pour travailler la lecture de carte en terrain accidenté."
+thumbnail: "/images/cartes/Rocher_des_Demoiselles-thumb.png"
+imagePath: "/images/cartes/Rocher_des_Demoiselles-apercu.jpg"
 bounds: [48.3654241952477, 2.64279628770963, 48.3905483959939, 2.69238289663746]
 difficultyLevel: "Moyen"
 scale: "1:10000"

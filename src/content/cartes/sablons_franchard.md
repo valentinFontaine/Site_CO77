@@ -1,6 +1,7 @@
 ---
 title: "Rochers des Sablons et Franchard"
 description: "Carte typique de Fontainebleau"
+thumbnail: "/images/cartes/sablons_franchard-thumb.png"
 bounds: [48.3744362025425, 2.55469404572898, 48.4190137885939, 2.64191308847357]
 difficultyLevel: "Moyen"
 scale: "1:10000"

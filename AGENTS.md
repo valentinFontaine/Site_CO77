@@ -78,6 +78,34 @@ docs/             documentation d'exploitation
 
 Collections : `actualites`, `evenements`, `entrainements`, `clubs`, `cartes`.
 
+## Cartes : ne jamais publier une carte nette
+
+Le dépôt est **public** et le site publie tout le contenu de `public/`. Un
+fichier commité devient donc téléchargeable par n'importe qui, et reste dans
+l'historique Git même après suppression. Les cartes de course d'orientation sont
+vendues par leurs propriétaires : les originaux haute résolution ne doivent
+jamais entrer dans le dépôt.
+
+Le circuit est le suivant :
+
+```
+cartes-sources/           originaux nets — exclu de Git par .gitignore
+        ↓  node scripts/generer-apercus.mjs
+public/images/cartes/     aperçus réduits et floutés — publiés
+```
+
+**Le flou est appliqué à la génération, donc inscrit dans les pixels.** Ne jamais
+le remplacer par un `filter: blur()` en CSS : le navigateur téléchargerait la
+carte nette avant de la masquer, et un « enregistrer l'image sous » suffirait à
+la récupérer. Un flou CSS n'est pas une protection.
+
+Deux images par carte, distinctes :
+
+- `<id>-thumb.png` — vignette posée sur la carte interactive, fond transparent
+  épousant les limites de la carte, environ 300 px de large ; souvent fabriquée à
+  la main, le script ne l'écrase pas si elle existe.
+- `<id>-apercu.jpg` — illustration de la fiche, 1000 px et floutée.
+
 ## Pièges connus
 
 **La carte interactive de `/cartographie/`** est pilotée par
@@ -107,7 +135,6 @@ validation : elles tracent ce qui reste à reprendre depuis `attachements/`.
 - Finaliser la migration des contenus marqués `needsManualReview`
 - Brancher le domaine `co77.fr`
 - Réduire le poids des images héritées (certaines dépassent 2 Mo en 6000 px)
-- Produire les vignettes des cartes (`thumbnail`) : aucune n'existe aujourd'hui
 - Concevoir l'inscription aux courses et la vente de cartes — non commencé
 
 ## Documentation

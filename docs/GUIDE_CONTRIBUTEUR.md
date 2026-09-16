@@ -59,6 +59,12 @@ couleur dépendant du **Type de terrain**. La **Vignette** est facultative : c'e
 une image de la carte qui vient se poser dans le rectangle. Sans elle, le
 rectangle s'affiche quand même.
 
+> **Ne téléversez jamais une carte en bonne résolution.** Le site est public :
+> tout ce qui y est déposé devient téléchargeable par n'importe qui. Les cartes
+> se vendent — seules des images volontairement réduites et floutées sont mises
+> en ligne. En cas de doute, transmettez le fichier à la personne qui gère le
+> site plutôt que de le déposer vous-même.
+
 ## Quelques repères
 
 **La case « Brouillon »** — cochée, le contenu est enregistré mais **n'apparaît

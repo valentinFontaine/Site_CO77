@@ -96,6 +96,7 @@ const elTitre = document.getElementById('titre');
 const elDescription = document.getElementById('description');
 const elMessages = document.getElementById('messages');
 const boutonEnregistrer = document.getElementById('enregistrer');
+const elManques = document.getElementById('manques');
 const boutonTracer = document.getElementById('tracer');
 
 function afficherMessage(texte, type) {
@@ -103,18 +104,29 @@ function afficherMessage(texte, type) {
 	elMessages.className = type || '';
 }
 
+/**
+ * Verrouille l'enregistrement tant qu'il manque quelque chose, **et dit quoi**.
+ *
+ * Un bouton grisé sans explication est une impasse : on ne peut ni deviner ce
+ * qui manque, ni savoir si l'outil est cassé. La liste ci-dessous s'affiche donc
+ * sous le bouton.
+ *
+ * Le titre et la description sont exigés parce qu'ils sont obligatoires dans le
+ * schéma des cartes (`src/content.config.ts`). Une description vide serait
+ * enregistrée en chaîne vide, que le site traite comme « non renseigné » : le
+ * champ obligatoire manquerait, le build échouerait et le déploiement serait
+ * bloqué — sans que l'erreur pointe vers cet éditeur.
+ */
 function majEtatBoutonEnregistrer() {
-	// Le titre et la description sont exigés parce qu'ils sont obligatoires dans le
-	// schéma des cartes (`src/content.config.ts`). Une description vide serait
-	// enregistrée en chaîne vide, que le site traite comme « non renseigné » : le
-	// champ obligatoire manquerait, le build échouerait et le déploiement serait
-	// bloqué — sans que l'erreur pointe vers cet éditeur.
-	boutonEnregistrer.disabled =
-		contour.length < 3 ||
-		elId.value.trim() === '' ||
-		elTitre.value.trim() === '' ||
-		elDescription.value.trim() === '' ||
-		!sourceActuelle;
+	const manques = [];
+	if (!sourceActuelle) manques.push('choisir une image source');
+	if (contour.length < 3) manques.push(`tracer le contour (${contour.length} sommet${contour.length > 1 ? 's' : ''} sur 3 minimum)`);
+	if (elId.value.trim() === '') manques.push('renseigner l\'identifiant');
+	if (elTitre.value.trim() === '') manques.push('renseigner le titre');
+	if (elDescription.value.trim() === '') manques.push('renseigner la description');
+
+	boutonEnregistrer.disabled = manques.length > 0;
+	elManques.textContent = manques.length ? `Il reste à : ${manques.join(', ')}.` : '';
 }
 
 // ---------------------------------------------------------------------------
@@ -396,7 +408,12 @@ document.getElementById('terminerTrace').addEventListener('click', () => {
 // 6. Enregistrement
 // ---------------------------------------------------------------------------
 
-elId.addEventListener('input', majEtatBoutonEnregistrer);
+// Les trois champs conditionnent l'enregistrement : les trois doivent le
+// réévaluer. N'écouter que l'identifiant laissait le bouton grisé même une
+// fois le titre et la description saisis.
+for (const champ of [elId, elTitre, elDescription]) {
+	champ.addEventListener('input', majEtatBoutonEnregistrer);
+}
 
 boutonEnregistrer.addEventListener('click', async () => {
 	if (!sourceActuelle || !feuille || contour.length < 3) return;
@@ -441,3 +458,7 @@ boutonEnregistrer.addEventListener('click', async () => {
 // ---------------------------------------------------------------------------
 
 chargerSources();
+
+// Évaluation initiale : sans elle, le bouton paraît actif au chargement alors
+// que rien n'est encore renseigné, et aucune explication n'est affichée.
+majEtatBoutonEnregistrer();

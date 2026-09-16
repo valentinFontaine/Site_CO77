@@ -29,6 +29,10 @@ var COULEUR_DEFAUT = '#2337ff';
 // Vue de repli quand aucune carte n'a d'emprise exploitable : la Seine-et-Marne.
 var VUE_PAR_DEFAUT = { centre: [48.62, 2.95], zoom: 9 };
 
+// Plan de superposition de la feuille survolée. Doit dépasser le calque SVG des
+// contours, que Leaflet fixe à 200, sans atteindre les infobulles (650).
+var ZINDEX_FEUILLE = 250;
+
 // Sur un écran tactile il n'y a pas de survol : la première touche montre la
 // feuille, la seconde ouvre la fiche.
 var AU_SURVOL = window.matchMedia && window.matchMedia('(hover: hover)').matches;
@@ -169,6 +173,13 @@ function ajouterCarte(map, carte, etat) {
 			feuille = L.imageOverlay(carte.apercu, carte.feuille, {
 				interactive: false,
 				className: 'carte-feuille',
+				// Leaflet place tous les contours dans un unique calque SVG, auquel sa
+				// feuille de style donne `z-index: 200`, contre 1 pour les images. Le
+				// SVG passe donc devant toutes les images quel que soit l'ordre du
+				// DOM, et `bringToFront()` n'y change rien : la feuille survolée se
+				// retrouvait sous le liseré des cartes voisines. Il faut la monter
+				// au-dessus de ce calque. On reste sous les infobulles (650).
+				zIndex: ZINDEX_FEUILLE,
 			});
 		}
 		return feuille;

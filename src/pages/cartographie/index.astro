@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { getPublished } from '../../lib/collections';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 
-const maps = await getCollection('cartes');
+const maps = await getPublished('cartes');
 
 // Prepare map data for the client-side script
 const mapData = maps.map(map => ({

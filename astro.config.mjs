@@ -6,7 +6,10 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	// En local : localhost. Sur Netlify : la variable d'environnement URL contient
+	// l'adresse réelle du site (xxx.netlify.app aujourd'hui, https://co77.fr demain),
+	// ce qui garde les URLs canoniques, le sitemap et le flux RSS corrects.
+	site: process.env.URL ?? 'http://localhost:4321',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{

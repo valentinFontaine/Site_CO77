@@ -1,6 +1,6 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import { getPublished } from '../../lib/collections';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
@@ -8,7 +8,7 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('actualites');
+  const posts = await getPublished('actualites');
   return posts.map((post) => ({
     params: { slug: post.id },
     props: post,
@@ -33,7 +33,7 @@ const breadcrumbItems = [
 			<Breadcrumb items={breadcrumbItems} />
 			<h1>{post.data.title}</h1>
 			<p style="color: var(--gray);"><FormattedDate date={post.data.pubDate} /></p>
-			{post.data.heroImage && (typeof post.data.heroImage === "string" && (post.data.heroImage.startsWith("/images/") || post.data.heroImage.startsWith("http")) ? (<img src={post.data.heroImage} alt={post.data.title} style="max-width: 100%; margin: 1rem 0; border-radius: 8px;" />) : (<Image src={post.data.heroImage} alt={post.data.title} inferSize={true} style="max-width: 100%; margin: 1rem 0; border-radius: 8px;" />))}
+			{post.data.heroImage && (<img src={post.data.heroImage} alt={post.data.title} style="max-width: 100%; margin: 1rem 0; border-radius: 8px;" />)}
 			<Content />
 		</main>
 		<Footer />

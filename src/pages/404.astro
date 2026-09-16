@@ -1,0 +1,26 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<BaseHead title={`Page introuvable - ${SITE_TITLE}`} description="La page demandée n'existe pas." />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Page introuvable</h1>
+			<p>La page que vous cherchez n'existe pas ou a été déplacée.</p>
+			<p>
+				<a href="/">Retour à l'accueil</a> &middot;
+				<a href="/actualites/">Actualités</a> &middot;
+				<a href="/evenements/">Événements</a>
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>

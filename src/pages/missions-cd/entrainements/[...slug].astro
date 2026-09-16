@@ -1,11 +1,12 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import { getPublished } from '../../../lib/collections';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 
 export async function getStaticPaths() {
-  const trainings = await getCollection('entrainements');
+  const trainings = await getPublished('entrainements');
   return trainings.map((training) => ({
     params: { slug: training.id },
     props: training,

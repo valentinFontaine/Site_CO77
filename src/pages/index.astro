@@ -3,14 +3,14 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
+import { getPublished } from '../lib/collections';
 import FormattedDate from '../components/FormattedDate.astro';
 
-const allActualites = (await getCollection('actualites')).map(p => ({ ...p, collection: 'actualites' }));
-const allClubs = (await getCollection('clubs')).map(p => ({ ...p, collection: 'clubs' }));
-const allCartes = (await getCollection('cartes')).map(p => ({ ...p, collection: 'cartes' }));
-const allEntrainements = (await getCollection('entrainements')).map(p => ({ ...p, collection: 'entrainements' }));
-const allEvenements = (await getCollection('evenements')).map(p => ({ ...p, collection: 'evenements' }));
+const allActualites = (await getPublished('actualites')).map(p => ({ ...p, collection: 'actualites' }));
+const allClubs = (await getPublished('clubs')).map(p => ({ ...p, collection: 'clubs' }));
+const allCartes = (await getPublished('cartes')).map(p => ({ ...p, collection: 'cartes' }));
+const allEntrainements = (await getPublished('entrainements')).map(p => ({ ...p, collection: 'entrainements' }));
+const allEvenements = (await getPublished('evenements')).map(p => ({ ...p, collection: 'evenements' }));
 
 const allContent = [...allActualites, ...allClubs, ...allCartes, ...allEntrainements, ...allEvenements];
 

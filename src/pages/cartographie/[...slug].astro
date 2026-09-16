@@ -1,6 +1,7 @@
 ---
 import { render } from 'astro:content';
 import { getPublished } from '../../lib/collections';
+import { getCalages, donneesCarte } from '../../lib/cartes';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
@@ -17,6 +18,8 @@ export async function getStaticPaths() {
 const carte = Astro.props;
 const { Content } = await render(carte);
 
+const calage = (await getCalages()).get(carte.id);
+
 // Caractéristiques affichées en tableau : on n'affiche que celles qui sont renseignées.
 const caracteristiques = [
 	['Secteur', carte.data.region],
@@ -26,17 +29,11 @@ const caracteristiques = [
 	['Cartographe', carte.data.author],
 ].filter(([, valeur]) => Boolean(valeur)) as [string, string][];
 
-// La fiche affiche la même carte interactive que l'index, cadrée sur cette seule emprise.
-const mapData = [
-	{
-		title: carte.data.title,
-		bounds: carte.data.bounds,
-		thumbnail: carte.data.thumbnail,
-		mapType: carte.data.mapType,
-		scale: carte.data.scale,
-		difficultyLevel: carte.data.difficultyLevel,
-	},
-];
+// La fiche affiche la même carte interactive que l'index, cadrée sur cette seule
+// emprise. L'adresse est retirée : on est déjà sur la fiche, s'y renvoyer n'aurait
+// pas de sens.
+const donnees = donneesCarte(carte, calage);
+const mapData = donnees ? [{ ...donnees, url: null }] : [];
 ---
 
 <!doctype html>
@@ -70,7 +67,10 @@ const mapData = [
 			}
 
 			<div id="map" data-map-data={JSON.stringify(mapData)}></div>
-			<p class="note">Emprise de la carte. Changez de fond de plan avec les contrôles en haut à droite.</p>
+			<p class="note">
+				Zone cartographiée. Survolez-la pour voir la feuille complète. Changez de fond de plan avec
+				les contrôles en haut à droite.
+			</p>
 
 			{
 				carte.data.imagePath && (
@@ -158,7 +158,8 @@ const mapData = [
 			.custom-tooltip .infobulle-details {
 				color: #4b5563;
 			}
-			.map-image-overlay {
+			.carte-vignette,
+			.carte-feuille {
 				pointer-events: none;
 			}
 		</style>

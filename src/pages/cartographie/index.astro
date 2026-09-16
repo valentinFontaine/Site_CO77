@@ -1,28 +1,23 @@
 ---
 import { getPublished } from '../../lib/collections';
+import { getCalages, donneesCarte } from '../../lib/cartes';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 
 const maps = await getPublished('cartes');
+const calages = await getCalages();
 
 // Trier par secteur puis par nom, pour une liste stable et lisible.
 const cartes = maps.sort((a, b) =>
 	`${a.data.region ?? ''} ${a.data.title}`.localeCompare(`${b.data.region ?? ''} ${b.data.title}`, 'fr'),
 );
 
-// Données transmises telles quelles au script Leaflet. L'adresse de la fiche est
-// calculée ici plutôt que reconstruite en JavaScript, pour rester cohérente avec
-// les pages réellement générées par [...slug].astro.
-const mapData = cartes.map((carte) => ({
-	title: carte.data.title,
-	bounds: carte.data.bounds,
-	thumbnail: carte.data.thumbnail,
-	mapType: carte.data.mapType,
-	scale: carte.data.scale,
-	difficultyLevel: carte.data.difficultyLevel,
-	url: `/cartographie/${carte.id}/`,
-}));
+// Données transmises au script Leaflet, emprises déjà normalisées. Une carte
+// sans emprise exploitable est écartée plutôt que transmise à moitié.
+const mapData = cartes
+	.map((carte) => donneesCarte(carte, calages.get(carte.id)))
+	.filter((carte) => carte !== null);
 ---
 
 <!doctype html>
@@ -42,8 +37,8 @@ const mapData = cartes.map((carte) => ({
 		<main>
 			<h1>Cartographie en Seine-et-Marne</h1>
 			<p class="intro">
-				Chaque rectangle représente l'emprise d'une carte. Survolez-le pour voir ses caractéristiques,
-				cliquez pour ouvrir sa fiche.
+				Chaque zone colorée est une carte. Survolez-la pour voir la feuille complète et ses
+				caractéristiques, cliquez pour ouvrir sa fiche.
 			</p>
 
 			<div id="map" data-map-data={JSON.stringify(mapData)}></div>
@@ -197,11 +192,14 @@ const mapData = cartes.map((carte) => ({
 			.custom-tooltip .infobulle-details {
 				color: #4b5563;
 			}
-			.carte-emprise {
+			/* Le contour n'a qu'un liseré : son remplissage est transparent et ne sert
+			   qu'à rendre toute la surface de la carte survolable. */
+			.carte-contour {
 				cursor: pointer;
-				transition: fill-opacity 0.15s ease;
 			}
-			.map-image-overlay {
+			/* Les images ne captent pas la souris : c'est le contour qui s'en charge. */
+			.carte-vignette,
+			.carte-feuille {
 				pointer-events: none;
 			}
 		</style>

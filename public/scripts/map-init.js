@@ -2,16 +2,22 @@
  * Carte interactive des cartes de course d'orientation (Leaflet).
  *
  * Utilisé par /cartographie/ (toutes les cartes) et par la fiche de chaque carte
- * (une seule emprise). Les deux pages exposent un élément `#map` portant
- * l'attribut `data-map-data`, un tableau JSON décrivant les cartes à afficher.
+ * (une seule). Les deux pages exposent un élément `#map` portant l'attribut
+ * `data-map-data`, un tableau JSON décrivant les cartes à afficher.
  *
- * Chaque carte est dessinée comme un rectangle correspondant à son emprise
- * géographique. Si une vignette est renseignée, elle est superposée par-dessus.
- * Le rectangle reste dessiné même sans vignette — ou si l'image est absente du
- * serveur — pour que la carte soit toujours repérable.
+ * Ce qui s'affiche, et pourquoi :
+ *
+ *   au repos   la zone réellement cartographiée, détourée selon son contour,
+ *              cerclée d'un liseré fin
+ *   au survol  la feuille imprimée entière, cadre FFCO compris, liseré masqué
+ *
+ * Le contour est dessiné sans remplissage : une surface colorée posée sur les
+ * cartes masquerait ce que le visiteur est précisément venu regarder. Le liseré
+ * sert seulement à signaler qu'il y a quelque chose à survoler, et sa couleur
+ * indique le type de terrain.
  */
 
-// Couleur du rectangle selon le type de terrain.
+// Couleur du liseré selon le type de terrain.
 var COULEURS_TYPE = {
 	'Forêt': '#1b7f3b',
 	Urbain: '#b3541e',
@@ -23,6 +29,10 @@ var COULEUR_DEFAUT = '#2337ff';
 // Vue de repli quand aucune carte n'a d'emprise exploitable : la Seine-et-Marne.
 var VUE_PAR_DEFAUT = { centre: [48.62, 2.95], zoom: 9 };
 
+// Sur un écran tactile il n'y a pas de survol : la première touche montre la
+// feuille, la seconde ouvre la fiche.
+var AU_SURVOL = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+
 function echapper(texte) {
 	return String(texte == null ? '' : texte).replace(/[&<>"']/g, function (caractere) {
 		return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[caractere];
@@ -32,11 +42,10 @@ function echapper(texte) {
 /** Crée la carte et ses fonds de plan. */
 function mountMap(container) {
 	if (typeof L === 'undefined') {
-		console.error('Leaflet n\'est pas chargé');
+		console.error("Leaflet n'est pas chargé");
 		return null;
 	}
 
-	// `L.map` installe déjà les boutons de zoom : ne pas en ajouter un second.
 	var map = L.map(container, { scrollWheelZoom: false });
 
 	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -53,7 +62,6 @@ function mountMap(container) {
 		{ attribution: '&copy; <a href="https://www.ign.fr">IGN</a>', maxZoom: 19 },
 	);
 
-	// Les photos aériennes aident à juger du terrain : forêt, clairières, bâti.
 	var ignPhoto = L.tileLayer(
 		'https://data.geopf.fr/wmts?layer=ORTHOIMAGERY.ORTHOPHOTOS&style=normal&tilematrixset=PM' +
 			'&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg' +
@@ -76,15 +84,25 @@ function mountMap(container) {
 	return map;
 }
 
-/** Convertit `[latSud, lngOuest, latNord, lngEst]` en emprise Leaflet. */
-function versEmprise(bounds) {
-	if (!Array.isArray(bounds) || bounds.length !== 4 || bounds.some(function (n) {
-		return typeof n !== 'number' || isNaN(n);
-	})) {
-		return null;
-	}
-	// `L.latLngBounds` remet d'aplomb les coins donnés dans le désordre.
-	return L.latLngBounds([bounds[0], bounds[1]], [bounds[2], bounds[3]]);
+/** Vérifie qu'une emprise `[[sud, ouest], [nord, est]]` est exploitable. */
+function empriseValide(emprise) {
+	return (
+		Array.isArray(emprise) &&
+		emprise.length === 2 &&
+		emprise.every(function (coin) {
+			return (
+				Array.isArray(coin) &&
+				coin.length === 2 &&
+				coin.every(function (n) {
+					return typeof n === 'number' && !isNaN(n);
+				})
+			);
+		})
+	);
+}
+
+function contourValide(contour) {
+	return Array.isArray(contour) && contour.length >= 3;
 }
 
 function contenuInfobulle(carte) {
@@ -95,61 +113,134 @@ function contenuInfobulle(carte) {
 	);
 }
 
-/** Dessine les cartes et renvoie l'emprise cumulée de celles qui ont pu l'être. */
+/**
+ * Installe une carte sur le fond : sa vignette détourée, son liseré, et la
+ * bascule vers la feuille complète.
+ */
+function ajouterCarte(map, carte, etat) {
+	var couleur = COULEURS_TYPE[carte.mapType] || COULEUR_DEFAUT;
+
+	var vignette = null;
+	if (carte.thumbnail && empriseValide(carte.bounds)) {
+		// `interactive: false` : c'est le contour qui capte les événements. Une
+		// seule zone sensible, donc une seule infobulle et un seul lien.
+		vignette = L.imageOverlay(carte.thumbnail, carte.bounds, {
+			interactive: false,
+			className: 'carte-vignette',
+		}).addTo(map);
+
+		vignette.on('error', function () {
+			console.warn('Vignette introuvable pour « ' + carte.title + ' » : ' + carte.thumbnail);
+			map.removeLayer(vignette);
+			vignette = null;
+		});
+	}
+
+	// Sans contour tracé, on retombe sur le rectangle de l'emprise : la carte
+	// reste repérable et cliquable en attendant d'être calée dans l'éditeur.
+	var sommets = contourValide(carte.contour)
+		? carte.contour
+		: [
+				[carte.bounds[0][0], carte.bounds[0][1]],
+				[carte.bounds[1][0], carte.bounds[0][1]],
+				[carte.bounds[1][0], carte.bounds[1][1]],
+				[carte.bounds[0][0], carte.bounds[1][1]],
+			];
+
+	// `fillOpacity: 0` garde une surface sensible à la souris sans rien masquer :
+	// on peut survoler la carte partout, pas seulement sur son liseré.
+	var contour = L.polygon(sommets, {
+		color: couleur,
+		weight: 2,
+		opacity: 0.85,
+		fill: true,
+		fillOpacity: 0,
+		className: 'carte-contour',
+	}).addTo(map);
+
+	contour.bindTooltip(contenuInfobulle(carte), { sticky: true, className: 'custom-tooltip' });
+
+	// La feuille entière n'est chargée qu'au premier survol : sur une page qui
+	// affichera une vingtaine de cartes, télécharger d'emblée toutes les feuilles
+	// serait long pour rien, la plupart ne seront jamais survolées.
+	var feuille = null;
+	function feuilleChargee() {
+		if (!feuille && carte.apercu && empriseValide(carte.feuille)) {
+			feuille = L.imageOverlay(carte.apercu, carte.feuille, {
+				interactive: false,
+				className: 'carte-feuille',
+			});
+		}
+		return feuille;
+	}
+
+	function montrerFeuille() {
+		var image = feuilleChargee();
+		if (!image) return;
+		if (!map.hasLayer(image)) image.addTo(map);
+		image.bringToFront(); // passer devant les cartes voisines
+		if (vignette) map.removeLayer(vignette);
+		contour.setStyle({ opacity: 0, fillOpacity: 0 });
+		etat.ouverte = carte;
+	}
+
+	function cacherFeuille() {
+		if (feuille && map.hasLayer(feuille)) map.removeLayer(feuille);
+		if (vignette && !map.hasLayer(vignette)) vignette.addTo(map);
+		contour.setStyle({ opacity: 0.85, weight: 2 });
+		if (etat.ouverte === carte) etat.ouverte = null;
+	}
+
+	carte.cacher = cacherFeuille;
+
+	if (AU_SURVOL) {
+		contour.on('mouseover', function () {
+			if (carte.apercu) montrerFeuille();
+			else contour.setStyle({ weight: 4 });
+		});
+		contour.on('mouseout', function () {
+			cacherFeuille();
+			contour.setStyle({ weight: 2 });
+		});
+		contour.on('click', function () {
+			if (carte.url) window.location.href = carte.url;
+		});
+	} else {
+		// Écran tactile : première touche pour regarder, seconde pour ouvrir.
+		contour.on('click', function () {
+			if (etat.ouverte === carte) {
+				if (carte.url) window.location.href = carte.url;
+				return;
+			}
+			if (etat.ouverte && etat.ouverte.cacher) etat.ouverte.cacher();
+			if (carte.apercu) montrerFeuille();
+			else if (carte.url) window.location.href = carte.url;
+		});
+	}
+
+	return L.latLngBounds(carte.bounds[0], carte.bounds[1]);
+}
+
+/** Dessine toutes les cartes et renvoie l'emprise cumulée. */
 function addCarteOverlays(map, cartes) {
 	var empriseTotale = null;
+	var etat = { ouverte: null };
 
 	(cartes || []).forEach(function (carte) {
-		var emprise = versEmprise(carte.bounds);
-		if (!emprise) {
+		if (!empriseValide(carte.bounds)) {
 			console.warn('Emprise absente ou invalide pour « ' + carte.title + ' », carte ignorée');
 			return;
 		}
-
-		var couleur = COULEURS_TYPE[carte.mapType] || COULEUR_DEFAUT;
-
-		var rectangle = L.rectangle(emprise, {
-			color: couleur,
-			weight: 2,
-			opacity: 0.9,
-			fillColor: couleur,
-			fillOpacity: 0.18,
-			className: 'carte-emprise',
-		}).addTo(map);
-
-		rectangle.bindTooltip(contenuInfobulle(carte), { sticky: true, className: 'custom-tooltip' });
-
-		if (carte.url) {
-			rectangle.on('click', function () {
-				window.location.href = carte.url;
-			});
-		}
-
-		rectangle.on('mouseover', function () {
-			rectangle.setStyle({ fillOpacity: 0.35, weight: 3 });
-		});
-		rectangle.on('mouseout', function () {
-			rectangle.setStyle({ fillOpacity: 0.18, weight: 2 });
-		});
-
-		if (carte.thumbnail) {
-			// `interactive: false` laisse passer les clics vers le rectangle, qui
-			// reste la seule zone sensible : une seule infobulle, un seul lien.
-			var vignette = L.imageOverlay(carte.thumbnail, emprise, {
-				opacity: 0.85,
-				interactive: false,
-				className: 'map-image-overlay',
-			}).addTo(map);
-
-			// Vignette introuvable : on la retire, le rectangle suffit à situer la carte.
-			vignette.on('error', function () {
-				console.warn('Vignette introuvable pour « ' + carte.title + ' » : ' + carte.thumbnail);
-				map.removeLayer(vignette);
-			});
-		}
-
-		empriseTotale = empriseTotale ? empriseTotale.extend(emprise) : L.latLngBounds(emprise.getSouthWest(), emprise.getNorthEast());
+		var emprise = ajouterCarte(map, carte, etat);
+		empriseTotale = empriseTotale ? empriseTotale.extend(emprise) : emprise;
 	});
+
+	// Sur écran tactile, toucher le fond referme la feuille ouverte.
+	if (!AU_SURVOL) {
+		map.on('click', function () {
+			if (etat.ouverte && etat.ouverte.cacher) etat.ouverte.cacher();
+		});
+	}
 
 	return empriseTotale;
 }

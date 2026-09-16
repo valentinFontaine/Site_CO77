@@ -131,10 +131,22 @@ Deux images par carte, distinctes :
 
 **La carte interactive de `/cartographie/`** est pilotée par
 [`public/scripts/map-init.js`](public/scripts/map-init.js), du JavaScript simple
-chargé avec Leaflet depuis un CDN. Chaque carte est dessinée comme un rectangle
-à partir de son champ `bounds` ; la vignette n'est qu'un décor superposé. Une
-carte reste donc visible même sans vignette. Ne pas réintroduire de
-dépendance à `thumbnail` pour l'affichage.
+chargé avec Leaflet depuis un CDN. Au repos elle montre la zone cartographiée
+détourée, cerclée d'un liseré fin ; au survol, la feuille imprimée entière, et le
+liseré s'efface.
+
+**Ne jamais remplir le contour d'une couleur.** Une surface colorée posée sur les
+cartes masque ce que le visiteur est venu regarder. Le remplissage est
+transparent (`fillOpacity: 0`) et ne sert qu'à rendre toute la surface
+survolable ; la couleur du liseré indique le type de terrain.
+
+Les feuilles complètes ne sont chargées qu'au premier survol : avec une vingtaine
+de cartes, les télécharger d'emblée serait long pour rien. Et comme le survol
+n'existe pas sur écran tactile, une première touche montre la feuille, une
+seconde ouvre la fiche.
+
+Une carte sans calage retombe sur le rectangle de son champ `bounds` : elle reste
+repérable et cliquable en attendant d'être calée dans l'éditeur.
 
 **Les fonds de plan IGN passent par `data.geopf.fr`.** L'ancien service
 `wxs.ign.fr` a été fermé en 2024 et son domaine ne résout plus.

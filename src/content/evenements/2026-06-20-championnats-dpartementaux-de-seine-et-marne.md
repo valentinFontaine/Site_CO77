@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: Championnats Départementaux de Seine-et-Marne
 description: Championnats départementaux 2026
 pubDate: 2026-06-20

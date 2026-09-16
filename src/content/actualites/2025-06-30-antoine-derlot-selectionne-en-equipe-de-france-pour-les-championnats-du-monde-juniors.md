@@ -12,7 +12,6 @@ tags:
 - championnats-du-monde
 - juniors
 draft: false
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 
 Grâce à ses excellents résultats lors des courses de sélection, Antoine DERLOT a décroché sa place en Équipe de France pour les Championnats du Monde Juniors de Course d'Orientation (JWOC), qui se dérouleront du 26 juin au 4 juillet 2025, dans la région du Frioul, en Italie.

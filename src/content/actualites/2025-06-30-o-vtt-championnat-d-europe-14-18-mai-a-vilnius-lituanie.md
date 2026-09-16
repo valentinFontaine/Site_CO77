@@ -3,7 +3,6 @@ title: O’VTT Championnat d’ Europe 14/18 Mai à Vilnius (Lituanie)
 description: "O’VTT Championnat d’ Europe 14/18 Mai à Vilnius (Lituanie) Site dédié Mass Start Longue Distance M20: Jocelin LAURET (AS Samois) 4e Moyenne Distance M20: Jocelin LAURET (AS Samois) 5ele titre pour Aug..."
 category: resultats
 pubDate: 2025-06-30T16:56:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### O’VTT Championnat d’ Europe 14/18 Mai à Vilnius (Lituanie)
 

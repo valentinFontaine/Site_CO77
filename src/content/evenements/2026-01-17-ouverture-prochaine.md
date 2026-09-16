@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: Ouverture prochaine
 description: ''
 pubDate: 2026-01-17

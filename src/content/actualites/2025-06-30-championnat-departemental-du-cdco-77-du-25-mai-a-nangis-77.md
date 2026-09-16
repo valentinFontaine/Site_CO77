@@ -3,7 +3,6 @@ title: Championnat Départemental du CDCO 77 du 25 Mai à Nangis (77)
 description: Organisé par le CDCO77
 category: resultats
 pubDate: 2025-06-30T17:01:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### **Championnat Départemental du CDCO 77 du 25 Mai à Nangis (77)**
 

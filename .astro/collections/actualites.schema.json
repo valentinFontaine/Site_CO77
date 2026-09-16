@@ -63,8 +63,8 @@
       "description": "Catégorie de l'actualité"
     },
     "heroImage": {
-      "description": "Image principale pour l'aperçu",
-      "type": "string"
+      "type": "string",
+      "description": "Image principale, ex. /images/uploads/photo.jpg"
     },
     "seoTitle": {
       "type": "string",
@@ -80,9 +80,6 @@
       "description": "Date de dernière mise à jour",
       "type": "string",
       "format": "date-time"
-    },
-    "$schema": {
-      "type": "string"
     }
   },
   "required": [

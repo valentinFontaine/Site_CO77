@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: Championnat Régional 2026
 description: Championnat régional de course d'orientation
 pubDate: 2026-07-15

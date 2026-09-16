@@ -3,7 +3,6 @@ title: Nationales Nord Ouest du 15 et 16 Mars
 description: Site dédié
 category: resultats
 pubDate: 2025-03-17T23:49:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 ## Nationales Nord Ouest du 15 et 16 Mars
 

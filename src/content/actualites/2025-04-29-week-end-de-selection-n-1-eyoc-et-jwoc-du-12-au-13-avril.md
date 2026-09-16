@@ -3,7 +3,6 @@ title: Week-end de sélection n°1 EYOC et JWOC du 12 au 13 avril
 description: Sprint (Samedi 12 avril à Saint-Just-Malmont (43)
 category: resultats
 pubDate: 2025-04-29T22:19:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### Week-end de sélection n°1 EYOC et JWOC du 12 au 13 avril
 

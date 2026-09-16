@@ -3,7 +3,6 @@ title: Championnat de France Moyenne Distance du 3 Mai à Carcans-Maubuisson / D
 description: Organisé par les clubs ASM et SMOG
 category: resultats
 pubDate: 2025-06-30T16:50:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### Championnat de France Moyenne Distance du 3 Mai à  Carcans-Maubuisson / Domaine de Bombannes (33)
 

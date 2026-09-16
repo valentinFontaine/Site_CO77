@@ -3,7 +3,6 @@ title: Nationale Longue Distance sur la carte “Heidelberg-Rehbrunnenkopf”
 description: Site dédié
 category: resultats
 pubDate: 2025-06-30T17:07:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 **Nationales Nord Ouest du 7 au 9 Juin à Buhl**
 

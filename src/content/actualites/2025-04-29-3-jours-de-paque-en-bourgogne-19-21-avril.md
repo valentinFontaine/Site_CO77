@@ -3,7 +3,6 @@ title: 3 Jours de Pâque en Bourgogne 19/21 Avril
 description: Site dédié
 category: resultats
 pubDate: 2025-04-29T22:28:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 ## 3 Jours de Pâque en Bourgogne 19/21 Avril
 

@@ -3,6 +3,29 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // ============================================================================
+// OUTIL : tolérance aux champs vides
+// ============================================================================
+
+/**
+ * Le CMS enregistre `mon_champ: ""` quand un champ facultatif est laissé vide.
+ * Une chaîne vide ferait échouer la validation (URL, date, liste de choix…) et
+ * donc casserait le déploiement. On considère ces valeurs comme « non renseigné ».
+ */
+function stripEmpty(value: unknown) {
+	if (value && typeof value === 'object' && !Array.isArray(value)) {
+		return Object.fromEntries(
+			Object.entries(value as Record<string, unknown>).filter(
+				([, v]) => v !== '' && v !== null && !(Array.isArray(v) && v.length === 0),
+			),
+		);
+	}
+	return value;
+}
+
+/** Déclare le frontmatter d'une collection, en ignorant les champs laissés vides. */
+const frontmatter = <T extends z.ZodRawShape>(shape: T) => z.preprocess(stripEmpty, z.object(shape));
+
+// ============================================================================
 // SCHÉMAS DE BASE
 // ============================================================================
 
@@ -30,7 +53,7 @@ const baseSchema = {
 
 const clubs = defineCollection({
 	loader: glob({ base: './src/content/clubs', pattern: '**/*.{md,mdx}' }),
-	schema: z.object({
+	schema: frontmatter({
 		pubDate: z.coerce.date().optional(),
 		name: z.string(),
 		description: z.string(),
@@ -51,11 +74,11 @@ const clubs = defineCollection({
 
 const cartes = defineCollection({
 	loader: glob({ base: './src/content/cartes', pattern: '**/*.{md,mdx}' }),
-	schema: ({ image }) =>
-		z.object({
+	schema:
+		frontmatter({
 			pubDate: z.coerce.date().optional(),
 			title: z.string(),
-			imagePath: z.optional(image()),
+			imagePath: z.string().optional(),
 			description: z.string(),
 			bounds: z.array(z.number()).length(4).describe('Map bounds as [swLat, swLng, neLat, neLng]'),
 			thumbnail: z.string().optional().describe('Path to thumbnail image (PNG format)'),
@@ -75,8 +98,8 @@ const cartes = defineCollection({
 
 const actualites = defineCollection({
 	loader: glob({ base: './src/content/actualites', pattern: '**/*.{md,mdx}' }),
-	schema: ({ image }) =>
-		z.object({
+	schema:
+		frontmatter({
 			...baseSchema,
 			category: z.enum([
 				'annonces',
@@ -86,7 +109,7 @@ const actualites = defineCollection({
 				'photos',
 				'divers'
 			]).describe('Catégorie de l\'actualité'),
-			heroImage: z.optional(image()).describe('Image principale pour l\'aperçu'),
+			heroImage: z.string().describe('Image principale, ex. /images/uploads/photo.jpg').optional(),
 			seoTitle: z.string().max(60).describe('Titre optimisé pour le SEO').optional(),
 			seoDescription: z.string().max(160).describe('Description optimisée pour le SEO').optional(),
 			updatedDate: z.coerce.date().describe('Date de dernière mise à jour').optional(),
@@ -99,7 +122,7 @@ const actualites = defineCollection({
 
 const evenements = defineCollection({
 	loader: glob({ base: './src/content/evenements', pattern: '**/*.{md,mdx}' }),
-	schema: z.object({
+	schema: frontmatter({
 		...baseSchema,
 		eventDate: z.coerce.date().describe('Date principale de l\'événement (YYYY-MM-DD)'),
 		location: z.string().describe('Lieu de l\'événement').optional(),
@@ -140,7 +163,7 @@ const evenements = defineCollection({
 
 const entrainements = defineCollection({
 	loader: glob({ base: './src/content/entrainements', pattern: '**/*.{md,mdx}' }),
-	schema: z.object({
+	schema: frontmatter({
 		...baseSchema,
 		date: z.coerce.date().describe('Date de l\'entraînement'),
 		rendezVous: z.string().describe('Point de rendez-vous'),

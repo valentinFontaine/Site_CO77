@@ -3,7 +3,6 @@ title: Nationales Sud Ouest du 29 et 30 Mars à Laure Minervois
 description: Résultat Simple
 category: resultats
 pubDate: 2025-03-31T22:23:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 ### Nationales Sud Ouest du 29 et 30 Mars à Laure Minervois
 

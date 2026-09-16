@@ -3,7 +3,6 @@ title: Trophée de Saint Quentin en Yvelines étape 3 du 25 Juin
 description: Organisée par le RO Paris
 category: resultats
 pubDate: 2025-06-30T17:15:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### **Trophée de Saint Quentin en Yvelines  étape 3 du 25 Juin**
 

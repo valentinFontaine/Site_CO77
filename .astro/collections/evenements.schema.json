@@ -181,9 +181,6 @@
       "type": "string",
       "format": "uri",
       "description": "Lien externe résultats"
-    },
-    "$schema": {
-      "type": "string"
     }
   },
   "required": [

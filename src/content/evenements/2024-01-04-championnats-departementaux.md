@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: championnats departementaux
 description: ''
 pubDate: '2024-01-04'

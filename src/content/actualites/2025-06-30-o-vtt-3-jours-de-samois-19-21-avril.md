@@ -3,7 +3,6 @@ title: "O'VTT 3 jours de Samois 19/21 Avril"
 description: "Du 19 au 21 avril 2025, une trentaine d’orienteurs franciliens ont pris part à un événement majeur ce CO à VTT : trois Jours de course d’orientation dans le massif bellifontain. Cette compétition, ins"
 category: resultats
 pubDate: 2025-06-30T16:29:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 [Site dédié](http://samois.coursedorientation.fr/)
 

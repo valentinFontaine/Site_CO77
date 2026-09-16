@@ -3,7 +3,6 @@ title: 3 Jours de Pâques en Bourgogne 19/21 Avril
 description: Le groupe jeunes de la Ligue (GRIFCO) était de déplacement ainsi que d’autres sous les couleurs de leur club.
 category: resultats
 pubDate: 2025-06-30T16:23:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 ### 3 Jours de Pâques en Bourgogne 19/21 Avril
 

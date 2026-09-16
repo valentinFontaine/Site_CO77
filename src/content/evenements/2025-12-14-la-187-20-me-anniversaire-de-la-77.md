@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: La 187 - 20 ème Anniversaire de la 77
 description: 20ème anniversaire de la 77 à Fontainebleau
 pubDate: 2025-12-14

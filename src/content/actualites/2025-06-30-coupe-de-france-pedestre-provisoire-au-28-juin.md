@@ -3,7 +3,6 @@ title: Coupe de France pédestre provisoire au 28 Juin
 description: "Remarque: les Nationales Nord Est de Bulh (7 et 8 Juin) ne sont pas encore prises en compte"
 category: resultats
 pubDate: 2025-06-30T17:23:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### Coupe de France pédestre provisoire au 28 Juin
 

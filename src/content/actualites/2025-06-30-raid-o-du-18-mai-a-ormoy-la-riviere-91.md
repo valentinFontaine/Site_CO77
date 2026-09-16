@@ -3,7 +3,6 @@ title: Raid’O du 18 Mai à Ormoy la Rivière (91)
 description: Organisé par le COL Etrechy sur la carte”Ile de Loisirs + La Vallée de la Juine”
 category: resultats
 pubDate: 2025-06-30T16:54:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### Raid’O du 18 Mai à Ormoy la Rivière (91)
 

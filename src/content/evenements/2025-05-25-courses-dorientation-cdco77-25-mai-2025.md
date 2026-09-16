@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: Courses d'Orientation CDCO77 - 25 Mai 2025
 description: ''
 pubDate: '2025-05-25'

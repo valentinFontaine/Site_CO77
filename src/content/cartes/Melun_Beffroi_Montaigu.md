@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: "Melun Beffroi Montaigu"
 description: "Nouvelle carte ajoutée automatiquement"
 thumbnail: "/images/cartes/Melun_Beffroi_Montaigu-thumb.png"

@@ -3,7 +3,6 @@ title: Courses de Séléctions EYOC et JWOC du 12 et 13 Avril
 description: Week-end de sélection n°1 EYOC et JWOC du 12 au 13 avril
 category: resultats
 pubDate: 2025-06-30T16:32:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 ####  Courses de Séléctions EYOC et JWOC du 12 et 13 Avril
 

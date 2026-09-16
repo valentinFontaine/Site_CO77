@@ -3,7 +3,6 @@ title: Championnat du Monde Juniors (JWOC) du 26 Juin au 4 Juillet
 description: Sprint Relais (Samedi 28 Juin) (15h30) à Levico Terme
 category: resultats
 pubDate: 2025-06-30T17:25:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 A Suivre en direct sur [https://www.jwoc2025.it/en/classic-home/](https://www.jwoc2025.it/en/classic-home/)
 

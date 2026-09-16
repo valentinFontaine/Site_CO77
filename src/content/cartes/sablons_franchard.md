@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: "Rochers des Sablons et Franchard"
 description: "Carte typique de Fontainebleau"
 thumbnail: "/images/cartes/sablons_franchard-thumb.png"

@@ -3,7 +3,6 @@ title: "Le passage des balises de couleurs est organisé par le COLE le 21 juin 
 description: "date limite d'inscription : 15 juin"
 category: resultats
 pubDate: 2025-06-30T17:04:00.000Z
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 ---
 #### Le passage des balises de couleurs est organisé par le COLE le 21 juin de 9h à 16h sur la carte d'Etréchy
 

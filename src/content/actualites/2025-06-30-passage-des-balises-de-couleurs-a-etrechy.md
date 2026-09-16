@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: Passage des balises de couleurs à Etrechy
 description: Passage des balises de couleurs à Etrechy le 21 juin
 category: resultats

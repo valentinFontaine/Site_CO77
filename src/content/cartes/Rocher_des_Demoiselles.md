@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: "Rocher des Demoiselles"
 description: "Nouvelle carte ajoutée automatiquement"
 thumbnail: "/images/cartes/Rocher_des_Demoiselles-thumb.png"

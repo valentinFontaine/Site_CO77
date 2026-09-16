@@ -1,5 +1,4 @@
 ---
-heroImage: '../../assets/2025_10_02_la77_flyer_v1.png'
 title: Championnat Départemental de Seine et Marne 2023
 description: Championnat départemental en forêt de Fontainebleau
 author: CO77

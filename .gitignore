@@ -27,3 +27,8 @@ pnpm-debug.log*
 
 .vscode/
 .vibe/
+
+# résidus d'éditeur
+*.swp
+*.swo
+*~

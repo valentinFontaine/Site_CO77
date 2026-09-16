@@ -1,0 +1,29 @@
+# Normalisation des fins de ligne.
+# Indispensable ici : la configuration Git locale utilise core.autocrlf=true,
+# ce qui, sans ce fichier, risque d'altérer les fichiers binaires (images, PDF,
+# polices) lors des allers-retours entre Windows, Linux et le serveur de build.
+
+# Par défaut : Git décide pour le texte, LF dans le dépôt.
+* text=auto eol=lf
+
+# Fichiers explicitement binaires : ne jamais y toucher.
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.pdf   binary
+*.zip   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+*.mp4   binary
+*.gpx   binary
+*.ocd   binary
+
+# Scripts shell : toujours en LF, y compris sous Windows.
+*.sh    text eol=lf

@@ -30,6 +30,18 @@ export function mercatorY(latitude: number): number {
 	return Math.log(Math.tan(Math.PI / 4 + phi / 2));
 }
 
+/**
+ * Abscisse de Mercator : la longitude, en radians.
+ *
+ * Ce compagnon de `mercatorY` existe surtout pour rendre les unités visibles.
+ * Comparer une longitude en degrés à une ordonnée de Mercator paraît anodin et
+ * donne un résultat faux d'un facteur 180/π, soit environ 57 — une image posée
+ * sur le fond se retrouve alors étirée en ruban.
+ */
+export function mercatorX(longitude: number): number {
+	return (longitude * Math.PI) / 180;
+}
+
 /** Opération inverse de `mercatorY`. */
 export function latitudeDepuisMercator(y: number): number {
 	return ((2 * Math.atan(Math.exp(y)) - Math.PI / 2) * 180) / Math.PI;
@@ -98,5 +110,24 @@ export function emprise(contour: Point[]): [Point, Point] {
  * pendant le redimensionnement.
  */
 export function rapportAttendu(feuille: Feuille): number {
-	return (feuille.est - feuille.ouest) / (mercatorY(feuille.nord) - mercatorY(feuille.sud));
+	// Les deux termes doivent être exprimés dans la même unité : celle du plan de
+	// Mercator. Diviser des degrés de longitude par une ordonnée de Mercator
+	// donnerait un rapport faux d'environ 57.
+	return (
+		(mercatorX(feuille.est) - mercatorX(feuille.ouest)) /
+		(mercatorY(feuille.nord) - mercatorY(feuille.sud))
+	);
+}
+
+/**
+ * Latitude sud donnant à la feuille le rapport largeur/hauteur voulu, les trois
+ * autres bords étant fixés.
+ *
+ * C'est l'opération dont l'éditeur a besoin pour verrouiller les proportions
+ * pendant qu'on déplace ou redimensionne une carte : l'image ne doit jamais se
+ * poser déformée sur le fond.
+ */
+export function sudPourRapport(nord: number, ouest: number, est: number, rapport: number): number {
+	const haut = mercatorY(nord);
+	return latitudeDepuisMercator(haut - (mercatorX(est) - mercatorX(ouest)) / rapport);
 }

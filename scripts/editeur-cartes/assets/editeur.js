@@ -21,10 +21,21 @@ function latitudeDepuisMercator(y) {
 	return ((2 * Math.atan(Math.exp(y)) - Math.PI / 2) * 180) / Math.PI;
 }
 
+/**
+ * Abscisse de Mercator : la longitude, en radians.
+ *
+ * Sans cette conversion, on compare des degrés à une ordonnée de Mercator et le
+ * rapport sort faux d'un facteur 180/π — l'image se pose en ruban vertical.
+ * Doit rester identique à `mercatorX` de src/lib/cartes-geometrie.ts.
+ */
+function mercatorX(longitude) {
+	return (longitude * Math.PI) / 180;
+}
+
 /** Calcule le sud de la feuille pour que nord/ouest/est donnés respectent le rapport largeur/hauteur de l'image. */
 function calerSud(nord, ouest, est, rapport) {
 	const haut = mercatorY(nord);
-	const bas = haut - (est - ouest) / rapport;
+	const bas = haut - (mercatorX(est) - mercatorX(ouest)) / rapport;
 	return latitudeDepuisMercator(bas);
 }
 
@@ -44,6 +55,14 @@ let polygoneContour = null;
 let modeTrace = false;
 
 const carte = L.map('carte', { scrollWheelZoom: true }).setView([48.55, 2.85], 10);
+
+// Le conteneur est dimensionné par un `flex: 1` que le navigateur ne résout
+// qu'après la mise en page. Leaflet, initialisé avant, ne voyait qu'une case de
+// 256 px et ne chargeait qu'une poignée de tuiles au milieu d'une zone grise.
+// On lui fait reprendre la mesure une fois la mise en page faite, puis à chaque
+// redimensionnement de la fenêtre.
+requestAnimationFrame(() => carte.invalidateSize());
+window.addEventListener('resize', () => carte.invalidateSize());
 
 const ignPlan = L.tileLayer(
 	'https://data.geopf.fr/wmts?layer=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&style=normal&tilematrixset=PM' +
@@ -156,8 +175,13 @@ async function chargerImageSource() {
 		const largeurDeg = (vue.getEast() - vue.getWest()) * 0.5;
 		const ouest = centre.lng - largeurDeg / 2;
 		const est = centre.lng + largeurDeg / 2;
-		const nord = centre.lat + largeurDeg / rapport / 2;
-		const sud = calerSud(nord, ouest, est, rapport);
+
+		// Hauteur calculée dans le plan de Mercator, pour que le rectangle soit
+		// réellement centré sur la vue et au bon rapport dès la première pose.
+		const demiHauteur = (mercatorX(est) - mercatorX(ouest)) / rapport / 2;
+		const milieu = mercatorY(centre.lat);
+		const nord = latitudeDepuisMercator(milieu + demiHauteur);
+		const sud = latitudeDepuisMercator(milieu - demiHauteur);
 		feuille = { sud, ouest, nord, est };
 	} else {
 		// Rotation d'une image déjà posée : on garde le coin nord-ouest et la

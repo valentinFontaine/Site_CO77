@@ -38,13 +38,18 @@ npm run build   # génère dist/
 schémas de contenu : s'il échoue, Netlify ne déploie pas et le site reste figé
 sur la version précédente. Un build vert est le seul critère de succès.
 
-**Économiser les minutes de build Netlify.** Le forfait est limité et chaque
-push sur `main` déclenche une reconstruction. Deux conséquences :
+**Ne jamais pousser sans que l'utilisateur l'ait demandé.** C'est lui qui
+déclenche la mise en ligne, explicitement, et personne d'autre. Commiter en local
+est libre ; `git push` ne l'est pas. En l'absence de demande, le travail reste sur
+la machine, terminé et commité, et on signale qu'il attend d'être poussé.
+
+La raison est le coût : le forfait Netlify est limité et chaque push sur `main`
+déclenche une reconstruction. Deux conséquences qui en découlent :
 
 - **Tout se teste en local** (`npm run build`, `npm run dev`). Le déploiement
   n'est pas un banc d'essai.
-- **Grouper les commits en un seul push.** Dix commits poussés ensemble coûtent
-  un build ; poussés un par un, ils en coûtent dix.
+- **Grouper les commits.** Dix commits poussés ensemble coûtent un build ;
+  poussés un par un, ils en coûtent dix.
 
 `scripts/netlify-ignore.sh`, branché par la clé `ignore` de `netlify.toml`,
 annule automatiquement les builds dont le commit ne touche pas au site publié

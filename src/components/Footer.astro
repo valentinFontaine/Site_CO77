@@ -1,4 +1,6 @@
 ---
+import ThemeSwitcher from './ThemeSwitcher.astro';
+
 const today = new Date();
 ---
 
@@ -13,6 +15,7 @@ const today = new Date();
 	<p class="copyright">
 		&copy; {today.getFullYear()} CDCO77 — Comité Départemental de Course d'Orientation de Seine-et-Marne
 	</p>
+	<ThemeSwitcher />
 </footer>
 
 <style>

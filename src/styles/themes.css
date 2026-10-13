@@ -1,0 +1,124 @@
+/*
+  Mises en forme proposées à la validation du comité.
+
+  Le sélecteur (src/components/ThemeSwitcher.astro) pose l'attribut
+  data-theme sur <html>. Sans attribut, c'est le modèle de départ défini
+  dans global.css qui s'applique. Chaque mise en forme ne fait que
+  surcharger : retirer un bloc de ce fichier la supprime sans rien casser.
+
+  Les sélecteurs commencent par :root[data-theme=...] pour l'emporter sur
+  les styles propres aux composants Astro.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Flyer « Tu cours. On filme. » — vert forêt, orange balise, fond crème */
+/* ------------------------------------------------------------------ */
+
+:root[data-theme='flyer'] {
+	--flyer-green: #1e4a3a;
+	--flyer-sage: #6e897b;
+	--flyer-orange: #f15a22;
+	--flyer-orange-dark: #c63d00;
+	--flyer-cream: #f6f4ef;
+	--flyer-beige: #e8e5de;
+	--flyer-text: #3d4541;
+
+	--accent: var(--flyer-orange-dark);
+	--accent-dark: var(--flyer-green);
+	--black: 30, 74, 58;
+	--gray: 110, 137, 123;
+	--gray-light: 232, 229, 222;
+	--gray-dark: 61, 69, 65;
+	--gray-gradient: var(--flyer-cream), var(--flyer-cream);
+}
+
+:root[data-theme='flyer'] body {
+	background: var(--flyer-cream);
+	color: var(--flyer-text);
+	font-family: Verdana, Tahoma, 'DejaVu Sans', sans-serif;
+	font-size: 17px;
+}
+
+:root[data-theme='flyer'] :is(h1, h2, h3, h4, h5, h6) {
+	font-family: Georgia, 'Times New Roman', serif;
+	font-weight: 700;
+	color: var(--flyer-green);
+	letter-spacing: -0.01em;
+}
+
+/* Le carré blanc et orange du flyer, devant les grands titres */
+:root[data-theme='flyer'] main :is(h1, h2)::before {
+	content: '';
+	display: inline-block;
+	width: 0.75em;
+	height: 0.75em;
+	margin-right: 0.35em;
+	vertical-align: -0.05em;
+	border: 2px solid var(--flyer-orange-dark);
+	background: linear-gradient(to right, #fff 50%, var(--flyer-orange-dark) 50%);
+	box-sizing: border-box;
+}
+
+/* Le court trait orange au-dessus des intertitres */
+:root[data-theme='flyer'] main h3::before {
+	content: '';
+	display: block;
+	width: 2.2rem;
+	height: 4px;
+	margin-bottom: 0.5rem;
+	background: var(--flyer-orange-dark);
+}
+:root[data-theme='flyer'] main [style*='text-align: center'] h3::before {
+	margin-inline: auto;
+}
+
+:root[data-theme='flyer'] a {
+	color: var(--flyer-orange-dark);
+}
+:root[data-theme='flyer'] a:hover {
+	color: var(--flyer-green);
+}
+
+:root[data-theme='flyer'] blockquote {
+	background: var(--flyer-beige);
+	border-left: 6px solid var(--flyer-orange);
+	padding: 1em 1.25em;
+	font-size: 1em;
+	color: var(--flyer-green);
+}
+
+:root[data-theme='flyer'] img {
+	border-radius: 0;
+}
+
+/* Les cartes à bordure grise de l'accueil ressortent en blanc sur le crème */
+:root[data-theme='flyer'] main [style*='border: 1px solid #ddd'] {
+	background: #fff;
+	border-radius: 0 !important;
+	border-color: var(--flyer-beige) !important;
+}
+
+/* En-tête : blanc, soulignement orange de la rubrique active */
+:root[data-theme='flyer'] header {
+	box-shadow: none;
+	border-bottom: 1px solid var(--flyer-beige);
+}
+:root[data-theme='flyer'] header nav a {
+	color: var(--flyer-green);
+}
+:root[data-theme='flyer'] header nav a.active,
+:root[data-theme='flyer'] header .logo-link:hover {
+	border-bottom-color: var(--flyer-orange);
+	text-decoration: none;
+}
+
+/* Pied de page : bandeau orange en tête, comme le bas du flyer */
+:root[data-theme='flyer'] footer {
+	background: var(--flyer-beige);
+	border-top: 8px solid var(--flyer-orange);
+	color: var(--flyer-green);
+}
+:root[data-theme='flyer'] footer .footer-links a {
+	color: var(--flyer-green);
+	font-weight: 700;
+}

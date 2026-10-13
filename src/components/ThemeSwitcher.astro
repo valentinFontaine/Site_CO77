@@ -1,0 +1,62 @@
+---
+/*
+  Pastille flottante pour comparer les mises en forme proposées au comité.
+  Le choix est mémorisé dans le navigateur ; le script de BaseHead.astro
+  l'applique avant l'affichage pour éviter un clignotement.
+  Pour ajouter une mise en forme : une entrée ici, un bloc dans themes.css.
+  Une fois le choix arrêté, retirer ce composant du pied de page.
+*/
+import { THEMES } from '../consts';
+---
+
+<div class="theme-switcher">
+	<label for="theme-select">Mise en forme</label>
+	<select id="theme-select">
+		{THEMES.map((theme) => <option value={theme.id}>{theme.label}</option>)}
+	</select>
+</div>
+
+<script is:inline>
+	(() => {
+		const select = document.getElementById('theme-select');
+		select.value = document.documentElement.dataset.theme || 'depart';
+		select.addEventListener('change', () => {
+			const theme = select.value;
+			if (theme === 'depart') delete document.documentElement.dataset.theme;
+			else document.documentElement.dataset.theme = theme;
+			try {
+				localStorage.setItem('co77-theme', theme);
+			} catch {}
+		});
+	})();
+</script>
+
+<style>
+	.theme-switcher {
+		position: fixed;
+		right: 1rem;
+		bottom: 1rem;
+		z-index: 2000;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.4rem 0.6rem 0.4rem 0.9rem;
+		background: #fff;
+		border: 1px solid #ccc;
+		border-radius: 999px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+		font-family: system-ui, sans-serif;
+		font-size: 14px;
+		line-height: 1.2;
+		color: #222;
+	}
+	select {
+		font: inherit;
+		padding: 0.2rem 0.3rem;
+	}
+	@media print {
+		.theme-switcher {
+			display: none;
+		}
+	}
+</style>

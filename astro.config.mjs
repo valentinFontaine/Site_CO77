@@ -11,6 +11,14 @@ export default defineConfig({
 	// ce qui garde les URLs canoniques, le sitemap et le flux RSS corrects.
 	site: process.env.URL ?? 'http://localhost:4321',
 	integrations: [mdx(), sitemap()],
+	vite: {
+		server: {
+			// Archives et originaux non publiés : les surveiller ne sert à rien, et une
+			// photo en cours d'enregistrement, verrouillée par Windows, fait planter
+			// `npm run dev` (EBUSY).
+			watch: { ignored: ['**/attachements/**', '**/cartes-sources/**'] },
+		},
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),

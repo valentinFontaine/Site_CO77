@@ -39,3 +39,7 @@ pnpm-debug.log*
 # ici, sur le poste, et seuls les aperçus dégradés générés par
 # scripts/generer-apercus.mjs sont publiés dans public/images/cartes/.
 cartes-sources/
+
+# Fichiers d'essai servis en local seulement (ex. carte de fond du thème
+# « Parcours ») : ils ne doivent jamais être commités.
+public/local/

@@ -454,3 +454,387 @@
 	color: #fff;
 	font-weight: 700;
 }
+
+/* ------------------------------------------------------------------ */
+/* Parcours — le site se court comme un circuit de CO                  */
+/* Papier blanc, surimpression violette du circuit, symboles IOF noirs */
+/* ------------------------------------------------------------------ */
+
+.parcours {
+	display: none;
+}
+
+:root[data-theme='parcours'] {
+	--parcours-violet: #b4127d;
+	--parcours-violet-dark: #8a0c5f;
+	--parcours-paper: #fdfcf8;
+	--parcours-ink: #161616;
+
+	--accent: var(--parcours-violet);
+	--accent-dark: var(--parcours-violet-dark);
+	--black: 22, 22, 22;
+	--gray: 90, 90, 90;
+	--gray-light: 235, 233, 226;
+	--gray-dark: 40, 40, 40;
+	--gray-gradient: var(--parcours-paper), var(--parcours-paper);
+}
+
+:root[data-theme='parcours'] body {
+	background: var(--parcours-paper);
+	color: var(--parcours-ink);
+}
+
+:root[data-theme='parcours'] a {
+	color: var(--parcours-violet);
+}
+
+/* Les titres des autres pages portent un cercle de poste */
+:root[data-theme='parcours'] main :is(h1, h2)::before {
+	content: '';
+	display: inline-block;
+	width: 0.7em;
+	height: 0.7em;
+	margin-right: 0.35em;
+	border: 3px solid var(--parcours-violet);
+	border-radius: 50%;
+	vertical-align: 0.05em;
+}
+
+:root[data-theme='parcours'] main [style*='border: 1px solid #ddd'] {
+	border: 2px solid var(--parcours-ink) !important;
+	border-radius: 0 !important;
+	background: #fff;
+}
+
+/* En-tête : bandeau blanc bordé d'un trait noir, comme le cadre d'une carte */
+:root[data-theme='parcours'] header {
+	position: relative;
+	z-index: 10;
+	background: #fff;
+	border-bottom: 2px solid var(--parcours-ink);
+	box-shadow: none;
+}
+:root[data-theme='parcours'] header nav a {
+	color: var(--parcours-ink);
+}
+:root[data-theme='parcours'] header nav a.active,
+:root[data-theme='parcours'] header .logo-link:hover {
+	border-bottom-color: var(--parcours-violet);
+}
+
+/* Sur l'accueil, le circuit remplace le contenu habituel */
+:root[data-theme='parcours'] .parcours {
+	display: block;
+	position: relative;
+}
+:root[data-theme='parcours'] .parcours ~ main {
+	display: none;
+}
+
+/* La carte reste en place pendant que les sections défilent par-dessus */
+:root[data-theme='parcours'] .parcours__stage {
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	height: 100svh;
+	overflow: hidden;
+	background: var(--parcours-paper);
+}
+:root[data-theme='parcours'] .parcours__map {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform-origin: 0 0;
+	will-change: transform;
+}
+/* Sur grand écran, la marge gauche redevient du papier : la fiche s'y pose
+   et le cartouche de la carte disparaît dessous */
+@media (min-width: 900px) {
+	:root[data-theme='parcours'] .parcours__stage::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			to right,
+			var(--parcours-paper) 0,
+			var(--parcours-paper) 30%,
+			rgba(253, 252, 248, 0) 52%
+		);
+	}
+}
+/* Sans JavaScript : la carte entière, réduite */
+:root[data-theme='parcours'] .parcours:not(.is-animated) .parcours__map {
+	transform: scale(0.5);
+}
+
+:root[data-theme='parcours'] .parcours__course {
+	fill: none;
+	stroke: var(--parcours-violet);
+	stroke-width: 6;
+	stroke-linecap: round;
+}
+:root[data-theme='parcours'] .parcours__leg {
+	stroke-dasharray: 1;
+	stroke-dashoffset: 0;
+}
+:root[data-theme='parcours'] .parcours.is-animated .parcours__leg {
+	stroke-dashoffset: 1;
+}
+:root[data-theme='parcours'] .parcours__control text {
+	fill: var(--parcours-violet);
+	stroke: var(--parcours-paper);
+	stroke-width: 10;
+	paint-order: stroke;
+	font: 700 64px Arial, Helvetica, sans-serif;
+}
+/* Le poste où l'on se trouve bat comme une balise qu'on vient de repérer */
+:root[data-theme='parcours'] .parcours__control.is-active :is(circle, polygon) {
+	stroke-width: 9;
+	animation: parcours-pulse 1.4s ease-in-out infinite;
+	transform-box: fill-box;
+	transform-origin: center;
+}
+@keyframes parcours-pulse {
+	50% {
+		scale: 1.12;
+	}
+}
+
+/* Les sections : une par écran, la fiche sur la gauche */
+:root[data-theme='parcours'] .parcours__steps {
+	position: relative;
+	margin: -100vh 0 0;
+	margin-top: -100svh;
+	padding: 0;
+	list-style: none;
+	pointer-events: none;
+}
+:root[data-theme='parcours'] .parcours__step {
+	display: flex;
+	align-items: center;
+	min-height: 100vh;
+	min-height: 100svh;
+	padding: 2rem 0 2rem 5vw;
+	box-sizing: border-box;
+}
+:root[data-theme='parcours'] .parcours__step + .parcours__step {
+	margin-top: 30vh;
+}
+
+/* La fiche : papier blanc, trait noir, comme une feuille de définitions */
+:root[data-theme='parcours'] .poste {
+	pointer-events: auto;
+	position: relative;
+	width: min(27rem, 40vw);
+	padding: 1.25rem 1.5rem 1.5rem;
+	background: rgba(255, 255, 255, 0.94);
+	border: 2px solid var(--parcours-ink);
+	box-shadow: 6px 6px 0 rgba(22, 22, 22, 0.18);
+	font-size: 1.05rem;
+	line-height: 1.55;
+	opacity: 0.35;
+	transform: translateY(1.5rem);
+	transition:
+		opacity 0.5s ease,
+		transform 0.5s ease;
+}
+:root[data-theme='parcours'] .parcours:not(.is-animated) .poste,
+:root[data-theme='parcours'] .parcours__step.is-active .poste {
+	opacity: 1;
+	transform: none;
+}
+:root[data-theme='parcours'] .poste h1,
+:root[data-theme='parcours'] .poste h2 {
+	margin: 1rem 0 0.5rem;
+	font-size: 1.9rem;
+	color: var(--parcours-ink);
+}
+:root[data-theme='parcours'] .poste h1 {
+	font-size: 2.3rem;
+}
+:root[data-theme='parcours'] .poste p {
+	margin: 0 0 1rem;
+}
+
+/* En-tête de la feuille de définitions, sur la fiche de départ */
+:root[data-theme='parcours'] .poste__entete {
+	display: grid;
+	grid-template-columns: repeat(4, auto);
+	margin: 0 0 0.75rem !important;
+	border: 2px solid var(--parcours-ink);
+	font: 700 0.8rem/1.2 Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+:root[data-theme='parcours'] .poste__entete span {
+	padding: 0.35rem 0.3rem;
+}
+:root[data-theme='parcours'] .poste__entete span + span {
+	border-left: 1px solid var(--parcours-ink);
+}
+
+/* Ligne de définition : huit cases A à H, la colonne D porte le symbole */
+:root[data-theme='parcours'] .poste__definition {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	border: 2px solid var(--parcours-ink);
+}
+:root[data-theme='parcours'] .poste__cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 1;
+	font: 700 1.1rem Arial, Helvetica, sans-serif;
+	color: var(--parcours-ink);
+}
+:root[data-theme='parcours'] .poste__cell + .poste__cell {
+	border-left: 1px solid var(--parcours-ink);
+}
+/* Trait épais toutes les trois colonnes, comme sur une vraie feuille */
+:root[data-theme='parcours'] .poste__cell:nth-child(4),
+:root[data-theme='parcours'] .poste__cell:nth-child(7) {
+	border-left-width: 2px;
+}
+:root[data-theme='parcours'] .poste__symbole {
+	width: 100%;
+	height: 100%;
+	padding: 12%;
+	border: 0;
+	background: transparent;
+	color: var(--parcours-ink);
+	cursor: help;
+}
+:root[data-theme='parcours'] .poste__symbole:is(:hover, :focus-visible) {
+	background: var(--parcours-violet);
+	color: #fff;
+	outline: none;
+}
+
+/* Au survol du symbole : l'élément tel qu'on le voit sur le terrain */
+:root[data-theme='parcours'] .poste__tip {
+	position: absolute;
+	top: calc(100% + 0.6rem);
+	left: 0;
+	z-index: 5;
+	display: block;
+	width: 100%;
+	background: #fff;
+	border: 2px solid var(--parcours-ink);
+	box-shadow: 6px 6px 0 rgba(22, 22, 22, 0.18);
+	font: 400 0.9rem/1.4 Arial, Helvetica, sans-serif;
+	text-align: left;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-0.4rem);
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease,
+		visibility 0.2s;
+}
+:root[data-theme='parcours'] .poste__cell--d:is(:hover, :focus-within) .poste__tip {
+	opacity: 1;
+	visibility: visible;
+	transform: none;
+}
+:root[data-theme='parcours'] .poste__tip img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 3 / 2;
+	object-fit: cover;
+}
+:root[data-theme='parcours'] .poste__tip-texte {
+	display: block;
+	padding: 0.6rem 0.8rem 0.75rem;
+}
+:root[data-theme='parcours'] .poste__tip-texte strong {
+	display: block;
+	margin-bottom: 0.2rem;
+	color: var(--parcours-violet);
+	font-size: 1rem;
+}
+:root[data-theme='parcours'] .poste__ref {
+	margin-right: 0.4em;
+	color: var(--parcours-ink);
+}
+
+:root[data-theme='parcours'] .poste__lien {
+	display: inline-block;
+	padding: 0.5rem 1rem;
+	background: var(--parcours-violet);
+	color: #fff;
+	font-weight: 700;
+	text-decoration: none;
+}
+:root[data-theme='parcours'] .poste__lien:hover {
+	background: var(--parcours-violet-dark);
+	color: #fff;
+}
+:root[data-theme='parcours'] .poste__consigne {
+	margin: 0 !important;
+	font-size: 0.9rem;
+	color: rgb(var(--gray));
+}
+
+:root[data-theme='parcours'] .poste__publications {
+	margin: 0 0 1rem;
+	padding: 0;
+	list-style: none;
+}
+:root[data-theme='parcours'] .poste__publications li {
+	padding: 0.5rem 0;
+	border-bottom: 1px solid rgba(22, 22, 22, 0.2);
+}
+:root[data-theme='parcours'] .poste__publications a {
+	display: block;
+	font-weight: 700;
+	line-height: 1.3;
+}
+:root[data-theme='parcours'] .poste__publications time {
+	font-size: 0.85rem;
+	color: rgb(var(--gray));
+}
+
+@media (min-width: 900px) {
+	/* La photo s'ouvre à droite de la fiche, sur la carte */
+	:root[data-theme='parcours'] .poste__tip {
+		top: -2px;
+		left: calc(100% + 1.5rem);
+		width: min(22rem, 30vw);
+		transform: translateX(-0.5rem);
+	}
+}
+
+/* Téléphone : la carte en haut, la fiche en bas de l'écran */
+@media (max-width: 899px) {
+	:root[data-theme='parcours'] .parcours__step {
+		align-items: flex-end;
+		padding: 2rem 16px;
+	}
+	:root[data-theme='parcours'] .poste {
+		width: 100%;
+		padding: 1rem;
+		font-size: 1rem;
+	}
+	:root[data-theme='parcours'] .poste h1 {
+		font-size: 1.8rem;
+	}
+	:root[data-theme='parcours'] .poste h2 {
+		font-size: 1.5rem;
+	}
+	/* La photo s'ouvre au-dessus de la fiche pour rester à l'écran */
+	:root[data-theme='parcours'] .poste__tip {
+		top: auto;
+		bottom: calc(100% + 0.6rem);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root[data-theme='parcours'] .poste,
+	:root[data-theme='parcours'] .poste__tip {
+		transition: none;
+	}
+	:root[data-theme='parcours'] .parcours__control.is-active :is(circle, polygon) {
+		animation: none;
+	}
+}

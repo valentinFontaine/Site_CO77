@@ -9,6 +9,7 @@ export const SITE_DESCRIPTION = 'Comité Départemental de Course d\'Orientation
 export const THEMES = [
 	{ id: 'flyer', label: 'Flyer « On filme »' },
 	{ id: 'logo', label: 'Logo CDCO (menu latéral)' },
+	{ id: 'parcours', label: 'Parcours de CO (carte)' },
 	{ id: 'depart', label: 'Modèle de départ' },
 ];
 

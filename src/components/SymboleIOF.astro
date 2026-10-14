@@ -1,0 +1,28 @@
+---
+// Un symbole de définition de poste IOF, à la couleur du texte qui l'entoure
+import { SYMBOLES, type SymboleId } from '../lib/symboles-iof';
+
+interface Props {
+	id: SymboleId;
+}
+
+const { id } = Astro.props;
+---
+
+<svg class="symbole-iof" viewBox="0 0 40 40" aria-hidden="true" set:html={SYMBOLES[id].svg} />
+
+<style>
+	.symbole-iof {
+		display: block;
+		width: 100%;
+		height: 100%;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2.6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.symbole-iof :global(.plein) {
+		fill: currentColor;
+	}
+</style>

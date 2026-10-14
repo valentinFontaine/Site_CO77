@@ -1,0 +1,398 @@
+---
+/*
+  Accueil de la mise en forme « Parcours » : la page se lit comme un circuit
+  de course d'orientation. Chaque section est un poste posé sur la carte ; en
+  défilant, le trait du circuit se dessine et la carte glisse jusqu'au poste
+  suivant. L'en-tête de chaque section reprend une ligne de définition de
+  poste (norme IOF 2018) ; survoler le symbole montre l'élément sur le terrain.
+
+  Masqué par défaut, affiché par themes.css quand data-theme="parcours".
+
+  La carte de fond (public/local/) est exclue de Git : sans elle, le circuit
+  se dessine sur un papier quadrillé de lignes de nord.
+*/
+import SymboleIOF from './SymboleIOF.astro';
+import { SYMBOLES, type SymboleId } from '../lib/symboles-iof';
+
+interface Publication {
+	title: string;
+	href: string;
+	date: Date;
+}
+
+interface Props {
+	publications: Publication[];
+}
+
+const { publications } = Astro.props;
+
+// Dimensions de l'image de fond, en pixels : le repère du circuit
+const MAP_WIDTH = 2425;
+const MAP_HEIGHT = 1698;
+const MAP_SRC = '/local/bois-rond.jpg';
+// 1 px de l'image ≈ 0,173 mm de feuille A3 ; au 1/10 000, ≈ 1,73 m sur le terrain
+const METERS_PER_PX = 1.73;
+
+type Kind = 'depart' | 'poste' | 'arrivee';
+
+interface Poste {
+	kind: Kind;
+	x: number;
+	y: number;
+	code?: number;
+	symbole: SymboleId;
+	photo: string;
+	title: string;
+	text: string;
+	href?: string;
+	linkLabel?: string;
+}
+
+const postes: Poste[] = [
+	{
+		kind: 'depart',
+		x: 700,
+		y: 674,
+		symbole: 'depart',
+		photo: '/images/parcours/depart-foret.jpg',
+		title: "Lis la carte. Trouve la balise.",
+		text: "Bienvenue sur le site du Comité Départemental de Course d'Orientation de Seine-et-Marne. Défilez pour courir le circuit : chaque poste vous mène à une partie du site.",
+	},
+	{
+		kind: 'poste',
+		x: 1051,
+		y: 458,
+		code: 31,
+		symbole: 'terrain-ouvert',
+		photo: '/images/parcours/terrain-ouvert.jpg',
+		title: 'La CO',
+		text: "Découvrez la course d'orientation et ses différentes facettes : à pied, à VTT, en forêt ou en ville, en loisir comme en compétition.",
+		href: '/la-co/',
+		linkLabel: 'Découvrir la CO',
+	},
+	{
+		kind: 'poste',
+		x: 1509,
+		y: 808,
+		code: 32,
+		symbole: 'mare',
+		photo: '/images/parcours/mare.jpg',
+		title: 'Actualités',
+		text: 'Résultats, news, photos et portraits des orienteurs du département.',
+		href: '/actualites/',
+		linkLabel: 'Lire les actualités',
+	},
+	{
+		kind: 'poste',
+		x: 1790,
+		y: 610,
+		code: 33,
+		symbole: 'groupe-rochers',
+		photo: '/images/parcours/groupe-rochers.jpg',
+		title: 'Notre organisation',
+		text: 'Un comité, des clubs, des bénévoles : qui fait vivre la course d\'orientation en Seine-et-Marne.',
+		href: '/organisation/',
+		linkLabel: "Voir l'organisation",
+	},
+	{
+		kind: 'poste',
+		x: 1724,
+		y: 1132,
+		code: 34,
+		symbole: 'colline',
+		photo: '/images/parcours/colline.jpg',
+		title: 'Cartographie',
+		text: 'Nos cartes et parcours d\'orientation, de Fontainebleau à la Brie.',
+		href: '/cartographie/',
+		linkLabel: 'Explorer les cartes',
+	},
+	{
+		kind: 'poste',
+		x: 1159,
+		y: 1186,
+		code: 35,
+		symbole: 'rocher',
+		photo: '/images/parcours/rocher.jpg',
+		title: 'Missions du CD',
+		text: 'Entraînements, matériel et organisation des courses : ce que le comité met à disposition des clubs.',
+		href: '/missions-cd/',
+		linkLabel: 'Voir les missions',
+	},
+	{
+		kind: 'poste',
+		x: 820,
+		y: 1250,
+		code: 36,
+		symbole: 'falaise',
+		photo: '/images/parcours/falaise.jpg',
+		title: 'Dernières publications',
+		text: '',
+	},
+	{
+		kind: 'arrivee',
+		x: 1401,
+		y: 1347,
+		symbole: 'arrivee',
+		photo: '/images/parcours/arrivee-foret.jpg',
+		title: 'Arrivée !',
+		text: 'Envie de courir pour de vrai ? Les clubs du département accueillent débutants et confirmés toute l\'année.',
+		href: '/la-co/les-clubs/',
+		linkLabel: 'Trouver un club',
+	},
+];
+
+// Rayon des cercles de poste et du triangle de départ, en pixels de carte
+const RADIUS = 42;
+
+// Tronçons du circuit, raccourcis pour s'arrêter au bord des cercles comme sur une vraie carte
+const legs = postes.slice(1).map((to, i) => {
+	const from = postes[i];
+	const dx = to.x - from.x;
+	const dy = to.y - from.y;
+	const length = Math.hypot(dx, dy);
+	const ux = dx / length;
+	const uy = dy / length;
+	const startGap = from.kind === 'depart' ? RADIUS * 1.1 : RADIUS;
+	const endGap = to.kind === 'arrivee' ? RADIUS * 1.25 : RADIUS;
+	return {
+		x1: from.x + ux * startGap,
+		y1: from.y + uy * startGap,
+		x2: to.x - ux * endGap,
+		y2: to.y - uy * endGap,
+		length,
+	};
+});
+
+const distanceKm = (legs.reduce((sum, leg) => sum + leg.length, 0) * METERS_PER_PX) / 1000;
+const controlCount = postes.filter((p) => p.kind === 'poste').length;
+
+// Le triangle de départ pointe vers le premier poste
+const start = postes[0];
+const startAngle = (Math.atan2(postes[1].y - start.y, postes[1].x - start.x) * 180) / Math.PI + 90;
+const triangle = [0, 120, 240]
+	.map((a) => {
+		const rad = ((a - 90) * Math.PI) / 180;
+		return `${(Math.cos(rad) * RADIUS * 1.25).toFixed(1)},${(Math.sin(rad) * RADIUS * 1.25).toFixed(1)}`;
+	})
+	.join(' ');
+
+const dateFormat = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<section class="parcours" aria-label="Le site en un circuit de course d'orientation">
+	<div class="parcours__stage" aria-hidden="true">
+		<svg
+			class="parcours__map"
+			width={MAP_WIDTH}
+			height={MAP_HEIGHT}
+			viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
+		>
+			<defs>
+				<pattern id="parcours-nord" width="180" height="180" patternUnits="userSpaceOnUse">
+					<line x1="90" y1="0" x2="90" y2="180" stroke="#4aa3df" stroke-width="3" />
+				</pattern>
+			</defs>
+			<rect width={MAP_WIDTH} height={MAP_HEIGHT} fill="url(#parcours-nord)" />
+			<image href={MAP_SRC} width={MAP_WIDTH} height={MAP_HEIGHT} />
+			<g class="parcours__course">
+				{
+					legs.map((leg, i) => (
+						<line
+							class="parcours__leg"
+							data-leg={i}
+							x1={leg.x1.toFixed(1)}
+							y1={leg.y1.toFixed(1)}
+							x2={leg.x2.toFixed(1)}
+							y2={leg.y2.toFixed(1)}
+							pathLength="1"
+						/>
+					))
+				}
+				{
+					postes.map((poste, i) => (
+						<g class="parcours__control" data-control={i} transform={`translate(${poste.x} ${poste.y})`}>
+							{poste.kind === 'depart' && (
+								<polygon points={triangle} transform={`rotate(${startAngle.toFixed(1)})`} />
+							)}
+							{poste.kind === 'poste' && (
+								<>
+									<circle r={RADIUS} />
+									<text x={RADIUS + 10} y={-RADIUS + 8}>
+										{i}
+									</text>
+								</>
+							)}
+							{poste.kind === 'arrivee' && (
+								<>
+									<circle r={RADIUS * 1.2} />
+									<circle r={RADIUS * 0.8} />
+								</>
+							)}
+						</g>
+					))
+				}
+			</g>
+		</svg>
+	</div>
+
+	<ol class="parcours__steps">
+		{
+			postes.map((poste, i) => {
+				const symbole = SYMBOLES[poste.symbole];
+				const tipId = `parcours-tip-${i}`;
+				return (
+					<li class={`parcours__step parcours__step--${poste.kind}`} data-step={i}>
+						<article class="poste">
+							{poste.kind === 'depart' && (
+								<p class="poste__entete">
+									<span>CDCO 77</span>
+									<span>Circuit découverte</span>
+									<span>{distanceKm.toFixed(1).replace('.', ',')} km</span>
+									<span>{controlCount} postes</span>
+								</p>
+							)}
+							<div class="poste__definition" role="group" aria-label="Définition de poste">
+								<span class="poste__cell poste__cell--a">{poste.kind === 'poste' ? i : ''}</span>
+								<span class="poste__cell poste__cell--b">{poste.code ?? ''}</span>
+								<span class="poste__cell" />
+								<span class="poste__cell poste__cell--d">
+									<button type="button" class="poste__symbole" aria-describedby={tipId}>
+										<SymboleIOF id={poste.symbole} />
+										<span class="sr-only">{symbole.name}</span>
+									</button>
+									<span class="poste__tip" id={tipId} role="tooltip">
+										<img src={poste.photo} alt="" width="800" height="533" loading="lazy" />
+										<span class="poste__tip-texte">
+											<strong>
+												{symbole.ref && <span class="poste__ref">{symbole.ref}</span>}
+												{symbole.name}
+											</strong>
+											{symbole.description}
+										</span>
+									</span>
+								</span>
+								<span class="poste__cell" />
+								<span class="poste__cell" />
+								<span class="poste__cell" />
+								<span class="poste__cell" />
+							</div>
+							{i === 0 ? <h1>{poste.title}</h1> : <h2>{poste.title}</h2>}
+							{poste.text && <p>{poste.text}</p>}
+							{i === postes.length - 2 && (
+								<ul class="poste__publications">
+									{publications.map((publication) => (
+										<li>
+											<a href={publication.href}>{publication.title}</a>
+											<time datetime={publication.date.toISOString()}>
+												{dateFormat.format(publication.date)}
+											</time>
+										</li>
+									))}
+								</ul>
+							)}
+							{poste.href && (
+								<a class="poste__lien" href={poste.href}>
+									{poste.linkLabel} →
+								</a>
+							)}
+							{poste.kind === 'depart' && <p class="poste__consigne">Défilez pour prendre le départ ↓</p>}
+						</article>
+					</li>
+				);
+			})
+		}
+	</ol>
+</section>
+
+<script>
+	// Caméra et tracé du circuit pilotés par le défilement.
+	// Sans JavaScript, la carte reste fixe et les sections se lisent normalement.
+	const section = document.querySelector<HTMLElement>('.parcours');
+	const stage = section?.querySelector<HTMLElement>('.parcours__stage');
+	const map = section?.querySelector<SVGSVGElement>('.parcours__map');
+
+	if (section && stage && map) {
+		const steps = [...section.querySelectorAll<HTMLElement>('.parcours__step')];
+		const legs = [...map.querySelectorAll<SVGLineElement>('.parcours__leg')];
+		const controls = [...map.querySelectorAll<SVGGElement>('.parcours__control')];
+		const points = controls.map((control) => {
+			const { e, f } = control.transform.baseVal.consolidate()!.matrix;
+			return { x: e, y: f };
+		});
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+		// Reste un moment sur chaque poste avant de repartir vers le suivant
+		const ease = (t: number) => {
+			const u = Math.min(1, Math.max(0, (t - 0.2) / 0.6));
+			return u * u * (3 - 2 * u);
+		};
+
+		let pending = false;
+
+		const update = () => {
+			pending = false;
+			if (document.documentElement.dataset.theme !== 'parcours') return;
+
+			const viewportMiddle = window.innerHeight / 2;
+			const centers = steps.map((step) => {
+				const rect = step.getBoundingClientRect();
+				return rect.top + rect.height / 2;
+			});
+
+			// Position continue dans le circuit : 2,5 = à mi-chemin entre les postes 2 et 3
+			let index = 0;
+			let t = 0;
+			if (viewportMiddle >= centers[centers.length - 1]) {
+				index = centers.length - 1;
+			} else if (viewportMiddle > centers[0]) {
+				while (viewportMiddle >= centers[index + 1]) index++;
+				t = (viewportMiddle - centers[index]) / (centers[index + 1] - centers[index]);
+			}
+
+			// Mouvement réduit : la carte saute d'un poste à l'autre sans glisser
+			const progress = reducedMotion.matches ? Math.round(t) : ease(t);
+			const from = points[index];
+			const to = points[Math.min(index + 1, points.length - 1)];
+			const x = from.x + (to.x - from.x) * progress;
+			const y = from.y + (to.y - from.y) * progress;
+
+			const width = stage.clientWidth;
+			const height = stage.clientHeight;
+			const wide = width >= 900;
+			// On prend de la hauteur entre deux postes, on zoome en arrivant
+			const zoom = reducedMotion.matches ? 1 : 1 - 0.22 * Math.sin(Math.PI * progress);
+			const scale = Math.max(width / 1500, height / 1050) * 1.5 * zoom;
+			const focusX = wide ? width * 0.66 : width * 0.5;
+			const focusY = wide ? height * 0.5 : height * 0.3;
+			map.style.transform = `translate(${focusX - x * scale}px, ${focusY - y * scale}px) scale(${scale})`;
+
+			legs.forEach((leg, i) => {
+				const drawn = reducedMotion.matches ? 1 : i < index ? 1 : i === index ? progress : 0;
+				leg.style.strokeDashoffset = String(1 - drawn);
+			});
+
+			const active = index + Math.round(progress);
+			controls.forEach((control, i) => control.classList.toggle('is-active', i === active));
+			controls.forEach((control, i) => control.classList.toggle('is-done', i < active));
+			steps.forEach((step, i) => step.classList.toggle('is-active', i === active));
+		};
+
+		const schedule = () => {
+			if (!pending) {
+				pending = true;
+				requestAnimationFrame(update);
+			}
+		};
+
+		window.addEventListener('scroll', schedule, { passive: true });
+		window.addEventListener('resize', schedule);
+		reducedMotion.addEventListener('change', schedule);
+		// Le sélecteur de mise en forme change data-theme sans recharger la page
+		new MutationObserver(schedule).observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['data-theme'],
+		});
+		section.classList.add('is-animated');
+		update();
+	}
+</script>

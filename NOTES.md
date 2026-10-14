@@ -67,3 +67,28 @@ foreach ($i in 1,151,301,451,601,751) {
 # simulation (n'écrit rien) ; ajouter --ecrire pour créer les fichiers
 node --use-system-ca scripts/importer-blog.mjs $TEMP/blog/feed_*.json --annee 2024
 ```
+
+## Mises en forme inspirées de la CO — état au 14/10/2026
+
+### Fait
+
+- Mise en forme « Parcours de CO (carte) » (`?theme=parcours`) : l'accueil se
+  court comme un circuit, un poste par section, avec une ligne de définition IOF
+  et une photo de terrain au survol du symbole.
+  Fichiers : `src/components/Parcours.astro`, `src/lib/symboles-iof.ts`, bloc
+  « Parcours » de `src/styles/themes.css`, photos `public/images/parcours/`.
+- La carte de fond est `public/local/bois-rond.jpg`, **exclue de Git**. Sans
+  elle, le circuit se dessine sur un papier quadrillé de lignes de nord.
+
+### Reste
+
+- Choisir une carte de fond publiable (aperçu dégradé, ou carte imaginaire en SVG).
+- Remplacer les photos provisoires (`attachements/CFO_*`) par des photos
+  choisies pour chaque symbole.
+
+### Idée retenue pour une prochaine session : « la carte vivante »
+
+Plus de page qui défile : un plein écran de carte, les sections posées comme des
+éléments du terrain ; passer d'une section à l'autre zoome ou dézoome la carte
+(1/10 000 → 1/4 000). Points durs connus : téléphone, accessibilité, contenu
+des bénévoles qui s'y range mal.

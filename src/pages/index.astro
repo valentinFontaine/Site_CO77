@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getPublished } from '../lib/collections';
 import FormattedDate from '../components/FormattedDate.astro';
+import Parcours from '../components/Parcours.astro';
 
 const allActualites = (await getPublished('actualites')).map(p => ({ ...p, collection: 'actualites' }));
 const allClubs = (await getPublished('clubs')).map(p => ({ ...p, collection: 'clubs' }));
@@ -28,6 +29,12 @@ function getCollectionPath(collection) {
 const recentContent = allContent
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
+
+const publications = recentContent.map((post) => ({
+  title: post.data.title || post.data.name,
+  href: `${getCollectionPath(post.collection)}/${post.id}/`,
+  date: post.data.pubDate,
+}));
 ---
 
 <!doctype html>
@@ -62,6 +69,8 @@ const recentContent = allContent
 				</p>
 			</div>
 		</section>
+		<!-- Circuit de CO, visible avec la mise en forme Parcours (themes.css) -->
+		<Parcours publications={publications} />
 		<main>
 			<div class="home-intro">
 				<h1>Bienvenue sur le site du CO77</h1>

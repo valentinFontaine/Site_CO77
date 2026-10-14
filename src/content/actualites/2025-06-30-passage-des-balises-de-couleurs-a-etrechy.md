@@ -11,12 +11,17 @@ tags:
 - jeune
 - formation
 - cole
+heroImage: /images/2025/etrechy-balises-1.jpg
 draft: false
 ---
 
 Ce Samedi 21 juin, sous un beau soleil estival, c'est à Etrechy qu'a eu lieu le rendez-vous annuel de validation des compétences acquises par les jeunes orienteurs franciliens.
 
 Organisé par le COLE, ce temps fort permet de faire un point sur la progression technique des jeunes, à travers le passage des balises de couleurs (verte, jaune, bleue), jalons essentiels dans leur formation.
+
+![Jeunes orienteurs au passage des balises de couleurs à Etrechy](/images/2025/etrechy-balises-2.jpg)
+
+![Atelier du passage des balises de couleurs à Etrechy](/images/2025/etrechy-balises-3.jpg)
 
 **Une journée sous la chaleur... mais avec le sourire !**
 
@@ -26,6 +31,10 @@ Malgré la chaleur bien présente, nos jeunes orienteurs n'ont pas démérité. 
 - Suivi d'itinéraire jalonné ou non selon la couleur de la balise
 - Questionnaire de connaissances de l'activité
 - Parcours d'aisance et d'agilité en milieu naturel
+
+![Atelier du passage des balises de couleurs à Etrechy](/images/2025/etrechy-balises-4.jpg)
+
+![Jeune orienteur au passage des balises de couleurs à Etrechy](/images/2025/etrechy-balises-5.jpg)
 
 Une réussite totale pour cette édition 2025 : les 35 jeunes orienteurs ont tous franchi avec brio l'étape de leur balise de couleur !
 

@@ -2,6 +2,7 @@
 title: "O'VTT 3 jours de Samois 19/21 Avril"
 description: "Du 19 au 21 avril 2025, une trentaine d’orienteurs franciliens ont pris part à un événement majeur ce CO à VTT : trois Jours de course d’orientation dans le massif bellifontain. Cette compétition, ins"
 category: resultats
+heroImage: /images/2025/samois-mass-start-vincent-brochot.jpg
 pubDate: 2025-06-30T16:29:00.000Z
 ---
 [Site dédié](http://samois.coursedorientation.fr/)
@@ -41,3 +42,20 @@ D60: Caroline BOUCHERIE (Balise 77) 7e
  [Résultat Simple](https://lifco.fr/2025/1/042125-cf-ms-fontainebleau.htm)
 
 Résultat SIRésultat en points CNH12: Raphaël TIRBOIS (ERCO) 5eH14: Tom TIRBOIS (ERCO) 3eH20: **Jocelin LAURET (AS Samois) 3e**H40: **Vincent BROCHOT (Balise 77) Champion de France**H50: **Stéphane TOUSSAINT (Balise 77)** **Champion de France**H60: José RORA (Balise 77) 4e, Gilbert LECONTE (Balise 77) 8eH70: **Alain GUILLON (Balise 77) 2e**D60: Caroline BOUCHERIE (Balise 77) 5e, Sylvie LECONTE (Balise 77) 7e, Isabelle RORA (Balise 77) 9e
+
+### Photos des podiums franciliens du Championnat de France Mass Start
+
+![Tom TIRBOIS 3e H14](/images/2025/samois-mass-start-tom-tirbois.jpg)
+*Tom TIRBOIS 3e H14*
+
+![Jocelin LAURET 3e H20](/images/2025/samois-mass-start-jocelin-lauret.jpg)
+*Jocelin LAURET 3e H20*
+
+![Stéphane TOUSSAINT Champion de France H50](/images/2025/samois-mass-start-stephane-toussaint.jpg)
+*Stéphane TOUSSAINT Champion de France H50*
+
+![Vincent BROCHOT Champion de France H40](/images/2025/samois-mass-start-vincent-brochot.jpg)
+*Vincent BROCHOT Champion de France H40*
+
+![Alain GUILLON 2e H70](/images/2025/samois-mass-start-alain-guillon.jpg)
+*Alain GUILLON 2e H70*

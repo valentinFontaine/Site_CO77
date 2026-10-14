@@ -36,7 +36,7 @@ auth:
   avatar_url_claim: avatar_url
 
 # Logo affiché sur l'écran de connexion et dans l'interface
-logo_url: /logo-co77-header.jpg
+logo_url: /logo-cdco77.svg
 
 # Permet de revenir au site depuis le CMS
 site_url: https://co77.netlify.app

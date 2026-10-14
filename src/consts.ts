@@ -7,6 +7,9 @@ export const SITE_DESCRIPTION = 'Comité Départemental de Course d\'Orientation
 // Mises en forme proposées à la validation (voir src/styles/themes.css).
 // « depart » est le modèle d'origine : il n'ajoute aucun attribut data-theme.
 export const THEMES = [
-	{ id: 'depart', label: 'Modèle de départ' },
 	{ id: 'flyer', label: 'Flyer « On filme »' },
+	{ id: 'depart', label: 'Modèle de départ' },
 ];
+
+// Mise en forme d'un visiteur qui n'en a encore choisi aucune
+export const DEFAULT_THEME = 'flyer';

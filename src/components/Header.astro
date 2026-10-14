@@ -6,7 +6,11 @@ import HeaderLink from './HeaderLink.astro';
 <header>
 	<nav>
 		<a href="/" class="logo-link">
-			<img src="/logo-co77-header.jpg" alt={SITE_TITLE} class="logo" />
+			<img src="/logo-cdco77.svg" alt={SITE_TITLE} class="logo" width="295" height="376" />
+			<span class="logo-text">
+				<strong>CDCO 77</strong>
+				<span>Course d'orientation en Seine-et-Marne</span>
+			</span>
 		</a>
 		<div class="internal-links">
 			<HeaderLink href="/">Accueil</HeaderLink>
@@ -45,11 +49,19 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 	}
 	.logo {
-		height: 40px;
+		display: block;
+		height: 48px;
 		width: auto;
 	}
+	/* Le nom à côté du logo n'apparaît qu'avec la mise en forme Flyer (themes.css) */
+	.logo-text {
+		display: none;
+	}
 	.logo-link {
-		padding: 1em 0.5em;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.6em 0.5em;
 		color: var(--black);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;

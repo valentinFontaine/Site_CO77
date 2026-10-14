@@ -147,11 +147,12 @@
 }
 
 /* Bandeau d'accueil repris du recto du flyer (src/pages/index.astro).
-   Absent du modèle de départ ; avec le flyer, il remplace l'introduction. */
+   Absent du modèle de départ ; avec le flyer et le logo, il remplace l'introduction.
+   Le thème logo le recolore en bleu plus bas. */
 .hero-flyer {
 	display: none;
 }
-:root[data-theme='flyer'] .hero-flyer {
+:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer {
 	display: block;
 	position: relative;
 	overflow: hidden;
@@ -160,7 +161,7 @@
 	border-bottom: 8px solid var(--flyer-orange);
 	color: #fff;
 }
-:root[data-theme='flyer'] .home-intro {
+:root:is([data-theme='flyer'], [data-theme='logo']) .home-intro {
 	display: none;
 }
 .hero-flyer__photo {
@@ -180,7 +181,7 @@
 	flex-direction: column;
 	justify-content: flex-end;
 }
-:root[data-theme='flyer'] .hero-flyer__kicker {
+:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer__kicker {
 	position: absolute;
 	top: 2.5rem;
 	left: 1.5rem;
@@ -202,7 +203,7 @@
 	height: 2.3rem;
 	background: linear-gradient(to right, #fff 50%, #f15a22 50%);
 }
-:root[data-theme='flyer'] .hero-flyer__tag {
+:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer__tag {
 	align-self: flex-start;
 	margin: 0 0 1.5rem;
 	padding: 0.6rem 1.9rem;
@@ -212,17 +213,17 @@
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
 }
-:root[data-theme='flyer'] .hero-flyer h1 {
+:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer h1 {
 	margin: 0 0 1.5rem;
 	color: #fff;
 	font-size: clamp(2.5rem, 7vw, 4.6rem);
 	line-height: 1.05;
 	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
-:root[data-theme='flyer'] .hero-flyer h1 span {
+:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer h1 span {
 	color: var(--flyer-orange);
 }
-:root[data-theme='flyer'] .hero-flyer__text {
+:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer__text {
 	max-width: 34rem;
 	margin: 0;
 	font-size: 1.05rem;
@@ -231,7 +232,7 @@
 /* Sur écran étroit, la photo passe en bandeau au-dessus du texte :
    sinon le titre recouvre la balise */
 @media (max-width: 720px) {
-	:root[data-theme='flyer'] .hero-flyer {
+	:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer {
 		min-height: 0;
 	}
 	.hero-flyer__photo {
@@ -239,11 +240,11 @@
 		display: block;
 		height: 15rem;
 	}
-	:root[data-theme='flyer'] .hero-flyer__content {
+	:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer__content {
 		position: static;
 		padding: 1.5rem 1rem 2rem;
 	}
-	:root[data-theme='flyer'] .hero-flyer__kicker {
+	:root:is([data-theme='flyer'], [data-theme='logo']) .hero-flyer__kicker {
 		top: 1.25rem;
 		left: 1rem;
 		right: 1rem;
@@ -320,17 +321,30 @@
 	border-top: 5px solid var(--logo-blue) !important;
 }
 
-/* Introduction de l'accueil en bandeau bleu */
-:root[data-theme='logo'] .home-intro {
-	margin: 0 0 2.5rem;
-	padding: 2rem 2rem 1rem;
-	background: linear-gradient(135deg, var(--logo-blue), var(--logo-blue-dark));
-	border-radius: 14px;
-	color: #fff;
+/* Bandeau photo de l'accueil, recoloré en bleu : voile, cercle autour
+   de la balise, étiquette. Les couleurs du SVG sont des propriétés CSS. */
+:root[data-theme='logo'] .hero-flyer {
+	background: var(--logo-blue-dark);
+	border-bottom-color: var(--logo-orange);
 }
-:root[data-theme='logo'] .home-intro h1 {
-	color: #fff;
-	font-size: 2.4em;
+:root[data-theme='logo'] #hero-flyer-voile stop {
+	stop-color: var(--logo-blue-dark);
+}
+:root[data-theme='logo'] #hero-flyer-voile stop:first-child {
+	stop-color: #10305a;
+}
+:root[data-theme='logo'] .hero-flyer circle {
+	stroke: #5aa0f0;
+}
+:root[data-theme='logo'] .hero-flyer__kicker::before {
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect x='1.5' y='1.5' width='17' height='17' rx='3.5' fill='%23fff' stroke='%233576c1' stroke-width='2.4'/%3E%3Cpath d='M16.3 3.3v11.2a1.8 1.8 0 0 1-1.8 1.8H3.3z' fill='%23f4743c'/%3E%3C/svg%3E")
+		center / contain no-repeat;
+}
+:root[data-theme='logo'] .hero-flyer__tag {
+	background: var(--logo-blue);
+}
+:root[data-theme='logo'] .hero-flyer h1 span {
+	color: var(--logo-orange);
 }
 
 /* Menu : colonne bleue fixée à gauche sur grand écran */

@@ -2,12 +2,17 @@
 /*
   Accueil de la mise en forme « Parcours » : la page se lit comme un circuit
   de course d'orientation. Chaque section est un poste posé sur la carte ; en
-  défilant, le trait du circuit se dessine et la carte glisse jusqu'au poste
-  suivant. L'en-tête de chaque section reprend une ligne de définition de
-  poste (norme IOF 2018) ; survoler le symbole montre l'élément sur le terrain.
+  défilant, on court le circuit : le trait violine se dessine sous nos pas et
+  la carte reste orientée dans le sens de la course, l'itinéraire vers le haut,
+  comme un orienteur la tient en main. Elle tourne à chaque poste.
+
+  L'en-tête de chaque section reprend une ligne de définition de poste (norme
+  IOF 2018) ; survoler le symbole montre l'élément sur le terrain.
+
+  Les postes suivent l'ordre du menu (Header.astro) : en défilant, le menu
+  surligne le poste où l'on se trouve.
 
   Masqué par défaut, affiché par themes.css quand data-theme="parcours".
-
   La carte de fond (public/local/) est exclue de Git : sans elle, le circuit
   se dessine sur un papier quadrillé de lignes de nord.
 */
@@ -46,6 +51,7 @@ interface Poste {
 	text: string;
 	href?: string;
 	linkLabel?: string;
+	withPublications?: boolean;
 }
 
 const postes: Poste[] = [
@@ -55,7 +61,7 @@ const postes: Poste[] = [
 		y: 674,
 		symbole: 'depart',
 		photo: '/images/parcours/depart-foret.jpg',
-		title: "Lis la carte. Trouve la balise.",
+		title: 'Lis la carte. Trouve la balise.',
 		text: "Bienvenue sur le site du Comité Départemental de Course d'Orientation de Seine-et-Marne. Défilez pour courir le circuit : chaque poste vous mène à une partie du site.",
 	},
 	{
@@ -80,7 +86,8 @@ const postes: Poste[] = [
 		title: 'Actualités',
 		text: 'Résultats, news, photos et portraits des orienteurs du département.',
 		href: '/actualites/',
-		linkLabel: 'Lire les actualités',
+		linkLabel: 'Toutes les actualités',
+		withPublications: true,
 	},
 	{
 		kind: 'poste',
@@ -90,7 +97,7 @@ const postes: Poste[] = [
 		symbole: 'groupe-rochers',
 		photo: '/images/parcours/groupe-rochers.jpg',
 		title: 'Notre organisation',
-		text: 'Un comité, des clubs, des bénévoles : qui fait vivre la course d\'orientation en Seine-et-Marne.',
+		text: "Un comité, des clubs, des bénévoles : qui fait vivre la course d'orientation en Seine-et-Marne.",
 		href: '/organisation/',
 		linkLabel: "Voir l'organisation",
 	},
@@ -102,7 +109,7 @@ const postes: Poste[] = [
 		symbole: 'colline',
 		photo: '/images/parcours/colline.jpg',
 		title: 'Cartographie',
-		text: 'Nos cartes et parcours d\'orientation, de Fontainebleau à la Brie.',
+		text: "Nos cartes et parcours d'orientation, de Fontainebleau à la Brie.",
 		href: '/cartographie/',
 		linkLabel: 'Explorer les cartes',
 	},
@@ -119,23 +126,13 @@ const postes: Poste[] = [
 		linkLabel: 'Voir les missions',
 	},
 	{
-		kind: 'poste',
+		kind: 'arrivee',
 		x: 820,
 		y: 1250,
-		code: 36,
-		symbole: 'falaise',
-		photo: '/images/parcours/falaise.jpg',
-		title: 'Dernières publications',
-		text: '',
-	},
-	{
-		kind: 'arrivee',
-		x: 1401,
-		y: 1347,
 		symbole: 'arrivee',
 		photo: '/images/parcours/arrivee-foret.jpg',
 		title: 'Arrivée !',
-		text: 'Envie de courir pour de vrai ? Les clubs du département accueillent débutants et confirmés toute l\'année.',
+		text: "Envie de courir pour de vrai ? Les clubs du département accueillent débutants et confirmés toute l'année.",
 		href: '/la-co/les-clubs/',
 		linkLabel: 'Trouver un club',
 	},
@@ -161,6 +158,26 @@ const legs = postes.slice(1).map((to, i) => {
 		y2: to.y - uy * endGap,
 		length,
 	};
+});
+
+// Numéro de poste posé à l'écart des deux tronçons, dans l'angle le plus ouvert, comme sur
+// une vraie carte : la carte tourne, un emplacement fixe finirait sur une ligne
+const LABEL_DISTANCE = RADIUS + 40;
+const labelPositions = postes.map((poste, i) => {
+	if (poste.kind !== 'poste') return { x: 0, y: 0 };
+	const unit = (other: { x: number; y: number }) => {
+		const d = Math.hypot(other.x - poste.x, other.y - poste.y);
+		return { x: (other.x - poste.x) / d, y: (other.y - poste.y) / d };
+	};
+	const a = unit(postes[i - 1]);
+	const b = unit(postes[i + 1]);
+	let x = -(a.x + b.x);
+	let y = -(a.y + b.y);
+	const norm = Math.hypot(x, y);
+	// Tronçons alignés : on se met sur le côté
+	if (norm < 0.1) [x, y] = [-a.y, a.x];
+	else [x, y] = [x / norm, y / norm];
+	return { x: x * LABEL_DISTANCE, y: y * LABEL_DISTANCE };
 });
 
 const distanceKm = (legs.reduce((sum, leg) => sum + leg.length, 0) * METERS_PER_PX) / 1000;
@@ -217,7 +234,10 @@ const dateFormat = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'lo
 							{poste.kind === 'poste' && (
 								<>
 									<circle r={RADIUS} />
-									<text x={RADIUS + 10} y={-RADIUS + 8}>
+									<text
+										x={labelPositions[i].x.toFixed(1)}
+										y={labelPositions[i].y.toFixed(1)}
+										text-anchor="middle" dominant-baseline="central">
 										{i}
 									</text>
 								</>
@@ -232,6 +252,11 @@ const dateFormat = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'lo
 					))
 				}
 			</g>
+		</svg>
+		<!-- La carte tourne avec le circuit : la flèche rappelle où est le nord -->
+		<svg class="parcours__nord" viewBox="-20 -30 40 60">
+			<path d="M0 -26 L9 6 L0 0 L-9 6 Z" />
+			<text y="22" text-anchor="middle">N</text>
 		</svg>
 	</div>
 
@@ -264,7 +289,7 @@ const dateFormat = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'lo
 										<img src={poste.photo} alt="" width="800" height="533" loading="lazy" />
 										<span class="poste__tip-texte">
 											<strong>
-												{symbole.ref && <span class="poste__ref">{symbole.ref}</span>}
+												{'ref' in symbole && <span class="poste__ref">{symbole.ref}</span>}
 												{symbole.name}
 											</strong>
 											{symbole.description}
@@ -278,7 +303,7 @@ const dateFormat = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'lo
 							</div>
 							{i === 0 ? <h1>{poste.title}</h1> : <h2>{poste.title}</h2>}
 							{poste.text && <p>{poste.text}</p>}
-							{i === postes.length - 2 && (
+							{poste.withPublications && (
 								<ul class="poste__publications">
 									{publications.map((publication) => (
 										<li>
@@ -310,21 +335,50 @@ const dateFormat = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'lo
 	const section = document.querySelector<HTMLElement>('.parcours');
 	const stage = section?.querySelector<HTMLElement>('.parcours__stage');
 	const map = section?.querySelector<SVGSVGElement>('.parcours__map');
+	const north = section?.querySelector<SVGSVGElement>('.parcours__nord');
 
-	if (section && stage && map) {
+	if (section && stage && map && north) {
 		const steps = [...section.querySelectorAll<HTMLElement>('.parcours__step')];
 		const legs = [...map.querySelectorAll<SVGLineElement>('.parcours__leg')];
 		const controls = [...map.querySelectorAll<SVGGElement>('.parcours__control')];
+		const labels = [...map.querySelectorAll<SVGTextElement>('.parcours__control text')];
+		const menu = [...document.querySelectorAll<HTMLElement>('header [data-step]')];
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 		const points = controls.map((control) => {
 			const { e, f } = control.transform.baseVal.consolidate()!.matrix;
 			return { x: e, y: f };
 		});
-		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-		// Reste un moment sur chaque poste avant de repartir vers le suivant
-		const ease = (t: number) => {
-			const u = Math.min(1, Math.max(0, (t - 0.2) / 0.6));
-			return u * u * (3 - 2 * u);
+		// Pour chaque tronçon : la rotation qui le met vers le haut, et la part
+		// du trajet couverte par le trait (il s'arrête au bord des cercles)
+		const segments = legs.map((leg, i) => {
+			const from = points[i];
+			const to = points[i + 1];
+			const length = Math.hypot(to.x - from.x, to.y - from.y);
+			const startGap = Math.hypot(leg.x1.baseVal.value - from.x, leg.y1.baseVal.value - from.y);
+			const endGap = Math.hypot(to.x - leg.x2.baseVal.value, to.y - leg.y2.baseVal.value);
+			const heading = (Math.atan2(to.y - from.y, to.x - from.x) * 180) / Math.PI;
+			return { from, to, length, startGap, endGap, rotation: -90 - heading };
+		});
+
+		const clamp = (value: number) => Math.min(1, Math.max(0, value));
+		const smooth = (u: number) => u * u * (3 - 2 * u);
+		// Écart d'angle le plus court, pour ne jamais faire un tour complet
+		const turn = (from: number, to: number) => ((((to - from) % 360) + 540) % 360) - 180;
+
+		// La carte tourne pendant qu'on pointe le poste, pas pendant qu'on court
+		const TURN_WINDOW = 0.18;
+		const rotationAt = (position: number) => {
+			const last = segments.length - 1;
+			const leg = Math.min(last, Math.max(0, Math.floor(position)));
+			const control = Math.round(position);
+			if (control < 1 || control > last || Math.abs(position - control) >= TURN_WINDOW) {
+				return segments[leg].rotation;
+			}
+			const before = segments[control - 1].rotation;
+			const u = smooth(clamp((position - control + TURN_WINDOW) / (2 * TURN_WINDOW)));
+			return before + turn(before, segments[control].rotation) * u;
 		};
 
 		let pending = false;
@@ -343,38 +397,52 @@ const dateFormat = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'lo
 			let index = 0;
 			let t = 0;
 			if (viewportMiddle >= centers[centers.length - 1]) {
-				index = centers.length - 1;
+				index = segments.length - 1;
+				t = 1;
 			} else if (viewportMiddle > centers[0]) {
 				while (viewportMiddle >= centers[index + 1]) index++;
 				t = (viewportMiddle - centers[index]) / (centers[index + 1] - centers[index]);
 			}
+			index = Math.min(index, segments.length - 1);
+			// Mouvement réduit : la carte saute d'un poste à l'autre
+			if (reducedMotion.matches) t = Math.round(t);
 
-			// Mouvement réduit : la carte saute d'un poste à l'autre sans glisser
-			const progress = reducedMotion.matches ? Math.round(t) : ease(t);
-			const from = points[index];
-			const to = points[Math.min(index + 1, points.length - 1)];
-			const x = from.x + (to.x - from.x) * progress;
-			const y = from.y + (to.y - from.y) * progress;
+			// On court à vitesse régulière : la caméra suit le défilement sans à-coup
+			const segment = segments[index];
+			const x = segment.from.x + (segment.to.x - segment.from.x) * t;
+			const y = segment.from.y + (segment.to.y - segment.from.y) * t;
+			const rotation = reducedMotion.matches ? segments[Math.min(index + t, segments.length - 1)].rotation : rotationAt(index + t);
 
 			const width = stage.clientWidth;
 			const height = stage.clientHeight;
 			const wide = width >= 900;
-			// On prend de la hauteur entre deux postes, on zoome en arrivant
-			const zoom = reducedMotion.matches ? 1 : 1 - 0.22 * Math.sin(Math.PI * progress);
+			// Léger recul au milieu d'un tronçon, pour voir où l'on va
+			const zoom = reducedMotion.matches ? 1 : 1 - 0.1 * Math.sin(Math.PI * t);
 			const scale = Math.max(width / 1500, height / 1050) * 1.5 * zoom;
 			const focusX = wide ? width * 0.66 : width * 0.5;
-			const focusY = wide ? height * 0.5 : height * 0.3;
-			map.style.transform = `translate(${focusX - x * scale}px, ${focusY - y * scale}px) scale(${scale})`;
+			const focusY = wide ? height * 0.55 : height * 0.35;
+			map.style.transform =
+				`translate(${focusX}px, ${focusY}px) rotate(${rotation}deg) scale(${scale}) translate(${-x}px, ${-y}px)`;
+			north.style.transform = `rotate(${rotation}deg)`;
+			// Les numéros de poste restent lisibles, quelle que soit l'orientation
+			labels.forEach((label) => {
+				label.setAttribute('transform', `rotate(${-rotation} ${label.getAttribute('x')} ${label.getAttribute('y')})`);
+			});
 
+			// Le trait suit exactement la caméra
 			legs.forEach((leg, i) => {
-				const drawn = reducedMotion.matches ? 1 : i < index ? 1 : i === index ? progress : 0;
+				let drawn = i < index ? 1 : 0;
+				if (i === index) {
+					const { length, startGap, endGap } = segments[i];
+					drawn = clamp((t * length - startGap) / (length - startGap - endGap));
+				}
 				leg.style.strokeDashoffset = String(1 - drawn);
 			});
 
-			const active = index + Math.round(progress);
+			const active = index + Math.round(t);
 			controls.forEach((control, i) => control.classList.toggle('is-active', i === active));
-			controls.forEach((control, i) => control.classList.toggle('is-done', i < active));
 			steps.forEach((step, i) => step.classList.toggle('is-active', i === active));
+			menu.forEach((item) => item.classList.toggle('is-current', Number(item.dataset.step) === active));
 		};
 
 		const schedule = () => {

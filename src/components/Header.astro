@@ -1,6 +1,16 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+
+const links = [
+	{ href: '/', label: 'Accueil', kind: 'depart' },
+	{ href: '/la-co/', label: 'La CO', kind: 'poste' },
+	{ href: '/actualites/', label: 'Actualités', kind: 'poste' },
+	{ href: '/organisation/', label: 'Notre organisation', kind: 'poste' },
+	{ href: '/cartographie/', label: 'Cartographie', kind: 'poste' },
+	{ href: '/missions-cd/', label: 'Missions du CD', kind: 'poste' },
+	{ href: '/la-co/les-clubs/', label: 'Arrivée : trouver un club', kind: 'arrivee' },
+];
 ---
 
 <header>
@@ -12,13 +22,30 @@ import HeaderLink from './HeaderLink.astro';
 				<span>Course d'orientation en Seine-et-Marne</span>
 			</span>
 		</a>
+		<!--
+			Les repères (triangle, cercles, double cercle) ne s'affichent qu'avec la
+			mise en forme Parcours : le menu devient un circuit, du départ à l'arrivée.
+			data-step relie chaque entrée au poste de l'accueil (Parcours.astro).
+		-->
 		<div class="internal-links">
-			<HeaderLink href="/">Accueil</HeaderLink>
-			<HeaderLink href="/la-co/">La CO</HeaderLink>
-			<HeaderLink href="/actualites/">Actualités</HeaderLink>
-			<HeaderLink href="/organisation/">Notre organisation</HeaderLink>
-			<HeaderLink href="/cartographie/">Cartographie</HeaderLink>
-			<HeaderLink href="/missions-cd/">Missions du CD</HeaderLink>
+			{
+				links.map((link, i) => (
+					<HeaderLink href={link.href} data-step={i} class={link.kind === 'arrivee' ? 'nav-arrivee' : undefined}>
+						<svg class="nav-repere" viewBox="0 0 40 40" aria-hidden="true">
+							{link.kind === 'depart' && <polygon points="20,7 33,30 7,30" />}
+							{link.kind === 'poste' && <circle cx="20" cy="20" r="13" />}
+							{link.kind === 'arrivee' && (
+								<>
+									<circle cx="20" cy="20" r="15" />
+									<circle cx="20" cy="20" r="9" />
+								</>
+							)}
+						</svg>
+						{link.kind === 'poste' && <span class="nav-numero">{i}</span>}
+						<span class="nav-label">{link.label}</span>
+					</HeaderLink>
+				))
+			}
 		</div>
 	</nav>
 </header>
@@ -65,6 +92,11 @@ import HeaderLink from './HeaderLink.astro';
 		color: var(--black);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
+	}
+	/* Repères du circuit : mise en forme Parcours seulement (themes.css) */
+	.nav-repere,
+	.nav-numero {
+		display: none;
 	}
 	.logo-link:hover {
 		border-bottom-color: var(--accent);

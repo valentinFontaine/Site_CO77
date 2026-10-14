@@ -457,21 +457,25 @@
 
 /* ------------------------------------------------------------------ */
 /* Parcours — le site se court comme un circuit de CO                  */
-/* Papier blanc, surimpression violette du circuit, symboles IOF noirs */
+/* Papier blanc, surimpression violine du circuit, symboles IOF noirs */
 /* ------------------------------------------------------------------ */
 
 .parcours {
 	display: none;
 }
+/* L'entrée « Arrivée » du menu n'existe que dans le circuit */
+:root .nav-arrivee {
+	display: none;
+}
 
 :root[data-theme='parcours'] {
-	--parcours-violet: #b4127d;
-	--parcours-violet-dark: #8a0c5f;
+	--parcours-violine: #b4127d;
+	--parcours-violine-dark: #8a0c5f;
 	--parcours-paper: #fdfcf8;
 	--parcours-ink: #161616;
 
-	--accent: var(--parcours-violet);
-	--accent-dark: var(--parcours-violet-dark);
+	--accent: var(--parcours-violine);
+	--accent-dark: var(--parcours-violine-dark);
 	--black: 22, 22, 22;
 	--gray: 90, 90, 90;
 	--gray-light: 235, 233, 226;
@@ -485,7 +489,7 @@
 }
 
 :root[data-theme='parcours'] a {
-	color: var(--parcours-violet);
+	color: var(--parcours-violine);
 }
 
 /* Les titres des autres pages portent un cercle de poste */
@@ -495,7 +499,7 @@
 	width: 0.7em;
 	height: 0.7em;
 	margin-right: 0.35em;
-	border: 3px solid var(--parcours-violet);
+	border: 3px solid var(--parcours-violine);
 	border-radius: 50%;
 	vertical-align: 0.05em;
 }
@@ -506,7 +510,7 @@
 	background: #fff;
 }
 
-/* En-tête : bandeau blanc bordé d'un trait noir, comme le cadre d'une carte */
+/* Menu : le circuit, du triangle de départ au double cercle d'arrivée */
 :root[data-theme='parcours'] header {
 	position: relative;
 	z-index: 10;
@@ -517,9 +521,156 @@
 :root[data-theme='parcours'] header nav a {
 	color: var(--parcours-ink);
 }
-:root[data-theme='parcours'] header nav a.active,
 :root[data-theme='parcours'] header .logo-link:hover {
-	border-bottom-color: var(--parcours-violet);
+	border-bottom-color: var(--parcours-violine);
+}
+:root[data-theme='parcours'] header .internal-links a {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	border-bottom: none;
+	font-weight: 400;
+	text-decoration: none;
+}
+:root[data-theme='parcours'] header .nav-arrivee {
+	display: flex;
+}
+:root[data-theme='parcours'] header .nav-repere {
+	display: block;
+	flex: none;
+	width: 28px;
+	height: 28px;
+	fill: #fff;
+	stroke: var(--parcours-violine);
+	stroke-width: 3;
+}
+:root[data-theme='parcours'] header .nav-numero {
+	display: inline;
+	min-width: 1ch;
+	color: var(--parcours-violine);
+	font: 700 0.9rem Arial, Helvetica, sans-serif;
+}
+:root[data-theme='parcours'] header .internal-links a:hover .nav-repere {
+	stroke-width: 4.5;
+}
+/* Le poste où l'on se trouve est pointé : son cercle se remplit.
+   Sur l'accueil, c'est le poste qu'on court qui l'emporte. */
+:root[data-theme='parcours'] header .internal-links a:is(.active, .is-current) {
+	font-weight: 700;
+}
+:root[data-theme='parcours'] header .internal-links a:is(.active, .is-current) .nav-repere {
+	fill: var(--parcours-violine);
+}
+:root[data-theme='parcours'] header .internal-links:has(.is-current) a.active:not(.is-current) {
+	font-weight: 400;
+}
+:root[data-theme='parcours'] header .internal-links:has(.is-current) a.active:not(.is-current) .nav-repere {
+	fill: #fff;
+}
+
+@media (min-width: 900px) {
+	:root[data-theme='parcours'] {
+		--parcours-sidebar: 15.5rem;
+	}
+	:root[data-theme='parcours'] body {
+		padding-left: var(--parcours-sidebar);
+	}
+	:root[data-theme='parcours'] header {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 1000;
+		box-sizing: border-box;
+		width: var(--parcours-sidebar);
+		padding: 1.5rem 0;
+		overflow-y: auto;
+		border-bottom: none;
+		border-right: 2px solid var(--parcours-ink);
+	}
+	:root[data-theme='parcours'] header nav {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 2rem;
+	}
+	:root[data-theme='parcours'] header .logo-link {
+		justify-content: center;
+		padding: 0 1rem;
+		border: none;
+	}
+	:root[data-theme='parcours'] header .logo {
+		height: 96px;
+	}
+	:root[data-theme='parcours'] header .internal-links {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 1.6rem;
+	}
+	/* Le trait du circuit relie les repères ; il passe sous eux et s'arrête à leur bord */
+	:root[data-theme='parcours'] header .internal-links::before {
+		content: '';
+		position: absolute;
+		top: 1.5rem;
+		bottom: 1.5rem;
+		left: calc(1.25rem + 13px);
+		border-left: 3px solid var(--parcours-violine);
+	}
+	:root[data-theme='parcours'] header .internal-links a {
+		position: relative;
+		padding: 0.35rem 1rem 0.35rem 1.25rem;
+		font-size: 1rem;
+		line-height: 1.25;
+	}
+	:root[data-theme='parcours'] header .internal-links a:is(.active, .is-current) {
+		background: rgba(180, 18, 125, 0.08);
+	}
+	:root[data-theme='parcours'] header .internal-links:has(.is-current) a.active:not(.is-current) {
+		background: none;
+	}
+}
+
+/* Téléphone : le circuit se déroule en une ligne qu'on fait glisser */
+@media (max-width: 899px) {
+	:root[data-theme='parcours'] header nav {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	:root[data-theme='parcours'] header .internal-links {
+		display: flex;
+		gap: 0.25rem;
+		overflow-x: auto;
+		padding-bottom: 0.25rem;
+	}
+	:root[data-theme='parcours'] header .internal-links a {
+		flex: none;
+		gap: 0.35rem;
+		padding: 0.4rem 0.5rem;
+		font-size: 0.9rem;
+	}
+	:root[data-theme='parcours'] header .nav-repere {
+		width: 22px;
+		height: 22px;
+	}
+}
+
+/* La rose du nord : la carte tourne avec le circuit */
+:root[data-theme='parcours'] .parcours__nord {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	box-sizing: border-box;
+	width: 56px;
+	height: 56px;
+	padding: 4px;
+	background: rgba(255, 255, 255, 0.9);
+	border: 2px solid var(--parcours-ink);
+	border-radius: 50%;
+	fill: var(--parcours-ink);
+	font: 700 14px Arial, Helvetica, sans-serif;
+}
+:root[data-theme='parcours'] .parcours:not(.is-animated) .parcours__nord {
+	display: none;
 }
 
 /* Sur l'accueil, le circuit remplace le contenu habituel */
@@ -569,7 +720,7 @@
 
 :root[data-theme='parcours'] .parcours__course {
 	fill: none;
-	stroke: var(--parcours-violet);
+	stroke: var(--parcours-violine);
 	stroke-width: 6;
 	stroke-linecap: round;
 }
@@ -581,7 +732,7 @@
 	stroke-dashoffset: 1;
 }
 :root[data-theme='parcours'] .parcours__control text {
-	fill: var(--parcours-violet);
+	fill: var(--parcours-violine);
 	stroke: var(--parcours-paper);
 	stroke-width: 10;
 	paint-order: stroke;
@@ -705,7 +856,7 @@
 	cursor: help;
 }
 :root[data-theme='parcours'] .poste__symbole:is(:hover, :focus-visible) {
-	background: var(--parcours-violet);
+	background: var(--parcours-violine);
 	color: #fff;
 	outline: none;
 }
@@ -750,7 +901,7 @@
 :root[data-theme='parcours'] .poste__tip-texte strong {
 	display: block;
 	margin-bottom: 0.2rem;
-	color: var(--parcours-violet);
+	color: var(--parcours-violine);
 	font-size: 1rem;
 }
 :root[data-theme='parcours'] .poste__ref {
@@ -761,13 +912,13 @@
 :root[data-theme='parcours'] .poste__lien {
 	display: inline-block;
 	padding: 0.5rem 1rem;
-	background: var(--parcours-violet);
+	background: var(--parcours-violine);
 	color: #fff;
 	font-weight: 700;
 	text-decoration: none;
 }
 :root[data-theme='parcours'] .poste__lien:hover {
-	background: var(--parcours-violet-dark);
+	background: var(--parcours-violine-dark);
 	color: #fff;
 }
 :root[data-theme='parcours'] .poste__consigne {

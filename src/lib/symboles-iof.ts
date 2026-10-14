@@ -48,12 +48,6 @@ export const SYMBOLES = {
 		description: 'Un rocher remarquable ou une face rocheuse isolée.',
 		svg: '<polygon class="plein" points="20,9 33,31 7,31" />',
 	},
-	falaise: {
-		ref: '2.1',
-		name: 'Falaise, face rocheuse',
-		description: 'Falaise ou face rocheuse, franchissable ou non.',
-		svg: '<path d="M6 15 H34 M7 15 V24 M13.5 15 V24 M20 15 V24 M26.5 15 V24 M33 15 V24" />',
-	},
 	arrivee: {
 		name: 'Arrivée',
 		description: 'Le double cercle marque l\'arrivée : on poinçonne une dernière fois.',

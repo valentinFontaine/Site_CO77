@@ -250,3 +250,193 @@
 		font-size: 0.75rem;
 	}
 }
+
+/* ------------------------------------------------------------------ */
+/* Logo CDCO — bleu du logo, balise devant les titres, menu latéral    */
+/* ------------------------------------------------------------------ */
+
+:root[data-theme='logo'] {
+	/* Couleurs relevées dans public/logo-cdco77.svg */
+	--logo-blue: #3576c1;
+	--logo-blue-dark: #1d4f8c;
+	--logo-blue-pale: #eaf1fa;
+	--logo-orange: #f4743c;
+	--logo-sidebar: 15rem;
+
+	--accent: var(--logo-blue);
+	--accent-dark: var(--logo-blue-dark);
+	--black: 29, 79, 140;
+	--gray: 90, 110, 140;
+	--gray-light: 214, 228, 245;
+	--gray-dark: 33, 45, 66;
+	--gray-gradient: var(--logo-blue-pale), #f7faff;
+}
+
+:root[data-theme='logo'] body {
+	background: #f7faff;
+}
+
+:root[data-theme='logo'] :is(h1, h2, h3, h4, h5, h6) {
+	color: var(--logo-blue-dark);
+}
+
+/* La balise du logo — carré blanc et orange cerclé de bleu — devant les grands titres */
+:root[data-theme='logo'] main :is(h1, h2)::before {
+	content: '';
+	display: inline-block;
+	width: 0.8em;
+	height: 0.8em;
+	margin-right: 0.4em;
+	vertical-align: -0.08em;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect x='1.5' y='1.5' width='17' height='17' rx='3.5' fill='%23fff' stroke='%233576c1' stroke-width='2.4'/%3E%3Cpath d='M16.3 3.3v11.2a1.8 1.8 0 0 1-1.8 1.8H3.3z' fill='%23f4743c'/%3E%3C/svg%3E")
+		center / contain no-repeat;
+}
+
+/* Un trait bleu sous les intertitres */
+:root[data-theme='logo'] main h3 {
+	padding-bottom: 0.3rem;
+	border-bottom: 3px solid var(--logo-blue);
+	display: inline-block;
+}
+
+:root[data-theme='logo'] a {
+	color: var(--logo-blue);
+}
+:root[data-theme='logo'] a:hover {
+	color: var(--logo-blue-dark);
+}
+
+:root[data-theme='logo'] blockquote {
+	background: var(--logo-blue-pale);
+	border-left: 6px solid var(--logo-blue);
+	padding: 1em 1.25em;
+	font-size: 1em;
+}
+
+/* Les cartes de l'accueil : fond blanc, liseré bleu en tête */
+:root[data-theme='logo'] main [style*='border: 1px solid #ddd'] {
+	background: #fff;
+	border-color: rgb(var(--gray-light)) !important;
+	border-top: 5px solid var(--logo-blue) !important;
+}
+
+/* Introduction de l'accueil en bandeau bleu */
+:root[data-theme='logo'] .home-intro {
+	margin: 0 0 2.5rem;
+	padding: 2rem 2rem 1rem;
+	background: linear-gradient(135deg, var(--logo-blue), var(--logo-blue-dark));
+	border-radius: 14px;
+	color: #fff;
+}
+:root[data-theme='logo'] .home-intro h1 {
+	color: #fff;
+	font-size: 2.4em;
+}
+
+/* Menu : colonne bleue fixée à gauche sur grand écran */
+:root[data-theme='logo'] header {
+	background: var(--logo-blue);
+	box-shadow: none;
+}
+:root[data-theme='logo'] header nav a {
+	color: #fff;
+}
+:root[data-theme='logo'] header .logo-text {
+	display: flex;
+	flex-direction: column;
+	line-height: 1.25;
+	color: #fff;
+}
+:root[data-theme='logo'] header .logo-text strong {
+	font-size: 1.3rem;
+	letter-spacing: 0.08em;
+}
+:root[data-theme='logo'] header .logo-text span {
+	font-size: 0.75rem;
+	opacity: 0.85;
+}
+
+@media (min-width: 900px) {
+	:root[data-theme='logo'] body {
+		padding-left: var(--logo-sidebar);
+	}
+	:root[data-theme='logo'] header {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 1000;
+		box-sizing: border-box;
+		width: var(--logo-sidebar);
+		padding: 2rem 0;
+		overflow-y: auto;
+	}
+	:root[data-theme='logo'] header nav {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 2rem;
+	}
+	:root[data-theme='logo'] header .logo-link {
+		flex-direction: column;
+		text-align: center;
+		gap: 0.9rem;
+		padding: 0 1rem;
+		border: none;
+	}
+	:root[data-theme='logo'] header .logo {
+		height: 120px;
+	}
+	:root[data-theme='logo'] header .internal-links {
+		display: flex;
+		flex-direction: column;
+	}
+	:root[data-theme='logo'] header .internal-links a {
+		padding: 0.7rem 1.5rem;
+		border-bottom: none;
+		border-left: 5px solid transparent;
+		font-size: 1rem;
+		line-height: 1.3;
+	}
+	:root[data-theme='logo'] header .internal-links a:hover {
+		background: rgba(255, 255, 255, 0.1);
+	}
+	/* La rubrique active : liseré orange, comme la balise */
+	:root[data-theme='logo'] header .internal-links a.active {
+		background: rgba(255, 255, 255, 0.16);
+		border-left-color: var(--logo-orange);
+		text-decoration: none;
+	}
+}
+
+/* Sur écran étroit, la colonne redevient une barre en haut */
+@media (max-width: 899px) {
+	:root[data-theme='logo'] header .logo-text {
+		display: none;
+	}
+	:root[data-theme='logo'] header nav {
+		flex-wrap: wrap;
+	}
+	:root[data-theme='logo'] header .internal-links {
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+	}
+	:root[data-theme='logo'] header .internal-links a {
+		padding: 0.4em 0.5em;
+		font-size: 0.95rem;
+	}
+	:root[data-theme='logo'] header nav a.active {
+		border-bottom-color: var(--logo-orange);
+		text-decoration: none;
+	}
+}
+
+/* Pied de page bleu foncé */
+:root[data-theme='logo'] footer {
+	background: var(--logo-blue-dark);
+	color: #fff;
+}
+:root[data-theme='logo'] footer .footer-links a {
+	color: #fff;
+	font-weight: 700;
+}

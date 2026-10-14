@@ -8,6 +8,7 @@ export const SITE_DESCRIPTION = 'Comité Départemental de Course d\'Orientation
 // « depart » est le modèle d'origine : il n'ajoute aucun attribut data-theme.
 export const THEMES = [
 	{ id: 'flyer', label: 'Flyer « On filme »' },
+	{ id: 'logo', label: 'Logo CDCO (menu latéral)' },
 	{ id: 'depart', label: 'Modèle de départ' },
 ];
 

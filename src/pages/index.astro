@@ -37,15 +37,42 @@ const recentContent = allContent
 	</head>
 	<body>
 		<Header />
+		<!-- Bandeau du flyer « On filme », visible seulement avec cette mise en forme (themes.css) -->
+		<section class="hero-flyer" aria-labelledby="hero-flyer-title">
+			<!-- Photo et cercle partagent le même repère : le cercle reste sur la balise quel que soit le recadrage -->
+			<svg class="hero-flyer__photo" viewBox="0 0 1920 1080" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+				<defs>
+					<linearGradient id="hero-flyer-voile" x1="0" x2="1" y1="0" y2="0">
+						<stop offset="0" stop-color="#14362a" stop-opacity="0.85" />
+						<stop offset="0.55" stop-color="#1e4a3a" stop-opacity="0.55" />
+						<stop offset="1" stop-color="#1e4a3a" stop-opacity="0.2" />
+					</linearGradient>
+				</defs>
+				<image href="/images/bandeau-accueil.jpg" width="1920" height="1080" />
+				<rect width="1920" height="1080" fill="url(#hero-flyer-voile)" />
+				<circle cx="1368" cy="541" r="165" fill="none" stroke="#f15a22" stroke-width="7" />
+			</svg>
+			<div class="hero-flyer__content">
+				<p class="hero-flyer__kicker">Course d'orientation · Seine-et-Marne</p>
+				<p class="hero-flyer__tag">Comité départemental 77</p>
+				<h1 id="hero-flyer-title">Lis la carte.<br /><span>Trouve la balise.</span></h1>
+				<p class="hero-flyer__text">
+					Découvrez les activités, les clubs, les entraînements et les compétitions
+					de course d'orientation dans le département de Seine-et-Marne.
+				</p>
+			</div>
+		</section>
 		<main>
-			<h1>Bienvenue sur le site du CO77</h1>
-			<p>
-				Bienvenue sur le site officiel du <strong>Comité Départemental 77 de Course d'Orientation</strong>.
-			</p>
-			<p>
-				Découvrez les activités, les clubs, les entraînements et les compétitions de course d'orientation 
-				dans le département de Seine-et-Marne.
-			</p>
+			<div class="home-intro">
+				<h1>Bienvenue sur le site du CO77</h1>
+				<p>
+					Bienvenue sur le site officiel du <strong>Comité Départemental 77 de Course d'Orientation</strong>.
+				</p>
+				<p>
+					Découvrez les activités, les clubs, les entraînements et les compétitions de course d'orientation 
+					dans le département de Seine-et-Marne.
+				</p>
+			</div>
 			
 			<h2>Nos sections</h2>
 			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
